@@ -24,9 +24,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: "brownoxford@gmail.com"
+    fullname: Scott Fluhrer
+    organization: Cisco Systems
+    email: "sfluhrer@cisco.com"
 
 normative:
 
@@ -42,7 +42,8 @@ TODO Abstract
 
 # Introduction
 
-TODO Introduction
+NIST has run a competition to select postquantum primitives, for the key exchange mechanism, they selected Kyber.  Now, one issue with Kyber is that there are plausible patent claims against it; while NIST has agreements with the patent holders, they have not released those agreements, hence it is unknown whether those would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.
+This draft documents NTRU, which is an alternative postquantum key exchange mechanism.  It is believed to be IPR free; this alternative would be usable by everyone.
 
 
 # Conventions and Definitions
