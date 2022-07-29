@@ -1,13 +1,14 @@
----
+%%%
 title: "NTRU Key Encapsulation"
 category: info
 
 docname: draft-fluhrer-crfg-ntru-latest
-submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
+submissiontype: IETF 
 number:
 date:
 consensus: true
 v: 3
+
 # area: AREA
 # workgroup: WG Working Group
 keyword:
@@ -28,28 +29,46 @@ author:
     organization: Cisco Systems
     email: "sfluhrer@cisco.com"
 
+author:
+ -
+    fullname: Michael Prorock
+    organization: mesur.io
+    email: "mprorock@mesur.io"
+
+
 normative:
 
 informative:
 
 
---- abstract
+# Abstract
 
-TODO Abstract
+This draft documents NTRU as a method for post quantum key encapsulation mechanism (KEM).  The NTRU method from KEM is believed to be IPR free and cryptogprahically sound for both pre and post quantum threat environments.
 
+NIST has run a competition to select postquantum primitives and selected Kyber for KRM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.
 
---- middle
+This document does not define any new cryptography, only describes an existing cryptographic system.
 
 # Introduction
 
-NIST has run a competition to select postquantum primitives, for the key exchange mechanism, they selected Kyber.  Now, one issue with Kyber is that there are plausible patent claims against it; while NIST has agreements with the patent holders, they have not released those agreements, hence it is unknown whether those would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.
-This draft documents NTRU, which is an alternative postquantum key exchange mechanism.  It is believed to be IPR free; this alternative would be usable by everyone.
-
+This document describes the key encapsulation mechanism (KEM) based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to as NTRU. NTRU is constructed by utilization of a correct deterministic public key scheme (correct DPKE).  The method described here is based on a combination of prior approaches described in NTRUEncrypt and NTRU-HRSS-KEM, and permits use of four well defined and reviewed parameter sets.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
+# Notation
+
+# Cryptographic Dependencies
+
+# NTRU Encryption
+
+# Algorithm Identifiers
+
+ntruhps2048509
+ntruhps2048677
+ntruhrss701
+ntruhps4096821
 
 # Security Considerations
 
@@ -67,3 +86,19 @@ This document has no IANA actions.
 {:numbered="false"}
 
 TODO acknowledge.
+
+<reference anchor='NTRU' target='https://ntru.org/f/ntru-20190330.pdf'>
+    <front>
+        <title>NTRU: Algorithm Specications And Supporting Documentation</title>
+        <author initials='C' surname='Chen' fullname='Cong Chen'></author>
+        <author initials='O.' surname='Danba' fullname='Oussama Danba'></author>
+        <author initials='J.' surname='Hoffstein' fullname='Jeffrey Hoffstein'></author>
+        <author initials='A.' surname='Hulsing' fullname='Andreas Hulsing'></author>
+        <author initials='J.' surname='Rijneveld' fullname='Joost Rijneveld'></author>
+        <author initials='J. M.' surname='Schanck' fullname='John M. Schanck'></author>
+        <author initials='P.' surname='Schwabe' fullname='Peter Schwabe'></author>
+        <author initials='W.' surname='Whyte' fullname='William Whyte'></author>
+        <author initials='Z.' surname='Zhang' fullname='Zhenfei Zhang'></author>
+        <date year='2019'/>
+    </front>
+</reference>
