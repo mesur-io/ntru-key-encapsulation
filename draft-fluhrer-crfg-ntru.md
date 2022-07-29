@@ -9,14 +9,14 @@ date:
 consensus: true
 v: 3
 
-# area: AREA
-# workgroup: WG Working Group
+# area: SEC
+# workgroup: CFRG
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - NTRU
+ - post quantum
+ - kem
 venue:
-#  group: WG
+#  group: CFRG
 #  type: Working Group
 #  mail: WG@example.com
 #  arch: https://example.com/WG
