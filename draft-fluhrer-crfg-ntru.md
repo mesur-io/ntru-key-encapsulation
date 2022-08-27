@@ -77,6 +77,17 @@ def polynomial_add( polynomial a, polynomial b )
   return sum
 ~~~
 
+## Polynomial Subtraction
+
+When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.  In pseudocode, this could look like:
+
+~~~
+def polynomial_subtract( polynomial a, polynomial b )
+  polynomial difference
+  for i := 0 to N-1 do
+    difference[i] = (a[i] + Q - b[i]) mod Q
+  return difference
+~~~
 # NTRU Encryption
 
 # Algorithm Identifiers
