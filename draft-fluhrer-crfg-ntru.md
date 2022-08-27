@@ -65,6 +65,18 @@ This document describes the key encapsulation mechanism (KEM) based on Hoffstein
 
 NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
 
+## Polynomial Addition
+
+When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.  In pseudocode, this could look like:
+
+~~~
+def polynomial_add( polynomial a, polynomial b )
+  polynomial sum
+  for i := 0 to N-1 do
+    sum[i] = (a[i] + b[i]) mod Q
+  return sum
+~~~
+
 # NTRU Encryption
 
 # Algorithm Identifiers
