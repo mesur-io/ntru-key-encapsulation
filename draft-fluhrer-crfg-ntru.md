@@ -88,6 +88,33 @@ def polynomial_subtract( polynomial a, polynomial b )
     difference[i] = (a[i] + Q - b[i]) mod Q
   return difference
 ~~~
+
+## Polynomial Multiplication
+
+When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).  In pseudocode, this could look like:
+
+~~~
+def polynomial_multiply( polynomial a, polynomial b )
+  polynomial product
+  for i := 0 to N-1 do
+    product[i] = 0
+  for i := 0 to N-1 do
+    for j := 0 to N-1 do
+      k = (i+j) mod N
+      product[k] = (product[k] + a[i]*b[j]) mod Q
+  return product
+~~~
+
+Note that this is example code; in many cases, one of the polynomials will be light weight (that is, has many element of 0), and more efficient algorithms may be available.
+
+Q: at one point, NTRU does polynomial multiplication modulo phi_N, 3 - have do we document that?
+
+## Polynomial Inversion
+
+When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).
+
+Here, give the algorithm to invert a polynomial.
+
 # NTRU Encryption
 
 # Algorithm Identifiers
