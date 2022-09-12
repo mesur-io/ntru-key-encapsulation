@@ -161,19 +161,3 @@ This document has no IANA actions.
 {:numbered="false"}
 
 TODO acknowledge.
-
-<reference anchor='NTRU' target='https://ntru.org/f/ntru-20190330.pdf'>
-    <front>
-        <title>NTRU: Algorithm Specications And Supporting Documentation</title>
-        <author initials='C' surname='Chen' fullname='Cong Chen'></author>
-        <author initials='O.' surname='Danba' fullname='Oussama Danba'></author>
-        <author initials='J.' surname='Hoffstein' fullname='Jeffrey Hoffstein'></author>
-        <author initials='A.' surname='Hulsing' fullname='Andreas Hulsing'></author>
-        <author initials='J.' surname='Rijneveld' fullname='Joost Rijneveld'></author>
-        <author initials='J. M.' surname='Schanck' fullname='John M. Schanck'></author>
-        <author initials='P.' surname='Schwabe' fullname='Peter Schwabe'></author>
-        <author initials='W.' surname='Whyte' fullname='William Whyte'></author>
-        <author initials='Z.' surname='Zhang' fullname='Zhenfei Zhang'></author>
-        <date year='2019'/>
-    </front>
-</reference>
