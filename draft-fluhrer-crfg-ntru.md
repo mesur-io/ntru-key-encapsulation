@@ -67,42 +67,42 @@ NTRU is based on polynomials; these can be viewed as a vector of N small values 
 
 ## Polynomial Addition
 
-When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.  In pseudocode, this could look like:
+When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.  In Python, this could look like:
 
 ~~~
-def polynomial_add( polynomial a, polynomial b )
-  polynomial sum
-  for i := 0 to N-1 do
-    sum[i] = (a[i] + b[i]) mod Q
-  return sum
+def polynomial_add(a, b):
+		sum = [ ]
+		for x in range(n):
+			 sum[x] = (a[x] + b[x]) % q
+		return sum 
 ~~~
 
 ## Polynomial Subtraction
 
-When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.  In pseudocode, this could look like:
+When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.  In Python, this could look like:
 
 ~~~
-def polynomial_subtract( polynomial a, polynomial b )
-  polynomial difference
-  for i := 0 to N-1 do
-    difference[i] = (a[i] + Q - b[i]) mod Q
-  return difference
+def polynomial_subtract(a, b):
+		sum = [ ]
+		for x in range(n):
+			 sum[x] = (a[x] + q - b[x]) % q
+		return sum 
 ~~~
 
 ## Polynomial Multiplication
 
-When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).  In pseudocode, this could look like:
+When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).  In Python, this could look like:
 
 ~~~
-def polynomial_multiply( polynomial a, polynomial b )
-  polynomial product
-  for i := 0 to N-1 do
-    product[i] = 0
-  for i := 0 to N-1 do
-    for j := 0 to N-1 do
-      k = (i+j) mod N
-      product[k] = (product[k] + a[i]*b[j]) mod Q
-  return product
+	def polynomial_multiply(a, b):
+		 product = []
+		 for x in range(n)
+			  product[x] = 0
+		 for x in range(n)
+			  for y in range(n)
+				   z = (x + y) % n
+			    product[z] = (product[z] + a[x]*b[y]) % q
+		 return product
 ~~~
 
 Note that this is example code; in many cases, one of the polynomials will be light weight (that is, has many element of 0), and more efficient algorithms may be available.
