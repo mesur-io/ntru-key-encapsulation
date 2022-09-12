@@ -59,6 +59,27 @@ This document describes the key encapsulation mechanism (KEM) based on Hoffstein
 
 # Notation
 
+# Parameter sets
+
+NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines two parameter sets, one called hps2048677, which has Q=2048 and N=677 and another called hps4096821, which has Q=4096 and N=821.
+
+In the python examples, we will have n and q be global variables; python code to set these globals appropriately might be:
+
+~~~
+def set_parameter_set_hps2048677():
+  global n
+  n = 677
+  global q
+  q = 2048
+def set_parameter_set_hps4096821():
+  global n
+  n = 821
+  global q
+  q = 4096
+~~~
+
+One of the above two routines should be called before any NTRU operations.
+
 # Cryptographic Dependencies
 
 ## Polynomials
