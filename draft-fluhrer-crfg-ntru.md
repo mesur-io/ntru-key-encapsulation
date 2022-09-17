@@ -85,6 +85,9 @@ Inverses can be computed efficiently, and also have the property that similar po
 
 ## Polynomial Addition
 
+[Now, I have working python code in ntru.py; should we just refer to that code, or bring in selected portions
+into this document?  I expect we don't want the preliminary versions of the code I wrote here...]
+
 When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.  In Python, this could look like:
 
 ~~~
