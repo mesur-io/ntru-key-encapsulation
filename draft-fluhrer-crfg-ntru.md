@@ -84,7 +84,20 @@ One of the above two routines should be called before any NTRU operations.
 
 ## Polynomials
 
-NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
+NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1, or alternativelu between -Q2 and Q/2-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
+
+Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
+a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0) (where x is an artificial variable that doesn't take a specific value).
+When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
+by the constant factor, either 3 or the value Q), and then we subtract multiples of x^n-1 until the result is a
+polynomial of degree n-1 or less.
+
+In addition, for most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
+there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
+(and doing the above reductions), we end up with the polynomial 1.
+We state this relationship as B = inv(A).
+
+Inverses can be computed efficiently, and also have the property that similar polynomials have inverses that are quite different.
 
 ## Polynomial Addition
 
@@ -140,19 +153,7 @@ Here, give the algorithm to invert a polynomial.
 
 ## Overview
 
-NTRU is based on polynomials that are taken modulo x^n - 1 and a constant factor (either 3 or a parameter set specific value q).
-That is, a polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
-a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0).
-When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
-by the constant factor, either 3 or a value q), and then we subtract multiples of x^n-1 until the result is a
-polynomial of degree n-1 or less.
-
-In addition, for most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
-there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
-(and doing the above reductions), we end up with the polynomial 1.
-We state this relationship as B = inv(A).
-
-With this background, here is a simplified overview how NTRU works: to generate a public/private keypair,
+Here is a simplified overview how NTRU works: to generate a public/private keypair,
 Alice selects two 'short' polynomials F and G (by short, that means that the coefficients are all 0, 1 or q-1).
 We then multiply each coefficient of G by 3, and then compute H = Inv(F) x G, and that is the public key; we keep around F as the private key.
 (In practice, we keep around some other values as well that'll speed up the decapsulation process)
