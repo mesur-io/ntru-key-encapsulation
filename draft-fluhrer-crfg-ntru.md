@@ -63,23 +63,6 @@ This document describes the key encapsulation mechanism (KEM) based on Hoffstein
 
 NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines two parameter sets, one called hps2048677, which has Q=2048 and N=677 and another called hps4096821, which has Q=4096 and N=821.
 
-In the python examples, we will have n and q be global variables; python code to set these globals appropriately might be:
-
-~~~
-def set_parameter_set_hps2048677():
-  global n
-  n = 677
-  global q
-  q = 2048
-def set_parameter_set_hps4096821():
-  global n
-  n = 821
-  global q
-  q = 4096
-~~~
-
-One of the above two routines should be called before any NTRU operations.
-
 # Cryptographic Dependencies
 
 ## Polynomials
@@ -90,11 +73,12 @@ Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implic
 a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0) (where x is an artificial variable that doesn't take a specific value).
 When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
 by the constant factor, either 3 or the value Q), and then we subtract multiples of x^n-1 until the result is a
-polynomial of degree n-1 or less.
+polynomial of degree n-1 or less
+(or equivalently add the resulting coefficent to the term x^(i+n) to the coefficent to the term x^i modulo the constant factor, and then discard all terms x^n and above).
 
-In addition, for most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
+For most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
 there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
-(and doing the above reductions), we end up with the polynomial 1.
+(and do the above reductions), we end up with the polynomial 1.
 We state this relationship as B = inv(A).
 
 Inverses can be computed efficiently, and also have the property that similar polynomials have inverses that are quite different.
