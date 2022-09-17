@@ -138,6 +138,34 @@ Here, give the algorithm to invert a polynomial.
 
 # NTRU Encryption
 
+## Overview
+
+NTRU is based on polynomials that are taken modulo x^n - 1 and a constant factor (either 3 or a parameter set specific value q).
+That is, a polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
+a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0).
+When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
+by the constant factor, either 3 or a value q), and then we subtract multiples of x^n-1 until the result is a
+polynomial of degree n-1 or less.
+
+In addition, for most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
+there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
+(and doing the above reductions), we end up with the polynomial 1.
+We state this relationship as B = inv(A).
+
+With this background, here is a simplified overview how NTRU works: to generate a public/private keypair,
+Alice selects two 'short' polynomials F and G (by short, that means that the coefficients are all 0, 1 or q-1).
+We then multiply each coefficient of G by 3, and then compute H = Inv(F) x G, and that is the public key; we keep around F as the private key.
+(In practice, we keep around some other values as well that'll speed up the decapsulation process)
+
+To generate a KEM key share with the public key H, Bob selects two short polynomials R and M, and compute C = R x H + M; that is the ciphertext.
+The encryptor also hashes R and M to generate its copy of the shared secret.
+
+When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this results in C x F = R x G + M x F.
+Note that all the polynomials R, G, M, F are short and so the resulting coefficients are not large (that is, always less than q/2).
+Then, we take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (modulo 3).
+She then multiples that polynomial by Inv(F) (this time over the modulo 3 polynomial), recovering M.
+She then uses M and the original ciphertext to recover R, and then hashes R and M together to generate its copy of the shared secret.
+
 # Algorithm Identifiers
 
 ntruhps2048509
