@@ -84,7 +84,7 @@ One of the above two routines should be called before any NTRU operations.
 
 ## Polynomials
 
-NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1, or alternativelu between -Q2 and Q/2-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
+NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1, or alternatively between -Q2 and Q/2-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
 
 Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
 a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0) (where x is an artificial variable that doesn't take a specific value).
@@ -153,16 +153,21 @@ Here, give the algorithm to invert a polynomial.
 
 ## Overview
 
-Here is a simplified overview how NTRU works: to generate a public/private keypair,
-Alice selects two 'short' polynomials F and G (by short, that means that the coefficients are all 0, 1 or q-1).
-We then multiply each coefficient of G by 3, and then compute H = Inv(F) x G, and that is the public key; we keep around F as the private key; we also compute Inv(H) as well, and store that in the private key.
+Here is a simplified overview how NTRU works (omitting some of the necessary tests used to address active attacks).
+
+To generate a public/private keypair,
+Alice selects two 'short' polynomials F and G (where short means that the coefficients are all 0, 1 or q-1).
+She then multiplies each coefficient of G by 3, and then computes H = Inv(F) x G; that is the public key.
+She stores F in the private key, and computes Inv(F) (with this inverse taken over the modulo 3 polynomial), and stores that in the private key as well. 
+She also computes Inv(H), and stores that in the private key.
 
 To generate a KEM key share with the public key H, Bob selects two short polynomials R and M, and compute C = R x H + M; that is the ciphertext.
 Bob also hashes R and M to generate his copy of the shared secret.
 
 When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this results in C x F = R x G + M x F.
-Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2).
-Then, she take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (modulo 3).
+Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2),
+and so the fact that we computed everything modulo Q can be ignored.
+Then, she take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (with each coefficient taken modulo 3).
 She then multiples that polynomial by Inv(F) (this time over the modulo 3 polynomial), recovering M.
 She then uses M, the original ciphertext and the stored value Inv(H) to recover R.
 She then hashes R and M together to generate her copy of the shared secret.
