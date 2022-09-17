@@ -155,17 +155,19 @@ Here, give the algorithm to invert a polynomial.
 
 Here is a simplified overview how NTRU works: to generate a public/private keypair,
 Alice selects two 'short' polynomials F and G (by short, that means that the coefficients are all 0, 1 or q-1).
-We then multiply each coefficient of G by 3, and then compute H = Inv(F) x G, and that is the public key; we keep around F as the private key.
-(In practice, we keep around some other values as well that'll speed up the decapsulation process)
+We then multiply each coefficient of G by 3, and then compute H = Inv(F) x G, and that is the public key; we keep around F as the private key; we also compute Inv(H) as well, and store that in the private key.
 
 To generate a KEM key share with the public key H, Bob selects two short polynomials R and M, and compute C = R x H + M; that is the ciphertext.
-The encryptor also hashes R and M to generate its copy of the shared secret.
+Bob also hashes R and M to generate his copy of the shared secret.
 
 When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this results in C x F = R x G + M x F.
-Note that all the polynomials R, G, M, F are short and so the resulting coefficients are not large (that is, always less than q/2).
-Then, we take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (modulo 3).
+Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2).
+Then, she take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (modulo 3).
 She then multiples that polynomial by Inv(F) (this time over the modulo 3 polynomial), recovering M.
-She then uses M and the original ciphertext to recover R, and then hashes R and M together to generate its copy of the shared secret.
+She then uses M, the original ciphertext and the stored value Inv(H) to recover R.
+She then hashes R and M together to generate her copy of the shared secret.
+
+Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's ciphertext C correctly, they will derive the same shared secret.
 
 # Algorithm Identifiers
 
