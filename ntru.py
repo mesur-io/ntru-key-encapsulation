@@ -1,5 +1,17 @@
-import random
-import hashlib
+#
+# This is an example NTRU implementation, along with a simple example of the
+# key exchange at the end.
+# This is *only* example code, and should be used only to gain an
+# understanding of how NTRU works; it should *not* be used by any real
+# application:
+# - It uses Python's internal rng; that's not crypto secure
+# - NTRU needs to be done in constant time (or, at least, time independent of
+#   any secret data.  This doesn't try to do that
+# And, of course, there's the practical issue that this implementation is
+# bog slow
+
+import random     # To get random bits
+import hashlib    # To get SHA-3
 
 def mod3(x):
     # This converts:
@@ -61,7 +73,7 @@ class NTRU_base:
     def multiply(self, A, B):
         # Multiply two polynomials (mod q)
         Product = []
-        for x in range(self.n):
+        for _ in range(self.n):
             Product.append(0)
         for x in range(self.n):
             for y in range(self.n):
@@ -74,7 +86,7 @@ class NTRU_base:
     def multiply_3(self, A, B):
         # Multiply two polynomials (mod q)
         Product = []
-        for x in range(self.n):
+        for _ in range(self.n):
             Product.append(0)
         for x in range(self.n):
             for y in range(self.n):
@@ -103,21 +115,23 @@ class NTRU_base:
 
     def invert(self, A):
         # Invert the polynomial A (mod q)
+
+        # First, invert the polynomial A (mod 2)
         V = []
-        for x in range(self.n):
+        for _ in range(self.n):
             V.append(0)
         W = [1]
-        for x in range(self.n-1):
+        for _ in range(self.n-1):
             W.append(0)
         F = []
-        for x in range(self.n):
+        for _ in range(self.n):
             F.append(1)
         G = []
         for x in range(self.n-1):
             G.append( (A[self.n-2-x] ^ A[self.n-1]) % 2 )
         G.append(0)
         delta = 1
-        for loop in range(2*self.n-3):
+        for _ in range(2*self.n-3):
             for x in reversed(range(self.n-1)):
                 V[x] = V[x-1]
             V[self.n-1] = 0
@@ -144,7 +158,12 @@ class NTRU_base:
         B = []
         for x in range(self.n):
             B.append( self.modq( -A[x] ) )
-        for x in range(4):
+
+        # Now that we've computed the inverse mod 2, do four iterations
+        # of Newton-Raphson to extend it to cover all the bits of q, which
+        # is a power of 2
+        # 4 iterations are sufficient for q < 65535
+        for _ in range(4):
             C = self.multiply( R, B )
             C[0] = self.modq(C[0] + 2)
             R = self.multiply( R, C )
@@ -153,24 +172,24 @@ class NTRU_base:
     def invert_3(self, A):
         # Invert the polynomial A (mod 3)
         V = []
-        for x in range(self.n):
+        for _ in range(self.n):
             V.append(0)
         W = [1]
-        for x in range(self.n-1):
+        for _ in range(self.n-1):
             W.append(0)
         F = []
-        for x in range(self.n):
+        for _ in range(self.n):
             F.append(1)
         G = []
         for x in range(self.n-1):
-            G.append( mod3(A[self.n-2-x] + 2*A[self.n-1]) )
+            G.append( mod3(A[self.n-2-x] - A[self.n-1]) )
         G.append(0)
         delta = 1
-        for loop in range(2*self.n-3):
+        for _ in range(2*self.n-3):
             for x in reversed(range(self.n-1)):
                 V[x] = V[x-1]
             V[0] = 0
-            sign = mod3( 2 * F[0] * G[0] )
+            sign = mod3( -F[0] * G[0] )
             if delta > 0 and G[0] != 0:
                 swap = 1
                 delta = -delta
@@ -198,7 +217,7 @@ class NTRU_base:
         # Generate a random trinary polynomial (that is, with all the terms
         # either 0, 1 or -1); with the highest term being 0
         F = []
-        for x in range(self.n-1):
+        for _ in range(self.n-1):
             v = mod3(random.getrandbits(8))
             F.append(v)
         F.append(0)
@@ -375,7 +394,7 @@ class NTRU_privatekey(NTRU_publickey):
 
         # And select the random S parameter (used to disguise KEM failure)
         self.S = bytearray()
-        for x in range(32):
+        for _ in range(32):
             self.S.append( random.randrange(256) )
 
         # And return the public key
@@ -461,8 +480,9 @@ class NTRU_privatekey(NTRU_publickey):
         else:
             return K2
 
+#
 # Here is a quick example; a key exchange between Alice and Bob
-# The convention is: everything Alice owns is prefixed by 'a_'
+# The convention this uses is: everything Alice owns is prefixed by 'a_'
 # Everything Bob owns is prefixed by 'b_'
 parameter_set = 'hps2048677'
 # parameter_set = 'hps4096821'
@@ -473,7 +493,8 @@ a_pubkey = a_privkey.key_gen()
 
 # Step 2: Alice sends her public key as a keyshare
 b_keyshare = a_pubkey
-# print( b_keyshare.hex() )  # If you want to print the public key
+# print( 'Alice sends her public key:' );
+# print( b_keyshare.hex() )
 
 # Step 3: Bob creates a shared secret/ciphertext based on
 # the keyshare he got from Alice
@@ -482,14 +503,17 @@ b_pubkey = NTRU_publickey( parameter_set )
 
 # Step 4: Bob sends his ciphertext as a keyshare
 a_keyshare = b_ciphertext
-# print( a_keyshare.hex() )  # If you want to print the ciphertext
+# print( 'Bob sends his ciphertext:' );
+# print( a_keyshare.hex() )
 
 # Step 5: Alice generates her shared secret from the keyshare she got
 # from Bob
 a_sharedsecret = a_privkey.kem_decapsulate(a_keyshare)
 
 # And at the end, we compare the two shared secrets
+print( 'Alice computes this shared secret:' );
 print( a_sharedsecret.hex() )
+print( 'Bob computes this shared secret:' );
 print( b_sharedsecret.hex() )
 if a_sharedsecret == b_sharedsecret:
     print( 'It worked!' )   # Actually, we shouldn't be that surprised...
