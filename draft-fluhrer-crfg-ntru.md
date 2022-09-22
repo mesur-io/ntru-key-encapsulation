@@ -175,7 +175,8 @@ Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's c
 +----------------+--------------------+-----------+
 ~~~
 
-[Question: do we want to support the ntruhrss701 parameter set?]
+[Question: do we want to support the ntruhrss701 parameter set?  I'm thinking not, because as far as I
+can see, that doesn't actually bring anything to the table (while adding complication) - ntruhps2048677 appears to be smaller/more secure and the performance delta is not that large]
 
 # Security Considerations
 
