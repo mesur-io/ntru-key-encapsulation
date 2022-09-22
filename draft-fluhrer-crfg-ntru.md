@@ -67,14 +67,14 @@ NTRU parameter sets define both the size of the vectors (refered to as polynomia
 
 ## Polynomials
 
-NTRU is based on polynomials; these can be viewed as a vector of N small values (between 0 and Q-1, or alternatively between -Q2 and Q/2-1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
+NTRU is based on polynomials; these can be viewed as a vector of N small values (either between 0 and Q-1, or sometimes either 0, 1 or -1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
 
 Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
-a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0) (where x is an artificial variable that doesn't take a specific value).
+a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0) (where x is an artificial variable that doesn't take a specific value).
 When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
 by the constant factor, either 3 or the value Q), and then we subtract multiples of x^n-1 until the result is a
-polynomial of degree n-1 or less
-(or equivalently add the resulting coefficent to the term x^(i+n) to the coefficent to the term x^i modulo the constant factor, and then discard all terms x^n and above).
+polynomial of degree n-1 or less.
+An equivalent way of expressing this is to add the resulting coefficent to the term x^(i+n) to the coefficent to the term x^i (modulo the constant factor), and then discard all terms x^n and above.
 
 For most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
 there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
@@ -161,12 +161,21 @@ She then hashes R and M together to generate her copy of the shared secret.
 
 Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's ciphertext C correctly, they will derive the same shared secret.
 
-# Algorithm Identifiers
+# Parameter Sets
 
-ntruhps2048509
-ntruhps2048677
-ntruhrss701
-ntruhps4096821
+~~~
++================+====================+===========+
+| Parameter Set  | Polynomial Size N  | Modulus Q |
++================+====================+===========+
+| ntruhps2048509 |         509        |    2048   |
++----------------+--------------------+-----------+
+| ntruhps2048677 |         677        |    2048   |
++----------------+--------------------+-----------+
+| ntruhps4096821 |         821        |    4096   |
++----------------+--------------------+-----------+
+~~~
+
+[Question: do we want to support the ntruhrss701 parameter set?]
 
 # Security Considerations
 
