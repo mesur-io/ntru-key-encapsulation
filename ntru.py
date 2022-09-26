@@ -39,7 +39,10 @@ class NTRU_base:
 
     # Initialize ourselves to do the specified parameter set
     def __init__(self, parameter_set):
-        if parameter_set == 'hps2048677':
+        if parameter_set == 'hps2048509':
+            self.n = 509
+            self.q = 2048
+        elif parameter_set == 'hps2048677':
             self.n = 677
             self.q = 2048
         elif parameter_set == 'hps4096821':
@@ -136,14 +139,14 @@ class NTRU_base:
                 V[x] = V[x-1]
             V[self.n-1] = 0
             if delta > 0 and G[0] != 0:
-                swap = -1
+                swap = True
                 delta = -delta
             else:
-                swap = 0
+                swap = False
             delta = delta + 1
             if swap:
-                T = F; F = G; G = T
-                T = V; V = W; W = T
+                F, G = G, F
+                V, W = W, V
             if F[0] != 0 and G[0] != 0:
                 for x in range(self.n):
                     G[x] = G[x]^F[x]
@@ -191,14 +194,14 @@ class NTRU_base:
             V[0] = 0
             sign = mod3( -F[0] * G[0] )
             if delta > 0 and G[0] != 0:
-                swap = 1
+                swap = True
                 delta = -delta
             else:
-                swap = 0
+                swap = False
             delta = delta + 1
             if swap:
-                T = F; F = G; G = T
-                T = V; V = W; W = T
+                F, G = G, F
+                V, W = W, V
             for x in range(self.n):
                 G[x] = mod3( G[x] + sign*F[x] )
                 W[x] = mod3( W[x] + sign*V[x] )
@@ -229,9 +232,9 @@ class NTRU_base:
         S = []
         for x in range(self.n - 1):
             v = 4*random.getrandbits(30)
-            if x < self.n//16:
+            if x < self.q//16 - 1:
                 v = v + 1
-            elif x < self.n//8:
+            elif x < self.q//8 - 2:
                 v = v + 2
             S.append(v)
         S.sort()     # This should be a constant time sort
@@ -297,22 +300,21 @@ class NTRU_publickey(NTRU_base):
         return H
 
     # Pack a trinary polynomial (one whose elements are all 0, 1, -1)
-    # into a bytestring.  This is used for hashing, and so it doesn't
-    # matter that not all the elements of A make it into the string
+    # into a bytestring.
     def pack_S3(self, A):
         list = bytearray()
-        for x in range((self.n-1)//5):
-            sum = 0
-            mult = 1
-                # Encode 5 consecutive elements into a single byte
-            for y in range(5):
-                val = A[5*x + y]
-                if (val < 0):   # We encode -1 elements as '2'
-                    val = 2
-                sum = sum + mult*val
-                mult = 3*mult
-
-            list.append(sum % 256)
+        sum = 0
+        mult = 1
+        for x in range(self.n-1):
+               val =  A[x]
+               if (val < 0):   # We encode -1 elements as '2'
+                   val = 2
+               sum = sum + mult*val
+               mult = 3*mult
+               if mult == 243 or x == self.n-2:
+                   list.append(sum % 256)
+                   sum = 0
+                   mult = 1
         return list
 
     #
@@ -417,7 +419,7 @@ class NTRU_privatekey(NTRU_publickey):
                 count_2 = count_2 + 1
             elif v != 0:
                 return 0
-        if count_1 == self.n//16 and count_2 == self.n//16:
+        if count_1 == self.q//16 - 1 and count_2 == self.q//16 - 1:
             return 1
         return 0
     
