@@ -11,12 +11,13 @@ ntru.py is some example code implementation Python.  Some notes:
    we pull from hashlib.  Yes, there is likely a pre-existing Python polynomial
    library - a large part of the reason behind this is to show those polynomial
    operations.
- - This currently implements the parameter sets hps2048677 and hps4096821.
-   hps2048509 would be easy to add; hrss701 would be more work (as hrss changes
-   how some of the internal functions operate)
+ - This currently implements the parameter sets hps2048677, hps4096821, and
+   hps2048509; hrss701 would be more work (as hrss changes how some of the internal
+   functions operate)
  - This is bog slow; this is both because we avoid clever (efficient) algorithms in
    favor of more obvious ones, and also because, well, Python
- - We have yet to do interoperability testing against the NTRU reference code (which we
-   really need to do - self interoperability only takes you so far...)
+ - We have done interoperability testing against the reference code submitted to
+   NIST as a part of the round 3 submission, for all three parameter sets supported
+   by this package.
  - I tried to write this in ideomatic Python, but to be honest, this is the first
-   nontrivial Python program I wrote, and so some C-ism's may have crept in...
+   nontrivial Python program I have written, and so some C-ism's may have crept in...
