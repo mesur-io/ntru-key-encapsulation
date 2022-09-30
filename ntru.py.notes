@@ -1,12 +1,14 @@
-ntru.py is some example code implementation Python.  Some notes:
+ntru.py is some example code implementating Python.  Some notes:
 
 - This implementation is **NOT** designed to be used for security; it is example code,
   designed to show how NTRU works.  Security sins that this implementation commits:
     - It calls the generic python rng for randomness; that is not designed to for
       crypto uses
     - Much of what NTRU does needs to be in constant time (to prevent leakage).
-      While do an occasional nod towards that, however we certainly don't cover
-      everything (and in any case, Python is likely not internally constant time)
+      We tried to do that, however some of the Python operations we rely on (multiply,
+      modulo, sort) are either unlikely or known not to be constant time
+ - This code is meant to show how NTRU works internally, hence we tried to comment
+   it well
  - This code is self contained, with the exception of the SHA3 implementation, which
    we pull from hashlib.  Yes, there is likely a pre-existing Python polynomial
    library - a large part of the reason behind this is to show those polynomial
