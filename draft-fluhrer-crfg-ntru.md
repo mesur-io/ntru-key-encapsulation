@@ -136,20 +136,19 @@ When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that polynomial
 
 Here, give the algorithm to invert a polynomial.
 
-# Sampling
+# Selecting Random Polynomials
 
-NTRU needs to sample random polynomials, both during key generation as well as encryption.
-It MUST rely on a cryptographically secure random number generator to select these values
+When running NTRU, we need at times random polynomials with specific forms; doing this is referred to a sampling.
+We need to do this both when generating keys as well as when encrypting a message.
+It MUST rely on a cryptographically secure random number generator to select these values.
 
 ## Sample a random trinary polynomial
 
-This function (called sample_iid by the reference code) selects a random trinary sample (with
-the last coeffient 0).
+This function (called sample_iid by the reference code) selects a random trinary polynomial,
+that is, one whose coefficients are all either 0, 1 or 2, with the last coefficient 0.
 
-This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3.  This isn't
-precisely uniform; it is close enough for security.
-
-We then append a 0 as the last coefficient.
+This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3 (and setting the last coefficient to be 0).
+This isn't precisely uniform; it is close enough for security.
 
 ## Sample a random balanced trinary polynomial
 
@@ -157,18 +156,20 @@ This function (called sample_fixed_type by the refence code) selects a random tr
 
 This can be done by generating n-1 random values; tagging q/16-1 of the values as 1; q/16-1 of the values as -1 and the rest tagged as 0.  Then, you can sort (in constant time) the random values; the resulting tags are in the required random order.
 
-# Serialization
+# Converting Between Polynomials and Byte Strings
 
 NTRU needs to convert polynomials into byte strings and vica versa,
 both the export public keys and ciphertexts, as well as being able to hash those polynomials.
+We refer to this process as serialization and deserialization.
 
 ## Serialize a polynomial base q
 
 This function (called pack_Rq0 by the reference code) converts a polynomial into a byte string.
 
 This function takes the first n-1 coefficients (each a value between 0 and q-1), expresses each
-as a log_2(q) bit little endian integer, and concatinates them into a long bit string; the result
-is that bit string being parsed into bytes (with any trailing bits being set to 0).
+as a log_2(q) bit bit string as a little endian integer.
+Then, it concatinates those n-1 bit strings into a long bit string; the result
+is that bit string being parsed into bytes (with any trailing bits in the last byte being set to 0).
 
 The inverse function (called) unpack_Rq0) converts that byte string back into a polynomial.
 
@@ -177,7 +178,7 @@ bit string as a little endian integer and sets the corresponding coefficient of 
 that integer.  Then, it adds all those n-1 coefficients together, and sets the n-th coefficient
 to the negation of that sum modulo q.
 
-A close reading of the above algorithm will note that the pack_Rq0 doesn't actually depend on the
+A close reading of the above algorithms will note that the pack_Rq0 doesn't actually depend on the
 last coefficient.  This is because this code assumes that the polynomial is a multiple of the
 polynomial x-1; the unpack_Rq0 code uses that assumption to reconstruct that last coefficient.
 
@@ -189,15 +190,16 @@ are a multiple of the polynomial G; we always sample G values that have an equal
 
 This function (called pack_S3 by the reference code) converts a trinary polynomial into a byte string.
 
-This function takes the n-1 coefficients in sets of 5; it converts each coefficient into the values 0, 1 or 2.
-This it sums up the coefficients as c0 + 3*c1 + 9*c2 + 27*c3 + 81*c4, and then stores that value in the byte string.
+This function takes the n-1 coefficients in sets of 5; it converts the five coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2.
+This it sums up the coefficients as c0 + 3*c1 + 9*c2 + 27*c3 + 81*c4, and then stores that value as the next byte in the byte string.
 
 If the last set of 5 is incomplete (which will happen if n-1 is not a multiple of 5), then the higher missing coefficients are assumed to be zero.
 
 Now, if the polynomial happens to not be trinary, then it doesn't matter what byte we store; we need to store some value, and this code still needs to be constant time.
 The reason we don't care is this happens only on decryption failure (someone handed us an invalid ciphertext); in that case, the value of the hash will end up being ignored.
+Of course, no matter what the coefficient is, this still needs to be done in constant time.
 
-This output of this function will be used only for hashing, hence there is 	no need of an inverse function.
+This output of this function will be used only for hashing, hence there is no need for an inverse function.
 
 # NTRU Encryption
 
