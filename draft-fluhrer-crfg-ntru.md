@@ -71,14 +71,21 @@ NTRU is based on polynomials; these can be viewed as a vector of N small values 
 
 Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
 a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0) (where x is an artificial variable that doesn't take a specific value).
-When we multiply two polynomials, we compute the product of the two polynomials as normal (reducing each coefficient
-by the constant factor, either 3 or the value Q), and then we subtract multiples of x^n-1 until the result is a
+When we multiply two polynomials, we first do it as we do in standard algebra; we multiply each pair of terms (including x exponential), and then sum the products which have the same resulting x term.  For example, (2x^2 + 3x + 5)(4x + 8) = (2*4)x^3 + (2*8 + 3*4)x^2 + (3*8 + 4*5)x + 5*8 = 8x^3 + 28x^2 + 44x + 40.
+
+For NTRU, however, we do two additional reductions to this multiplication.  First, for each sum of the product, we compute that sum modulo a constant factor (either 3 or the value Q; NTRU uses both at times).  In the above example, if we were reducing things modulo 3, we would actually get the resulting polynomial (8 mod 3)x^3 + (28 mod 3)x^2 + (44 mod 3)x + (40 mod 3) = 2x^3 + x^2 + 2x + 1.
+
+In addition, we compute the multiplication modulo x^n - 1 (where the value of n is specified in the parameter set); that is, we subtract multiples of x^n-1 until the result is a
 polynomial of degree n-1 or less.
 An equivalent way of expressing this is to add the resulting coefficent to the term x^(i+n) to the coefficent to the term x^i (modulo the constant factor), and then discard all terms x^n and above.
 
+In the above example, assuming n=2, the final result would be (2+2 mod 3)x + (1+1 mod 3) = x + 2.
+
+A polynomal can be conveniently represented by an array of n values (with the x^i factor being implicit in the positions in the array); 16 bits per value are sufficient to represent all the coefficients that are encountered within NTRU.
+
 For most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
 there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
-(and do the above reductions), we end up with the polynomial 1.
+(and do the above reductions), we end up with the polynomial 1 = 0x^(n-1) + 0x^(n-2) + ... + 0x + 1.
 We state this relationship as B = inv(A).
 
 Inverses can be computed efficiently, and also have the property that similar polynomials have inverses that are quite different.
@@ -226,6 +233,28 @@ She then hashes R and M together to generate her copy of the shared secret.
 
 Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's ciphertext C correctly, they will derive the same shared secret.
 
+## Private and Public Key Generation
+
+To generate a public/private keypair, we can follow this procedure:
+
+- Sample a random F using the sample_iid procedure
+
+- Sample a random G using the sample_fixed_type procedure
+
+- Multiply each coefficient of G by 3
+
+- Compute FG_inv = Inverse( F * G ) (this computation is done modulo q)
+
+- Compute H = FG_inv * G * G (modulo q)
+
+- Compute H_inv = FG_inv * F * F (modulo q)
+
+- Compute F_inv = Inverse( F ) (this computation is done modulo 3)
+
+- Sample a random 32 byte value S randomly
+
+The resulting public key is the value H (serialized by the pack_Rq0 procedure); the resulting private key are the values F, H_inv, F_inv and S.  Any other intermediate values should be securely disposed.
+ 
 # Parameter Sets
 
 ~~~
