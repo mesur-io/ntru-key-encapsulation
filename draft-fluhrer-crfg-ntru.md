@@ -285,7 +285,7 @@ The resulting public key is the value H (serialized by the pack_Rq0 procedure); 
 
 ## Key Encapsulation
 
-This takes a public key H, and generates both a ciphertext C as well as a shared key K.
+This takes a public key H, and generates both a ciphertext C as well as a secret string K.
 The ciphertext C should be sent to the holder of the private key; the key K should be used as the secret.
 
 We can follow this procedure:
@@ -298,13 +298,13 @@ We can follow this procedure:
 
 - Compute C = R*H + M (perfoming both the polynomial multiplication and polynomial addition modulo q)
 
-- Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is the secret key K
+- Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is the secret string K
 
 - Return K and C serialized using the pack_Rq0 procedure
 
 ## Key Decapuslation
 
-This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and produces a secret key K.
+This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and produces a secret string K.
 If the ciphertext is the same as what was proceduced by the key encapsulation procedure, then this will generate the same secret key K.
 
 We can follow this procedure:
@@ -329,7 +329,7 @@ We can follow this procedure:
 
 - Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is K1
 
-- Use SHA3-256 to hash the concatination of S (from the secret key) and C, the resulting 32 bytes is K2
+- Use SHA3-256 to hash the concatination of S (from the private key) and C, the resulting 32 bytes is K2
 
 - If Success, return K=K1; otherwise, return K=K2
 
@@ -350,18 +350,57 @@ We can follow this procedure:
 [Question: do we want to support the ntruhrss701 parameter set?  I'm thinking not, because as far as I
 can see, that doesn't actually bring anything to the table (while adding complication) - ntruhps2048677 appears to be smaller/more secure and the performance delta is not that large]
 
+# Usage
+
+Here is the problem that NTRU solves; we have two systems (we'll call them Alice and Bob) who wish to establish a common secret string that they can use to derive keys to protect future communication.
+They share a communication path that is authenticated (that is, the problem of detecting changes to messages between Alice and Bob is solved by something else), but that communication path may be monitored.
+What NTRU tries to achieve is to ensure that someone monitoring the communication path cannot rederive the common secret string (and hence cannot derive the communication keys.
+
+To do this, Alice and Bob follow this three step process
+
+- Step 1: Alice follows the 'Private and Public Key Generation' procedure; this creates a private key (which Alice keeps to herself) and a public key, which she sends to Bob.  Alternatively, she may decide to reuse a previously generated keypair.
+
+- Step 2: Bob receives Alice's public key, and follows the 'Key Encapsulation' procedure; this creates a secret string (which Bob keeps to himself) and a ciphertext, which he sends to Alice
+
+- Step 3: Alice recieves Bob's ciphertext, and follows the 'Key Decapuslation' procedure; this creates a secret string (which Alice keeps to herself).  Alice can then either destroy her private key, or keep it around for next time.
+
+The secret strings that Alice and Bob generate are the same, and can be used for creating symmetric keys
+
+## Comparison with DH
+
+If you look over the above Usage text, it sounds like it's doing the same job as Diffie-Hellman.
+In fact, NTRU can be viewed as a drop-in replacement for DH (with larger key shares) in some protocols.
+However, the equivalence is not exact; with NTRU, Bob can't compute the ciphertext until we get the public key.
+In contrast, in Diffie-Hellman, both sides can generate their key share g^x mod p independently.
+Some use cases take advantage of this property of Diffie-Hellman (for example, everyone publishes their key shares in a central directory; to generate keys with someone else, we can download their public key from the directory, and obtain the same key as they get when they download our key from the directory).
+A protocol that does this is known as a NonInteractive Key Exchange (NIKE) - NTRU does not do this; if you need this, you need to look for a different solution.
+
 # Security Considerations
 
-TODO Security
+TODO Security; especially how secure are the various parameter sets
 
+## Public key reuse
+
+NTRU public/private keys can be safely reused.  Reusing an NTRU key may be tempting, because the NTRU key generation process is considerably more costly than the key encapsulation or decapsulation operations.
+On the other hand, if you do reuse NTRU keys, you lose the Perfect Forward Secrecy property.
+That is, as long as you don't zeroize the NTRU private key, then an attacker that can break into the system can extract that private key, and then recover any symmetric keys that were negotiated with that private key.
 
 # IANA Considerations
 
 This document has no IANA actions.
 
+# Open Questions
+
+- The NTRU reference code takes a seed and expands that into the random stream that is used for the random sampling (because that is what NIST asked for); should this mandate that (rather than the 'pick a random number' approach we currently specify)?
+
+- HRSS - currently, we omit that parameter set - it does perform slightly faster than the HPS parameter set at the same security level (at the cost of a larger public key/ciphertext).  My expectation is that the larger keyshare size for HRSS is a more significant cost than the larger computational cost for HPS.  It would also complicate the logic somewhat (as we would need to specify both the HPS and the HRSS ways of doing things).  Is the decision to leave it out the correct one?
+
+- We don't specify a flattened format for a private key.  In my view, there is no need; systems will generally use ephemerial public/private key pairs, that is, create them on the fly, use them for one or a handful of exchanges and then throw them away.  In this use case, there is no need to transfer a private key to another device.  Now, it is possible for NTRU to be used with static keys - should we try to address that case?
+
+- There is a tiny chance of failure during key generation (if F happens to be selected as all 0); this happens with probability < 2^-800 (that is, it'll never happen in practice, unless the random number generator broke).  Should we ignore it or address it?
 
 --- back
-
+ 
 # Acknowledgments
 {:numbered="false"}
 
