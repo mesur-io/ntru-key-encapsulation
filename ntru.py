@@ -64,7 +64,7 @@ class NTRU_base:
             self.q = 4096
         elif parameter_set == 'tiny':    # For testing purposes only
             self.n = 17
-            self.q = 512
+            self.q = 128
         else:
             raise ValueError    # Undefined parameter set
  
@@ -198,18 +198,17 @@ class NTRU_base:
         for x in range(self.n-1):
             B.append( V[self.n-2-x] )
         B.append(0)
-
         # The lsbits of B are the lsbits of (A*R)^-1
-        MAR = self.multiply_int( AR, -1 )
 
         # Now that we've computed the inverse mod 2, do four iterations
         # of Newton-Raphson to extend it to cover all the bits of q, which
         # is a power of 2
         # 4 iterations are sufficient for q < 65536
         # Yes, Newton-Raphson works, even though the normal calculus-based way
-        # of showing its correctness really doesn't apply here; at the start of
+        # of showing its correctness doesn't apply here; at the start of
         # iteration n, if the lower k bits of the inverse are correct, then
         # after iteration n, the lower 2k bits of the inverse are correct
+        MAR = self.multiply_int( AR, -1 )
         for _ in range(4):
             C = self.multiply( B, MAR )
             C[0] = self.modq(C[0] + 2)
@@ -374,24 +373,27 @@ class NTRU_publickey(NTRU_base):
             # Step to the next input bit
             bit_in = 2*bit_in
             if bit_in == 256:
-                x = x + 1
-                bit_in = 1
+                x = x + 1         # Ran out of bits in this byte; step to
+                bit_in = 1        # the next byte
 
             # Step to the next output bit
             bit_out = 2*bit_out
 
-            # If we've filled the coefficent, set it
+            # If we've filled the coefficent, append it to the list
             if bit_out == self.q:
                 H.append(self.modq(next_val))
-
-                # And we track the sum of all the coefficients
-                sum = sum + next_val
-                bit_out = 1
-                next_val = 0
                 total_bytes = total_bytes+1
 
+                # We track the sum of all the coefficients
+                sum = sum + next_val
+
+                # And start on the next coefficient
+                bit_out = 1
+                next_val = 0
+
         # Reconstruct the last coefficent; it's minus the sum of all the
-        # coefficients we did read
+        # coefficients we did read (for polynomials that are multiples of
+        # x-1, the sum of the coefficients is 0)
         H.append(self.modq(-sum))
         return H
 
@@ -418,11 +420,7 @@ class NTRU_publickey(NTRU_base):
                # If we've collected 5 coefficients, or we hit the lsat
                # coefficient, deposit the byte we have
                if collected == 5 or x == self.n-2:
-                   list.append(num_byte % 256)  # The %256 is needed because
-                                           # Python will garb if we
-                                           # insert a byte outside the
-                                           # range (which can happen if
-                                           # the input is not trinomial)
+                   list.append(num_byte)
                    num_byte = 0
                    mult = 1
                    collected = 0
@@ -613,7 +611,7 @@ class NTRU_privatekey(NTRU_publickey):
 
         # Hash the ciphertext and a random value; this is a random looking
         # string that we return on decryption failure.  And, since this
-        # depends on;y on the ciphertext, we'll always get the same random
+        # depends only on the ciphertext, we'll always get the same random
         # string even if they submit the same ciphertext
         K2 = hash_two_strings(self.S, C_packed)
 
@@ -639,6 +637,7 @@ class NTRU_privatekey(NTRU_publickey):
 # parameter_set = 'hps2048509'
 parameter_set = 'hps2048677'
 # parameter_set = 'hps4096821'
+# parameter_set = 'tiny'
 
 # Step 1: Alice creates her private/public key:
 a_privkey = NTRU_privatekey( parameter_set )
