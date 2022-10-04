@@ -3,7 +3,7 @@ title: "NTRU Key Encapsulation"
 category: info
 
 docname: draft-fluhrer-crfg-ntru-latest
-submissiontype: IETF 
+submissiontype: IETF
 number:
 date:
 consensus: true
@@ -104,7 +104,7 @@ def polynomial_add(a, b):
 		sum = [ ]
 		for x in range(n):
 			 sum[x] = (a[x] + b[x]) % q
-		return sum 
+		return sum
 ~~~
 
 ## Polynomial Subtraction
@@ -116,7 +116,7 @@ def polynomial_subtract(a, b):
 		sum = [ ]
 		for x in range(n):
 			 sum[x] = (a[x] + q - b[x]) % q
-		return sum 
+		return sum
 ~~~
 
 ## Polynomial Multiplication
@@ -245,7 +245,7 @@ Here is a simplified overview how NTRU works (omitting some of the necessary tes
 To generate a public/private keypair,
 Alice selects two 'short' polynomials F and G (where short means that the coefficients are all 0, 1 or q-1).
 She then multiplies each coefficient of G by 3, and then computes H = Inv(F) x G; that is the public key.
-She stores F in the private key, and computes Inv(F) (with this inverse taken over the modulo 3 polynomial), and stores that in the private key as well. 
+She stores F in the private key, and computes Inv(F) (with this inverse taken over the modulo 3 polynomial), and stores that in the private key as well.
 She also computes Inv(H), and stores that in the private key.
 
 To generate a KEM key share with the public key H, Bob selects two short polynomials R and M, and compute C = R x H + M; that is the ciphertext.
