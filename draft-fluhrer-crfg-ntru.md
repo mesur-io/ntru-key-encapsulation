@@ -313,7 +313,7 @@ We can follow this procedure:
 
 - Compute A = C*F (modulo q)
 
-- For each coeffient x in A, if it is < q/2, replace it with x mod 3; if it is >= q/2, replace it with 3 - (q-x) mod 3
+- For each coeffient x in A, if it is < q/2, replace it with x mod 3; if it is >= q/2, replace it with 2 - (q-1-x) mod 3
 
 [THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 - WOULD A BALANCED REPRESENTATION BE CLEARER?]
  
