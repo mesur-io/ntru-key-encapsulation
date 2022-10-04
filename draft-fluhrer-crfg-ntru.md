@@ -53,6 +53,8 @@ This document does not define any new cryptography, only describes an existing c
 
 This document describes the key encapsulation mechanism (KEM) based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to as NTRU. NTRU is constructed by utilization of a correct deterministic public key scheme (correct DPKE).  The method described here is based on a combination of prior approaches described in NTRUEncrypt and NTRU-HRSS-KEM (as submitted to Round 3 of the NIST PQC project), and permits use of four well defined and reviewed parameter sets.
 
+[The below text doesn't endorse the HRSS parameter set - should we include it, or modify the above paragraph?]
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -61,7 +63,7 @@ This document describes the key encapsulation mechanism (KEM) based on Hoffstein
 
 # Parameter sets
 
-NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines two parameter sets, one called hps2048677, which has Q=2048 and N=677 and another called hps4096821, which has Q=4096 and N=821.
+NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines three parameter sets, one called hps2048509, which has Q=2048 and N=509, another called hps2048677, which has Q=2048 and N=677, and a third called hps4096821, which has Q=4096 and N=821.
 
 # Cryptographic Dependencies
 
@@ -133,15 +135,28 @@ When NTRU multiplies two polynomials, it does it by multiplying each pair of ele
 		 return product
 ~~~
 
-Note that this is example code; in many cases, one of the polynomials will be light weight (that is, has many element of 0), and more efficient algorithms may be available.
-
-Q: at one point, NTRU does polynomial multiplication modulo phi_N, 3 - have do we document that?
+Note that this is example code; in many cases, one of the polynomials will be of special form (for example, consists of only 0, 1 and -1), more efficient algorithms may be available.
 
 ## Polynomial Inversion
 
 When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).
 
 Here, give the algorithm to invert a polynomial.
+
+## Computing a Polynomial Modulo (x^n-1)/(x-1)
+
+At one point, we need to take a polynomial modulo x^(n-1)+x^(n-2)+...+1 = (x^n-1)/(x-1).
+We refer to this operation as modPhiN, and in Python, may be implemented as:
+
+~~~
+modPhiN(A):
+    B = A
+    msdigit = B[ self.n-1 ]    # msdigit == k
+    for x in range(self.n-1):
+        B[x] = self.modq(B[x] - msdigit)
+    B[ self.n-1 ] = 0
+    return B
+~~~
 
 # Selecting Random Polynomials
 
@@ -152,16 +167,29 @@ It MUST rely on a cryptographically secure random number generator to select the
 ## Sample a random trinary polynomial
 
 This function (called sample_iid by the reference code) selects a random trinary polynomial,
-that is, one whose coefficients are all either 0, 1 or 2, with the last coefficient 0.
+that is, one whose all the coefficients are either 0, 1 or q-1, with the last coefficient 0.
 
-This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3 (and setting the last coefficient to be 0).
+This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last coefficient to be 0)
 This isn't precisely uniform; it is close enough for security.
 
 ## Sample a random balanced trinary polynomial
 
-This function (called sample_fixed_type by the refence code) selects a random trinary sample with a specific weight; it consists of q/16-1 cofficients which are 1, q/16-1 coefficients which are -1, and the remainder (which includes coefficient n) as 0.
+This function (called sample_fixed_type by the refence code) selects a random trinary sample with a specific weight; it consists of q/16-1 cofficients which are 1, q/16-1 coefficients which are q-1, and the remainder (which includes coefficient n) as 0.
 
-This can be done by generating n-1 random values; tagging q/16-1 of the values as 1; q/16-1 of the values as -1 and the rest tagged as 0.  Then, you can sort (in constant time) the random values; the resulting tags are in the required random order.
+This can be done by generating n-1 random values; tagging q/16-1 of the values as 1; q/16-1 of the values as q-1 and the rest tagged as 0.  Then, you can sort (in constant time) the random values; the resulting tags are in the required random order.
+
+# Validating polynomials
+
+We also need to validate polynomials generated during decapsulation; that is, whether they were possible
+outputs of the sample_iid or sample_fixed_type procedures.
+
+## ValidR
+
+This verifies that R is a possible output of the sample_iid procedure; that is, that the coefficients of the polynomial R consists only of 0, 1 and q-1, and that the last coefficient is 0.
+
+## ValidM
+
+This verifies that M is a possible output of the sample_fixed_type procedure; that is, that the coefficients of the polynomial R consists only of 0, 1 and q-1, that the last coefficient is 0, and that there are precisely q/16-1 1 values and q/16-2 q-1 values.
 
 # Converting Between Polynomials and Byte Strings
 
@@ -254,7 +282,57 @@ To generate a public/private keypair, we can follow this procedure:
 - Sample a random 32 byte value S randomly
 
 The resulting public key is the value H (serialized by the pack_Rq0 procedure); the resulting private key are the values F, H_inv, F_inv and S.  Any other intermediate values should be securely disposed.
+
+## Key Encapsulation
+
+This takes a public key H, and generates both a ciphertext C as well as a shared key K.
+The ciphertext C should be sent to the holder of the private key; the key K should be used as the secret.
+
+We can follow this procedure:
+
+- Unpack the public key (using the unpack_Rq0 procedure) to obtain the polynomial H
+
+- Sample a random R using the sample_iid procedure
+
+- Sample a random M using the sample_fixed_type procedure
+
+- Compute C = R*H + M (perfoming both the polynomial multiplication and polynomial addition modulo q)
+
+- Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is the secret key K
+
+- Return K and C serialized using the pack_Rq0 procedure
+
+## Key Decapuslation
+
+This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and produces a secret key K.
+If the ciphertext is the same as what was proceduced by the key encapsulation procedure, then this will generate the same secret key K.
+
+We can follow this procedure:
+
+- Unpack the ciphertext (using the unpack_Rq0 procedure) to obtain the polynomial C
+
+- Compute A = C*F (modulo q)
+
+- For each coeffient x in A, if it is < q/2, replace it with x mod 3; if it is >= q/2, replace it with 3 - (q-x) mod 3
+
+[THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 - WOULD A BALANCED REPRESENTATION BE CLEARER?]
  
+- Compute M = A*F_inv (modulo 3) - yes, we are switching modulii
+
+- For each 2 coefficient within M, replace it with q-1
+
+- Compute R = (C - M) * H_inv (modulo q)
+
+- Compute R = modPhiN(R) (modulo q)
+
+- Set Success = ValidM(M) AND ValidR(R)
+
+- Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is K1
+
+- Use SHA3-256 to hash the concatination of S (from the secret key) and C, the resulting 32 bytes is K2
+
+- If Success, return K=K1; otherwise, return K=K2
+
 # Parameter Sets
 
 ~~~
