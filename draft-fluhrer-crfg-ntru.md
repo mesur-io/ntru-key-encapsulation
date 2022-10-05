@@ -72,8 +72,10 @@ NTRU parameter sets define both the size of the vectors (refered to as polynomia
 NTRU is based on polynomials; these can be viewed as a vector of N small values (either between 0 and Q-1, or sometimes either 0, 1 or -1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.
 
 Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
-a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0) (where x is an artificial variable that doesn't take a specific value).
-When we multiply two polynomials, we first do it as we do in standard algebra; we multiply each pair of terms (including x exponential), and then sum the products which have the same resulting x term.  For example, (2x^2 + 3x + 5)(4x + 8) = (2*4)x^3 + (2*8 + 3*4)x^2 + (3*8 + 4*5)x + 5*8 = 8x^3 + 28x^2 + 44x + 40.
+a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0) (where x is an independent variable that doesn't take a specific value).
+In this case, we don't think of a polynomial as a function of x that we can evaluate; instead, it is a quantity in and of itself.
+
+When we multiply two polynomials, we first do it as we do in standard algebra; we multiply each pair of terms (including x exponential), and then sum the products which have the same resulting x term.  For example, (2x^2 + 3x + 5)(4x + 8) = (2\*4)x^3 + (2\*8 + 3\*4)x^2 + (3\*8 + 4\*5)x + 5\*8 = 8x^3 + 28x^2 + 44x + 40.
 
 For NTRU, however, we do two additional reductions to this multiplication.  First, for each sum of the product, we compute that sum modulo a constant factor (either 3 or the value Q; NTRU uses both at times).  In the above example, if we were reducing things modulo 3, we would actually get the resulting polynomial (8 mod 3)x^3 + (28 mod 3)x^2 + (44 mod 3)x + (40 mod 3) = 2x^3 + x^2 + 2x + 1.
 
