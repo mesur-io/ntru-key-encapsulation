@@ -1,53 +1,49 @@
 %%%
-title: "NTRU Key Encapsulation"
-category: info
+title = "NTRU Key Encapsulation"
+abbrev = "NTRU"
+ipr = "trust200902"
+area = "Internet"
+workgroup = "CFRG"
+submissiontype = "IETF"
+keyword = ["NTRU", "post quantum", "kem"]
 
+[seriesInfo]
+name = "Internet-Draft"
+value = "draft-fluhrer-cfrg-ntru-lastest"
+stream = "IETF"
+status = "individual submission"
+
+[pi]
 docname: draft-fluhrer-crfg-ntru-latest
-submissiontype: IETF
-number:
-date:
-consensus: true
-v: 3
+toc = "yes"
 
-# area: SEC
-# workgroup: CFRG
-keyword:
- - NTRU
- - post quantum
- - kem
-venue:
-#  group: CFRG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
-  github: "mesur-io/ntru-key-encapsulation"
-  latest: "https://mesur-io.github.io/ntru-key-encapsulation/draft-fluhrer-crfg-ntru.html"
+[[author]]
+initials = "S."
+surname = "Fluhrer"
+fullname = "Scott Fluhrer"
+organization = "Cisco Systems"
+  [author.address]
+  email = "sfluhrer@cisco.com"
+  
+[[author]]
+initials = "M."
+surname = "Prorock"
+fullname = "Michael Prorock"
+organization = "mesur.io"
+  [author.address]
+  email = "mprorock@mesur.io"
 
-author:
- -
-    fullname: Scott Fluhrer
-    organization: Cisco Systems
-    email: "sfluhrer@cisco.com"
+%%%
 
-author:
- -
-    fullname: Michael Prorock
-    organization: mesur.io
-    email: "mprorock@mesur.io"
-
-
-normative:
-
-informative:
-
-
-# Abstract
+.# Abstract
 
 This draft documents NTRU as a method for post quantum key encapsulation mechanism (KEM).  The NTRU method from KEM is believed to be IPR free and cryptogprahically sound for both pre and post quantum threat environments.
 
 NIST has run a competition to select postquantum primitives and selected Kyber for KRM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.
 
 This document does not define any new cryptography, only describes an existing cryptographic system.
+
+{mainmatter}
 
 # Introduction
 
@@ -99,45 +95,17 @@ Inverses can be computed efficiently, and also have the property that similar po
 [Now, I have working python code in ntru.py; should we just refer to that code, or bring in selected portions
 into this document?  I expect we don't want the preliminary versions of the code I wrote here...]
 
-When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.  In Python, this could look like:
-
-~~~
-def polynomial_add(a, b):
-		sum = [ ]
-		for x in range(n):
-			 sum[x] = (a[x] + b[x]) % q
-		return sum
-~~~
+When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.
 
 ## Polynomial Subtraction
 
-When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.  In Python, this could look like:
-
-~~~
-def polynomial_subtract(a, b):
-		sum = [ ]
-		for x in range(n):
-			 sum[x] = (a[x] + q - b[x]) % q
-		return sum
-~~~
+When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.
 
 ## Polynomial Multiplication
 
-When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).  In Python, this could look like:
+When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more). 
 
-~~~
-	def polynomial_multiply(a, b):
-		 product = []
-		 for x in range(n)
-			  product[x] = 0
-		 for x in range(n)
-			  for y in range(n)
-				   z = (x + y) % n
-			    product[z] = (product[z] + a[x]*b[y]) % q
-		 return product
-~~~
-
-Note that this is example code; in many cases, one of the polynomials will be of special form (for example, consists of only 0, 1 and -1), more efficient algorithms may be available.
+Note that this can be optimized; in many cases, one of the polynomials will be of special form (for example, consists of only 0, 1 and -1), more efficient algorithms may be available.
 
 ## Polynomial Inversion
 
@@ -148,17 +116,7 @@ Here, give the algorithm to invert a polynomial.
 ## Computing a Polynomial Modulo (x^n-1)/(x-1)
 
 At one point, we need to take a polynomial modulo x^(n-1)+x^(n-2)+...+1 = (x^n-1)/(x-1).
-We refer to this operation as modPhiN, and in Python, may be implemented as:
-
-~~~
-modPhiN(A):
-    B = A
-    msdigit = B[ self.n-1 ]    # msdigit == k
-    for x in range(self.n-1):
-        B[x] = self.modq(B[x] - msdigit)
-    B[ self.n-1 ] = 0
-    return B
-~~~
+We refer to this operation as modPhiN, and can be performed by taking the top coefficient, and subtracting it fall all the other coefficients.
 
 # Selecting Random Polynomials
 
@@ -338,7 +296,6 @@ We can follow this procedure:
 
 # Parameter Sets
 
-~~~
 +================+====================+===========+
 | Parameter Set  | Polynomial Size N  | Modulus Q |
 +================+====================+===========+
@@ -348,7 +305,6 @@ We can follow this procedure:
 +----------------+--------------------+-----------+
 | ntruhps4096821 |         821        |    4096   |
 +----------------+--------------------+-----------+
-~~~
 
 [Question: do we want to support the ntruhrss701 parameter set?  I'm thinking not, because as far as I
 can see, that doesn't actually bring anything to the table (while adding complication) - ntruhps2048677 appears to be smaller/more secure and the performance delta is not that large]
@@ -401,10 +357,10 @@ This document has no IANA actions.
 - We don't specify a flattened format for a private key.  In my view, there is no need; systems will generally use ephemerial public/private key pairs, that is, create them on the fly, use them for one or a handful of exchanges and then throw them away.  In this use case, there is no need to transfer a private key to another device.  Now, it is possible for NTRU to be used with static keys - should we try to address that case?
 
 - There is a tiny chance of failure during key generation (if F happens to be selected as all 0); this happens with probability < 2^-800 (that is, it'll never happen in practice, unless the random number generator broke).  Should we ignore it or address it?
-
---- back
  
-# Acknowledgments
-{:numbered="false"}
+## Test vectors
 
-TODO acknowledge.
+//TODO
+
+{backmatter}
+# Acknowledgments
