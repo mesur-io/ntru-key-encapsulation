@@ -254,9 +254,10 @@ To generate a KEM key share with the public key H, Bob selects two short polynom
 Bob also hashes R and M to generate his copy of the shared secret.
 
 When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this results in C x F = R x G + M x F.
-Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2),
+Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2 in absolute value),
 and so the fact that we computed everything modulo Q can be ignored.
-Then, she take all the coefficients modulo 3; because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (with each coefficient taken modulo 3).
+Note that some of the coefficients may be 'negative' (that is, in the range Q/2 to Q-1); those need to be treated as negative values for this next step.
+Then, she take all the coefficients modulo 3 (taking into account the negative coefficients); because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (with each coefficient taken modulo 3).
 She then multiples that polynomial by Inv(F) (this time over the modulo 3 polynomial), recovering M.
 She then uses M, the original ciphertext and the stored value Inv(H) to recover R.
 She then hashes R and M together to generate her copy of the shared secret.
