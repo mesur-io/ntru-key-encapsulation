@@ -24,7 +24,7 @@ fullname = "Scott Fluhrer"
 organization = "Cisco Systems"
   [author.address]
   email = "sfluhrer@cisco.com"
-  
+
 [[author]]
 initials = "M."
 surname = "Prorock"
@@ -103,7 +103,7 @@ When NTRU subtracts two polynomials, it does it by subtracting each element of t
 
 ## Polynomial Multiplication
 
-When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more). 
+When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).
 
 Note that this can be optimized; in many cases, one of the polynomials will be of special form (for example, consists of only 0, 1 and -1), more efficient algorithms may be available.
 
@@ -277,7 +277,7 @@ We can follow this procedure:
 - For each coeffient x in A, if it is < q/2, replace it with x mod 3; if it is >= q/2, replace it with 2 - (q-1-x) mod 3
 
 [THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 - WOULD A BALANCED REPRESENTATION BE CLEARER?]
- 
+
 - Compute M = A*F_inv (modulo 3) - yes, we are switching modulii
 
 - For each 2 coefficient within M, replace it with q-1
@@ -357,7 +357,7 @@ This document has no IANA actions.
 - We don't specify a flattened format for a private key.  In my view, there is no need; systems will generally use ephemerial public/private key pairs, that is, create them on the fly, use them for one or a handful of exchanges and then throw them away.  In this use case, there is no need to transfer a private key to another device.  Now, it is possible for NTRU to be used with static keys - should we try to address that case?
 
 - There is a tiny chance of failure during key generation (if F happens to be selected as all 0); this happens with probability < 2^-800 (that is, it'll never happen in practice, unless the random number generator broke).  Should we ignore it or address it?
- 
+
 ## Test vectors
 
 //TODO
