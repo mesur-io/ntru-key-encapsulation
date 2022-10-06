@@ -16,7 +16,7 @@ Abstract
 
    This draft documents NTRU as a method for post quantum key
    encapsulation mechanism (KEM).  The NTRU method from KEM is believed
-   to be IPR free and cryptogprahically sound for both pre and post
+   to be IPR free and cryptographically sound for both pre and post
    quantum threat environments.
 
    NIST has run a competition to select postquantum primitives and
