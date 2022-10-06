@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-04T01:59:57.887279+00:00",
+  "timestamp": "2022-10-06T01:51:29.662960+00:00",
   "repo": "mesur-io/ntru-key-encapsulation",
   "labels": [
     {
@@ -69,5 +69,100 @@
       "comments": []
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 2,
+      "id": "PR_kwDOHu2pbM5AKZ_M",
+      "title": "Sfluhrer ntru explination",
+      "url": "https://github.com/mesur-io/ntru-key-encapsulation/pull/2",
+      "state": "OPEN",
+      "author": "sfluhrer",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I added a lot of text; lets go with it...",
+      "createdAt": "2022-10-04T20:20:45Z",
+      "updatedAt": "2022-10-05T20:11:08Z",
+      "baseRepository": "mesur-io/ntru-key-encapsulation",
+      "baseRefName": "main",
+      "baseRefOid": "ed4f977d9eff7dc54168ab1ae2d7a44fd843919a",
+      "headRepository": "mesur-io/ntru-key-encapsulation",
+      "headRefName": "sfluhrer-ntru-explination",
+      "headRefOid": "b73ea7a90c431b48310a3d5dc75796e4adc081b7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "sfluhrer",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> My comment was intended to be a request for changes. Explicitly adding now.\r\n\r\nHmmm, I have no idea what the 'mmark' format is supposed to be.  Do you have an example IETF draft in that format?",
+          "createdAt": "2022-10-05T18:21:14Z",
+          "updatedAt": "2022-10-05T18:21:14Z"
+        },
+        {
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Do you have an example IETF draft in that format?\r\n\r\nYou can take a look at the [post quantum signatures draft](https://raw.githubusercontent.com/mesur-io/post-quantum-signatures/main/draft-ietf-cose-post-quantum-signatures.md) for an example.\r\n\r\nThe [mmark syntax documentation](https://mmark.miek.nl/post/syntax/#rfc-7991-xml-output), specifically the [RFC 7991 section](https://mmark.miek.nl/post/syntax/), will be helpful here.",
+          "createdAt": "2022-10-05T20:11:08Z",
+          "updatedAt": "2022-10-05T20:11:08Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOHu2pbM5DdceC",
+          "commit": {
+            "abbreviatedOid": "b73ea7a"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "At some point along the way it looks like we moved from kramdown-rfc to a mix between [kramdown-rfc](https://github.com/cabo/kramdown-rfc)and [mmark](https://mmark.miek.nl/post/syntax) markdown. We need to use one or the other in order to have the workflows run properly.\r\n\r\nI suggest moving to mmark syntax, as I was unable to get kramdown-rfc to fully work properly in some quick testing.",
+          "createdAt": "2022-10-05T17:25:16Z",
+          "updatedAt": "2022-10-05T17:25:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5Ddc7m",
+          "commit": {
+            "abbreviatedOid": "b73ea7a"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "My comment was intended to be a request for changes. Explicitly adding now.",
+          "createdAt": "2022-10-05T17:26:49Z",
+          "updatedAt": "2022-10-05T17:26:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOHu2pbM5APybn",
+      "title": "Change format to mmark",
+      "url": "https://github.com/mesur-io/ntru-key-encapsulation/pull/3",
+      "state": "OPEN",
+      "author": "sfluhrer",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Changing the format of the draft to mmark",
+      "createdAt": "2022-10-05T21:29:55Z",
+      "updatedAt": "2022-10-05T21:39:23Z",
+      "baseRepository": "mesur-io/ntru-key-encapsulation",
+      "baseRefName": "sfluhrer-ntru-explination",
+      "baseRefOid": "b73ea7a90c431b48310a3d5dc75796e4adc081b7",
+      "headRepository": "mesur-io/ntru-key-encapsulation",
+      "headRefName": "sfluhrer-mmark",
+      "headRefOid": "4a930d2db59633c8faaac7e9819450ceb07ee94f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
