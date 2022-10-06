@@ -20,7 +20,7 @@ Abstract
    quantum threat environments.
 
    NIST has run a competition to select postquantum primitives and
-   selected Kyber for KRM.  Kyber unfortunately has plausible patent
+   selected Kyber for KEM.  Kyber unfortunately has plausible patent
    claims against it and there are currently undisclosed agreements with
    the patent holders and NIST.  It is unknown whether those agreements
    would be universally acceptable; if not, there will be organizations
@@ -108,9 +108,6 @@ Table of Contents
    described in NTRUEncrypt and NTRU-HRSS-KEM (as submitted to Round 3
    of the NIST PQC project), and permits use of four well defined and
    reviewed parameter sets.
-
-   [The below text doesn't endorse the HRSS parameter set - should we
-   include it, or modify the above paragraph?]
 
 2.  Conventions and Definitions
 
@@ -585,6 +582,8 @@ Table of Contents
    //TODO
 
 Appendix A.  Acknowledgments
+
+   TODO acknowledge.
 
 Authors' Addresses
 
