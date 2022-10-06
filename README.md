@@ -2,10 +2,10 @@
 
 This is the working area for the individual Internet-Draft, "NTRU Key Encapsulation".
 
-* [Editor's Copy](https://mesur-io.github.io/ntru-key-encapsulation/#go.draft-fluhrer-crfg-ntru.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-fluhrer-crfg-ntru)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-fluhrer-crfg-ntru)
-* [Compare Editor's Copy to Individual Draft](https://mesur-io.github.io/ntru-key-encapsulation/#go.draft-fluhrer-crfg-ntru.diff)
+* [Editor's Copy](https://mesur-io.github.io/ntru-key-encapsulation/#go.draft-fluhrer-cfrg-ntru.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-fluhrer-cfrg-ntru)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-fluhrer-cfrg-ntru)
+* [Compare Editor's Copy to Individual Draft](https://mesur-io.github.io/ntru-key-encapsulation/#go.draft-fluhrer-cfrg-ntru.diff)
 
 
 ## Contributing
