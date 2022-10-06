@@ -14,7 +14,6 @@ stream = "IETF"
 status = "individual submission"
 
 [pi]
-docname: draft-fluhrer-crfg-ntru-latest
 toc = "yes"
 
 [[author]]
