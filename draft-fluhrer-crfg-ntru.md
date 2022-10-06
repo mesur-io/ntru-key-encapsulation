@@ -9,7 +9,7 @@ keyword = ["NTRU", "post quantum", "kem"]
 
 [seriesInfo]
 name = "Internet-Draft"
-value = "draft-fluhrer-cfrg-ntru-latest"
+value = "draft-fluhrer-cfrg-ntru"
 stream = "IETF"
 status = "informational"
 
