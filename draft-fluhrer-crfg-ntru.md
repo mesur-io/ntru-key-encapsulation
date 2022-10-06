@@ -11,7 +11,7 @@ keyword = ["NTRU", "post quantum", "kem"]
 name = "Internet-Draft"
 value = "draft-fluhrer-cfrg-ntru-lastest"
 stream = "IETF"
-status = "individual submission"
+status = "info"
 
 [pi]
 toc = "yes"
