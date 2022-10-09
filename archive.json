@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-06T01:51:29.662960+00:00",
+  "timestamp": "2022-10-09T02:03:27.137202+00:00",
   "repo": "mesur-io/ntru-key-encapsulation",
   "labels": [
     {
@@ -75,24 +75,26 @@
       "id": "PR_kwDOHu2pbM5AKZ_M",
       "title": "Sfluhrer ntru explination",
       "url": "https://github.com/mesur-io/ntru-key-encapsulation/pull/2",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "sfluhrer",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I added a lot of text; lets go with it...",
       "createdAt": "2022-10-04T20:20:45Z",
-      "updatedAt": "2022-10-05T20:11:08Z",
+      "updatedAt": "2022-10-06T13:56:16Z",
       "baseRepository": "mesur-io/ntru-key-encapsulation",
       "baseRefName": "main",
-      "baseRefOid": "ed4f977d9eff7dc54168ab1ae2d7a44fd843919a",
+      "baseRefOid": "d48194273f34604d828eb905e1b568ebd9c93ede",
       "headRepository": "mesur-io/ntru-key-encapsulation",
       "headRefName": "sfluhrer-ntru-explination",
-      "headRefOid": "b73ea7a90c431b48310a3d5dc75796e4adc081b7",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f24c80091f18b109a55d9c168679979c8a5d01be",
+      "closedAt": "2022-10-06T13:56:13Z",
+      "mergedAt": "2022-10-06T13:56:13Z",
+      "mergedBy": "brownoxford",
+      "mergeCommit": {
+        "oid": "0018d189e7bbeb8a4eff925ce55074955c352c1d"
+      },
       "comments": [
         {
           "author": "sfluhrer",
@@ -135,6 +137,45 @@
           "createdAt": "2022-10-05T17:26:49Z",
           "updatedAt": "2022-10-05T17:26:49Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5DiLla",
+          "commit": {
+            "abbreviatedOid": "e22368c"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "It looks like you have some changes on the main branch in commit `c2df1ab` that are causing conflicts (because the markdown file got renamed). I've incorporated those changes as \"requested changes\" in this review, so you should be able to resolve the conflict by accepting them and then accepting the version of the spec from this branch.",
+          "createdAt": "2022-10-06T13:44:09Z",
+          "updatedAt": "2022-10-06T13:46:45Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\r\nThis draft documents NTRU as a method for post quantum key encapsulation mechanism (KEM).  The NTRU method from KEM is believed to be IPR free and cryptographically sound for both pre and post quantum threat environments.\r\n```",
+              "createdAt": "2022-10-06T13:44:09Z",
+              "updatedAt": "2022-10-06T13:46:45Z"
+            },
+            {
+              "originalPosition": 41,
+              "body": "```suggestion\r\nNIST has run a competition to select postquantum primitives and selected Kyber for KEM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.\r\n```",
+              "createdAt": "2022-10-06T13:44:20Z",
+              "updatedAt": "2022-10-06T13:46:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5DiQyk",
+          "commit": {
+            "abbreviatedOid": "f24c800"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-06T13:56:02Z",
+          "updatedAt": "2022-10-06T13:56:02Z",
+          "comments": []
         }
       ]
     },
@@ -143,26 +184,102 @@
       "id": "PR_kwDOHu2pbM5APybn",
       "title": "Change format to mmark",
       "url": "https://github.com/mesur-io/ntru-key-encapsulation/pull/3",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "sfluhrer",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Changing the format of the draft to mmark",
       "createdAt": "2022-10-05T21:29:55Z",
-      "updatedAt": "2022-10-05T21:39:23Z",
+      "updatedAt": "2022-10-06T13:31:07Z",
       "baseRepository": "mesur-io/ntru-key-encapsulation",
       "baseRefName": "sfluhrer-ntru-explination",
       "baseRefOid": "b73ea7a90c431b48310a3d5dc75796e4adc081b7",
       "headRepository": "mesur-io/ntru-key-encapsulation",
       "headRefName": "sfluhrer-mmark",
-      "headRefOid": "4a930d2db59633c8faaac7e9819450ceb07ee94f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "48653af73613600eea1b4204e7e6826036b69066",
+      "closedAt": "2022-10-06T13:31:00Z",
+      "mergedAt": "2022-10-06T13:31:00Z",
+      "mergedBy": "brownoxford",
+      "mergeCommit": {
+        "oid": "e22368c809988a34007a6d4c60236cc67aa173f0"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOHu2pbM5Dh5Kg",
+          "commit": {
+            "abbreviatedOid": "ea96d4c"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-10-06T13:00:04Z",
+          "updatedAt": "2022-10-06T13:00:57Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\r\nstatus = \"informational\"\r\n```\r\nSee https://mmark.miek.nl/post/syntax/#elements-of-the-title-block",
+              "createdAt": "2022-10-06T13:00:04Z",
+              "updatedAt": "2022-10-06T13:00:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5Dh7nW",
+          "commit": {
+            "abbreviatedOid": "ea96d4c"
+          },
+          "author": "sfluhrer",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-10-06T13:06:11Z",
+          "updatedAt": "2022-10-06T13:06:12Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "Thanks - the error message I was getting from xml2rfc said it expected 'info', so that's what I put in...",
+              "createdAt": "2022-10-06T13:06:12Z",
+              "updatedAt": "2022-10-06T13:06:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5DiBwN",
+          "commit": {
+            "abbreviatedOid": "7c4f747"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-10-06T13:21:18Z",
+          "updatedAt": "2022-10-06T13:21:23Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "```suggestion\r\nvalue = \"draft-fluhrer-crfg-ntru-latest\"\r\n```\r\n\r\n(`crfg` vs. typo `cfrg`)",
+              "createdAt": "2022-10-06T13:21:18Z",
+              "updatedAt": "2022-10-06T13:21:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHu2pbM5DiF0l",
+          "commit": {
+            "abbreviatedOid": "48653af"
+          },
+          "author": "brownoxford",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-06T13:30:46Z",
+          "updatedAt": "2022-10-06T13:30:46Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
