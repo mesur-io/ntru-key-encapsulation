@@ -227,7 +227,7 @@ Of course, no matter what the coefficient is, this still needs to be done in con
 
 This output of this function will be used only for hashing, hence there is no need for an inverse function.
 
-# NTRU Encryption
+# NTRU Protocol
 
 ## Overview
 
