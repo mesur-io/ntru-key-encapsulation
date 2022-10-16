@@ -5,8 +5,8 @@
 CFRG                                                          S. Fluhrer
 Internet-Draft                                             Cisco Systems
 Intended status: Informational                                M. Prorock
-Expires: 13 April 2023                                          mesur.io
-                                                         10 October 2022
+Expires: 19 April 2023                                          mesur.io
+                                                         16 October 2022
 
 
                          NTRU Key Encapsulation
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 April 2023.
+   This Internet-Draft will expire on 19 April 2023.
 
 Copyright Notice
 
@@ -103,12 +103,15 @@ Table of Contents
 
    This document describes the key encapsulation mechanism (KEM) scheme
    based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme,
-   commonly referred to as NTRU.  NTRU is constructed by utilization of
-   a correct deterministic public key scheme (correct DPKE).  The method
-   described here is based on a combination of prior approaches
-   described in NTRUEncrypt and NTRU-HRSS-KEM (as submitted to Round 3
-   of the NIST PQC project), and permits use of four well defined and
-   reviewed parameter sets.
+   commonly referred to as NTRU.  NTRU is constructed from a
+   deterministic public key scheme (correct DPKE) into a KEM (which has
+   tight proof of IND-CCA2 security in a classical and quantum model).
+   The method described here is based on a combination of prior
+   approaches, which eventually merged into the NTRUEncrypt and NTRU-
+   HRSS-KEM submissions (as submitted to Round 2 of the NIST PQC
+   project).  The algorithm described here is based on the Round 3
+   submission and permits the use of four well defined and reviewed
+   parameter sets.
 
 2.  Conventions and Definitions
 
