@@ -86,7 +86,7 @@ Table of Contents
    8.  Converting Between Polynomials and Byte Strings
      8.1.  Serialize a polynomial base q
      8.2.  Serialize a trinary polynomial
-   9.  NTRU Protocol
+   9.  NTRU
      9.1.  Overview
      9.2.  Private and Public Key Generation
      9.3.  Key Encapsulation
@@ -389,7 +389,7 @@ Table of Contents
    This output of this function will be used only for hashing, hence
    there is no need for an inverse function.
 
-9.  NTRU Protocol
+9.  NTRU
 
 9.1.  Overview
 
@@ -433,22 +433,25 @@ Table of Contents
 
    To generate a public/private keypair, we can follow this procedure:
 
-   *  Sample a random F using the sample_iid procedure
+   TODO: this two random functions could be integrated into one.
 
-   *  Sample a random G using the sample_fixed_type procedure
+   *  Generate a random polynomial f using using the ``sample_iid''
+      procedure.
 
-   *  Multiply each coefficient of G by 3
+   *  Generate a random polynomial g using the the sample_fixed_type
+      procedure
 
-   *  Compute FG_inv = Inverse( F * G ) (this computation is done modulo
-      q)
+   *  Multiply each coefficient of g by 3.
 
-   *  Compute H = FG_inv * G * G (modulo q)
+   *  Compute FG_inv = Inverse( f * g mod q) mod q.
 
-   *  Compute H_inv = FG_inv * F * F (modulo q)
+   *  Compute H = FG_inv * g * g (modulo q)
 
-   *  Compute F_inv = Inverse( F ) (this computation is done modulo 3)
+   *  Compute H_inv = FG_inv * f * f (modulo q)
 
-   *  Sample a random 32 byte value S randomly
+   *  Compute F_inv = Inverse( f ) (this computation is done modulo 3)
+
+   *  Generate a random 32 byte value s randomly
 
    The resulting public key is the value H (serialized by the pack_Rq0
    procedure); the resulting private key are the values F, H_inv, F_inv
