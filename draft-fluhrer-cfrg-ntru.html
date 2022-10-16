@@ -1138,10 +1138,21 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-notation" class="internal xref">Notation</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-notation-and-terminology" class="internal xref">Notation and Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-parameter-sets" class="internal xref">Parameter sets</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-ntru-hps-2048509" class="internal xref">NTRU-HPS 2048509</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-ntru-hps-2048677" class="internal xref">NTRU-HPS 2048677</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-ntru-hps-4096821" class="internal xref">NTRU-HPS 4096821</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-cryptographic-dependencies" class="internal xref">Cryptographic Dependencies</a></p>
@@ -1212,7 +1223,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-key-encapsulation" class="internal xref">Key Encapsulation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-key-decapuslation" class="internal xref">Key Decapuslation</a></p>
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-key-decapsulation" class="internal xref">Key Decapsulation</a></p>
 </li>
             </ul>
 </li>
@@ -1272,11 +1283,27 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <p id="section-2-1">{::boilerplate bcp14-tagged}<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="notation">
+<div id="notation-and-terminology">
 <section id="section-3">
-      <h2 id="name-notation">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-notation" class="section-name selfRef">Notation</a>
-    </h2>
+      <h2 id="name-notation-and-terminology">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-notation-and-terminology" class="section-name selfRef">Notation and Terminology</a>
+      </h2>
+<p id="section-3-1">The following functions and notation are used throughout the document.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-2.1">For any object <code>x</code>, we write <code>len(x)</code> to denote its length in bytes.<a href="#section-3-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-2.2">For two byte arrays <code>x</code> and <code>y</code>, write <code>x || y</code> to denote their
+concatenation.<a href="#section-3-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-2.3">I2OSP(x, xLen): Converts a non-negative integer <code>x</code> into a byte array
+of specified length <code>xLen</code> as described in {{!RFC8017}}. Note that
+this function returns a byte array in big-endian byte order.<a href="#section-3-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-2.4">
+          <code>n</code> and <code>q</code> are coprime positive integers. The first defines the size of the
+polynomials (treated as a zero indexed arrays), and the latter refers to the modulus.<a href="#section-3-2.4" class="pilcrow">¶</a>
+</li>
+      </ul>
 </section>
 </div>
 <div id="parameter-sets">
@@ -1284,7 +1311,64 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
       <h2 id="name-parameter-sets">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-parameter-sets" class="section-name selfRef">Parameter sets</a>
       </h2>
-<p id="section-4-1">NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines three parameter sets, one called hps2048509, which has Q=2048 and N=509, another called hps2048677, which has Q=2048 and N=677, and a third called hps4096821, which has Q=4096 and N=821.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">We define three parameter sets:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="ntru-hps-2048509">
+<section id="section-4.1">
+        <h3 id="name-ntru-hps-2048509">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ntru-hps-2048509" class="section-name selfRef">NTRU-HPS 2048509</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-4.1-1.1">Type: HPS<a href="#section-4.1-1.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-1.2">N: 509<a href="#section-4.1-1.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-1.3">Q: 2048<a href="#section-4.1-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-1.4">Hash: SHA3-256.<a href="#section-4.1-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-1.5">ID: 0x0001<a href="#section-4.1-1.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="ntru-hps-2048677">
+<section id="section-4.2">
+        <h3 id="name-ntru-hps-2048677">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-ntru-hps-2048677" class="section-name selfRef">NTRU-HPS 2048677</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-4.2-1.1">Type: HPS<a href="#section-4.2-1.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.2-1.2">N: 677<a href="#section-4.2-1.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.2-1.3">Q: 2048<a href="#section-4.2-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.2-1.4">Hash: SHA3-256.<a href="#section-4.2-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.2-1.5">ID: 0x0002<a href="#section-4.2-1.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="ntru-hps-4096821">
+<section id="section-4.3">
+        <h3 id="name-ntru-hps-4096821">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-ntru-hps-4096821" class="section-name selfRef">NTRU-HPS 4096821</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-4.3-1.1">Type: HPS<a href="#section-4.3-1.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-1.2">N: 821<a href="#section-4.3-1.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-1.3">Q: 4096<a href="#section-4.3-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-1.4">Hash: SHA3-256.<a href="#section-4.3-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-1.5">ID: 0x0003<a href="#section-4.3-1.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="cryptographic-dependencies">
@@ -1559,10 +1643,10 @@ The ciphertext C should be sent to the holder of the private key; the key K shou
         </ul>
 </section>
 </div>
-<div id="key-decapuslation">
+<div id="key-decapsulation">
 <section id="section-9.4">
-        <h3 id="name-key-decapuslation">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-key-decapuslation" class="section-name selfRef">Key Decapuslation</a>
+        <h3 id="name-key-decapsulation">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-key-decapsulation" class="section-name selfRef">Key Decapsulation</a>
         </h3>
 <p id="section-9.4-1">This takes a private key (F, H<em>inv, F</em>inv, S) and a ciphertext C, and produces a secret string K.
 If the ciphertext is the same as what was proceduced by the key encapsulation procedure, then this will generate the same secret key K.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
