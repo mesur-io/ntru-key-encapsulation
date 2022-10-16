@@ -86,7 +86,7 @@ Table of Contents
    8.  Converting Between Polynomials and Byte Strings
      8.1.  Serialize a polynomial base q
      8.2.  Serialize a trinary polynomial
-   9.  NTRU Encryption
+   9.  NTRU Protocol
      9.1.  Overview
      9.2.  Private and Public Key Generation
      9.3.  Key Encapsulation
@@ -389,7 +389,7 @@ Table of Contents
    This output of this function will be used only for hashing, hence
    there is no need for an inverse function.
 
-9.  NTRU Encryption
+9.  NTRU Protocol
 
 9.1.  Overview
 
