@@ -31,12 +31,11 @@ fullname = "Michael Prorock"
 organization = "mesur.io"
   [author.address]
   email = "mprorock@mesur.io"
-
 %%%
 
 .# Abstract
 
-This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM) scheme.  The NTRU method from KEM is believed to be IPR free and cryptographically sound for both classical and post-quantum threat environments.
+This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM) scheme. The NTRU method from KEM is believed to be IPR free and cryptographically sound for both classical and post-quantum threat environments.
 
 NIST has run a competition to select post-quantum primitives and preliminary selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.
 
@@ -46,7 +45,7 @@ This document does not define any new cryptography, only describes an existing c
 
 # Introduction
 
-This document describes the key encapsulation mechanism (KEM) scheme based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to as NTRU. NTRU is constructed by utilization of a correct deterministic public key scheme (correct DPKE).  The method described here is based on a combination of prior approaches described in NTRUEncrypt and NTRU-HRSS-KEM (as submitted to Round 3 of the NIST PQC project), and permits use of four well defined and reviewed parameter sets.
+This document describes the key encapsulation mechanism (KEM) scheme based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to as NTRU. NTRU is constructed from a deterministic public key scheme (correct DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and quantum model).  The method described here is based on a combination of prior approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM submissions (as submitted to Round 2 of the NIST PQC project). The algorithm described here is based on the Round 3 submission and permits the use of four well defined and reviewed parameter sets.
 
 # Conventions and Definitions
 
