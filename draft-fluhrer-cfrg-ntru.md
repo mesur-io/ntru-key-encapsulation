@@ -227,7 +227,7 @@ Of course, no matter what the coefficient is, this still needs to be done in con
 
 This output of this function will be used only for hashing, hence there is no need for an inverse function.
 
-# NTRU Protocol
+# NTRU
 
 ## Overview
 
@@ -257,21 +257,16 @@ Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's c
 
 To generate a public/private keypair, we can follow this procedure:
 
-- Sample a random F using the sample_iid procedure
+TODO: this two random functions could be integrated into one.
 
-- Sample a random G using the sample_fixed_type procedure
-
-- Multiply each coefficient of G by 3
-
-- Compute FG_inv = Inverse( F * G ) (this computation is done modulo q)
-
-- Compute H = FG_inv * G * G (modulo q)
-
-- Compute H_inv = FG_inv * F * F (modulo q)
-
-- Compute F_inv = Inverse( F ) (this computation is done modulo 3)
-
-- Sample a random 32 byte value S randomly
+- Generate a random polynomial f using using the ``sample_iid'' procedure.
+- Generate a random polynomial g using the the ``sample_fixed_type`` procedure
+- Multiply each coefficient of g by 3.
+- Compute FG_inv = Inverse( f * g  mod q)  mod q.
+- Compute H = FG_inv * g * g (modulo q)
+- Compute H_inv = FG_inv * f * f (modulo q)
+- Compute F_inv = Inverse( f ) (this computation is done modulo 3)
+- Generate a random 32 byte value s randomly
 
 The resulting public key is the value H (serialized by the pack_Rq0 procedure); the resulting private key are the values F, H_inv, F_inv and S.  Any other intermediate values should be securely disposed.
 
@@ -283,15 +278,10 @@ The ciphertext C should be sent to the holder of the private key; the key K shou
 We can follow this procedure:
 
 - Unpack the public key (using the unpack_Rq0 procedure) to obtain the polynomial H
-
 - Sample a random R using the sample_iid procedure
-
 - Sample a random M using the sample_fixed_type procedure
-
 - Compute C = R*H + M (perfoming both the polynomial multiplication and polynomial addition modulo q)
-
 - Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is the secret string K
-
 - Return K and C serialized using the pack_Rq0 procedure
 
 ## Key Decapsulation
