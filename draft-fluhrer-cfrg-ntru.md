@@ -51,11 +51,46 @@ This document describes the key encapsulation mechanism (KEM) scheme based on Ho
 
 {::boilerplate bcp14-tagged}
 
-# Notation
+# Notation and Terminology
+
+The following functions and notation are used throughout the document.
+
+- For any object `x`, we write `len(x)` to denote its length in bytes.
+- For two byte arrays `x` and `y`, write `x || y` to denote their
+  concatenation.
+- I2OSP(x, xLen): Converts a non-negative integer `x` into a byte array
+  of specified length `xLen` as described in {{!RFC8017}}. Note that
+  this function returns a byte array in big-endian byte order.
+- `n` and `q` are coprime positive integers. The first defines the size of the
+   polynomials (treated as a zero indexed arrays), and the latter refers to the modulus.
 
 # Parameter sets
 
-NTRU parameter sets define both the size of the vectors (refered to as polynomials) used within NTRU, as well as the modulus Q used in internally.  This document defines three parameter sets, one called hps2048509, which has Q=2048 and N=509, another called hps2048677, which has Q=2048 and N=677, and a third called hps4096821, which has Q=4096 and N=821.
+We define three parameter sets:
+
+## NTRU-HPS 2048509
+
+- Type: HPS
+- N: 509
+- Q: 2048
+- Hash: SHA3-256.
+- ID: 0x0001
+
+## NTRU-HPS 2048677
+
+- Type: HPS
+- N: 677
+- Q: 2048
+- Hash: SHA3-256.
+- ID: 0x0002
+
+## NTRU-HPS 4096821
+
+- Type: HPS
+- N: 821
+- Q: 4096
+- Hash: SHA3-256.
+- ID: 0x0003
 
 # Cryptographic Dependencies
 
@@ -259,7 +294,7 @@ We can follow this procedure:
 
 - Return K and C serialized using the pack_Rq0 procedure
 
-## Key Decapuslation
+## Key Decapsulation
 
 This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and produces a secret string K.
 If the ciphertext is the same as what was proceduced by the key encapsulation procedure, then this will generate the same secret key K.
