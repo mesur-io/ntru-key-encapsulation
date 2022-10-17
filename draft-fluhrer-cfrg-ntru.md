@@ -67,9 +67,17 @@ well defined and reviewed parameter sets.
 
 {::boilerplate bcp14-tagged}
 
-# Notation and Terminology
 
-The following functions and notation are used throughout the document.
+# Notational Conventions
+
+The key words "**MUST**", "**MUST NOT**", "**REQUIRED**", "**SHALL**", "**SHALL NOT**", "**SHOULD**",
+"**SHOULD NOT**", "**RECOMMENDED**", "**MAY**", and "**OPTIONAL**" in this
+document are to be interpreted as described in [@!RFC2119].
+
+# Terminology
+
+The following functions, terminology and notation are used throughout the
+document.
 
 - For any object `x`, we write `len(x)` to denote its length in bytes.
 - For two byte arrays `x` and `y`, write `x || y` to denote their
