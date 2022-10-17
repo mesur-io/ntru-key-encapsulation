@@ -94,7 +94,7 @@ DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and
 quantum model).  The method described here is based on a combination of prior
 approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM
 submissions (as submitted to Round 2 of the NIST PQC project). The algorithm
-described here is based on the Round 3 submission and permits the use of four
+described here is based on the Round 3 submission and permits the use of three
 well defined and reviewed parameter sets.
 
 # Parameter sets
