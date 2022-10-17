@@ -334,7 +334,7 @@ can see, that doesn't actually bring anything to the table (while adding complic
 
 Here is the problem that NTRU solves; we have two systems (we'll call them Alice and Bob) who wish to establish a common secret string that they can use to derive keys to protect future communication.
 They share a communication path that is authenticated (that is, the problem of detecting changes to messages between Alice and Bob is solved by something else), but that communication path may be monitored.
-What NTRU tries to achieve is to ensure that someone monitoring the communication path cannot rederive the common secret string (and hence cannot derive the communication keys.
+What NTRU tries to achieve is to ensure that someone monitoring the communication path cannot rederive the common secret string (and hence cannot derive the communication keys).
 
 To do this, Alice and Bob follow this three step process
 
@@ -350,7 +350,7 @@ The secret strings that Alice and Bob generate are the same, and can be used for
 
 If you look over the above Usage text, it sounds like it's doing the same job as Diffie-Hellman.
 In fact, NTRU can be viewed as a drop-in replacement for DH (with larger key shares) in some protocols.
-However, the equivalence is not exact; with NTRU, Bob can't compute the ciphertext until we get the public key.
+However, the equivalence is not exact; with NTRU, Bob cannot compute the ciphertext until he gets the public key.
 In contrast, in Diffie-Hellman, both sides can generate their key share g^x mod p independently.
 Some use cases take advantage of this property of Diffie-Hellman (for example, everyone publishes their key shares in a central directory; to generate keys with someone else, we can download their public key from the directory, and obtain the same key as they get when they download our key from the directory).
 A protocol that does this is known as a NonInteractive Key Exchange (NIKE) - NTRU does not do this; if you need this, you need to look for a different solution.
@@ -371,7 +371,7 @@ This document has no IANA actions.
 
 # Open Questions
 
-- The NTRU reference code takes a seed and expands that into the random stream that is used for the random sampling (because that is what NIST asked for); should this mandate that (rather than the 'pick a random number' approach we currently specify)?
+- The NTRU reference code takes a seed and expands that into the random stream that is used for the random sampling (because that is what NIST asked for); should this mandate that (rather than the 'pick a random number as needed' approach we currently specify)?
 
 - HRSS - currently, we omit that parameter set - it does perform slightly faster than the HPS parameter set at the same security level (at the cost of a larger public key/ciphertext).  My expectation is that the larger keyshare size for HRSS is a more significant cost than the larger computational cost for HPS.  It would also complicate the logic somewhat (as we would need to specify both the HPS and the HRSS ways of doing things).  Is the decision to leave it out the correct one?
 
