@@ -25,12 +25,20 @@ organization = "Cisco Systems"
   email = "sfluhrer@cisco.com"
 
 [[author]]
-initials = "M."
+initials = "S."
 surname = "Prorock"
 fullname = "Michael Prorock"
 organization = "mesur.io"
   [author.address]
   email = "mprorock@mesur.io"
+
+[[author]]
+initials = "M."
+surname = "Celi"
+fullname = "Sofia Celi"
+organization = "Brave"
+  [author.address]
+  email = "cherenkov@riseup.net"
 %%%
 
 .# Abstract
@@ -51,22 +59,9 @@ cryptographic system.
 
 {mainmatter}
 
-# Introduction
-
-This document describes the key encapsulation mechanism (KEM) scheme based on
-Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to
-as NTRU. NTRU is constructed from a deterministic public key scheme (correct
-DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and
-quantum model).  The method described here is based on a combination of prior
-approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM
-submissions (as submitted to Round 2 of the NIST PQC project). The algorithm
-described here is based on the Round 3 submission and permits the use of four
-well defined and reviewed parameter sets.
-
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
-
 
 # Notational Conventions
 
@@ -88,6 +83,18 @@ document.
 - `n` and `q` are coprime positive integers. The first defines the size of the
    polynomials (treated as a zero indexed arrays), and the latter refers to the
    modulus.
+
+# Introduction
+
+This document describes the key encapsulation mechanism (KEM) scheme based on
+Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to
+as NTRU. NTRU is constructed from a deterministic public key scheme (correct
+DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and
+quantum model).  The method described here is based on a combination of prior
+approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM
+submissions (as submitted to Round 2 of the NIST PQC project). The algorithm
+described here is based on the Round 3 submission and permits the use of four
+well defined and reviewed parameter sets.
 
 # Parameter sets
 
