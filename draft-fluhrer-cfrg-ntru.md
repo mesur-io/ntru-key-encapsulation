@@ -519,13 +519,15 @@ table below:
 
 ## Public key reuse
 
-NTRU public/private keys can be safely reused.  Reusing an NTRU key may be
-tempting, because the NTRU key generation process is considerably more costly
-than the key encapsulation or decapsulation operations. On the other hand, if
-you do reuse NTRU keys, you lose the Perfect Forward Secrecy property. That is,
-as long as you don't zeroize the NTRU private key, then an attacker that can
-break into the system can extract that private key, and then recover any
-symmetric keys that were negotiated with that private key.
+NTRU public/private keys can be safely reused for certain use cases.  
+Reusing an NTRU key may be tempting, because the NTRU key generation process is
+considerably more costly than the key encapsulation or decapsulation operations.
+On the other hand, if you do reuse NTRU keys, you lose the Perfect Forward
+Secrecy property. That is, as long as you don't zeroize the NTRU private key,
+then an attacker that can break into the system can extract that private key,
+and then recover any symmetric keys that were negotiated with that private key.
+
+If keys are reused, key revocation mechansims should be considered.
 
 # IANA Considerations
 
