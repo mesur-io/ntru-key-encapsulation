@@ -320,8 +320,9 @@ need for an inverse function.
 
 ## Overview
 
-Here is a simplified overview how NTRU works (omitting some of the necessary
-tests used to address active attacks).
+This section provides a simplified overview how NTRU works. Minor details are
+omitted for clarity reasons, and the Security Considerations section should be
+consulted prior to implementation.
 
 To generate a public/private keypair, Alice selects two 'short' polynomials F
 and G (where short means that the coefficients are all 0, 1 or q-1). She then
@@ -355,9 +356,7 @@ ciphertext C correctly, they will derive the same shared secret.
 
 To generate a public/private keypair, we can follow this procedure:
 
-TODO: this two random functions could be integrated into one.
-
-- Generate a random polynomial f using using the ``sample_iid'' procedure.
+- Generate a random polynomial f using using the ``sample_iid`` procedure.
 - Generate a random polynomial g using the the ``sample_fixed_type`` procedure
 - Multiply each coefficient of g by 3.
 - Compute FG_inv = Inverse( f * g  mod q)  mod q.
@@ -369,6 +368,9 @@ TODO: this two random functions could be integrated into one.
 The resulting public key is the value H (serialized by the pack_Rq0 procedure);
 the resulting private key are the values F, H_inv, F_inv and S.  Any other
 intermediate values should be securely disposed.
+
+n.b. the initial generation of random polynomials can be combined into a single
+procedure
 
 ## Key Encapsulation
 
@@ -406,7 +408,7 @@ We can follow this procedure:
 [THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 -
 WOULD A BALANCED REPRESENTATION BE CLEARER?]
 
-- Compute M = A*F_inv (modulo 3) - yes, we are switching modulii
+- Compute M = A*F_inv (modulo 3) - note the change of modulii
 
 - For each 2 coefficient within M, replace it with q-1
 
@@ -436,21 +438,20 @@ WOULD A BALANCED REPRESENTATION BE CLEARER?]
 | ntruhps4096821 |         821        |    4096   |
 +----------------+--------------------+-----------+
 
-[Question: do we want to support the ntruhrss701 parameter set?  I'm thinking
-not, because as far as I can see, that doesn't actually bring anything to the
-table (while adding complication) - ntruhps2048677 appears to be smaller/more
-secure and the performance delta is not that large]
+Other parameter sets do exist, such as ntruhrss701, hovewver they are not
+supported by this RFC at this time as they introduce complexity without
+significant value to security, size or performance.
 
 # Usage
 
-Here is the problem that NTRU solves; we have two systems (we'll call them Alice
-and Bob) who wish to establish a common secret string that they can use to
-derive keys to protect future communication. They share a communication path
-that is authenticated (that is, the problem of detecting changes to messages
-between Alice and Bob is solved by something else), but that communication path
-may be monitored. What NTRU tries to achieve is to ensure that someone
-monitoring the communication path cannot rederive the common secret string (and
-hence cannot derive the communication keys).
+NTRU solves the problem where two systems (we'll call them Alice and Bob) wish
+to establish a common secret string that they can use to derive keys to protect
+future communication. They share a communication path that is authenticated
+(that is, the problem of detecting changes to messages between Alice and Bob is
+solved by something else), but that communication path may be monitored. What
+NTRU tries to achieve is to ensure that someone monitoring the communication
+path cannot rederive the common secret string (and hence cannot derive the
+communication keys).
 
 To do this, Alice and Bob follow this three step process
 
@@ -468,28 +469,53 @@ To do this, Alice and Bob follow this three step process
   can then either destroy her private key, or keep it around for next time.
 
 The secret strings that Alice and Bob generate are the same, and can be used for
-creating symmetric keys
+creating symmetric keys or other key shared material used to protect future
+communications.
 
 ## Comparison with DH
 
-If you look over the above Usage text, it sounds like it's doing the same job as
+NTRU at first glace appears as though it may be performing the same job as
 Diffie-Hellman. In fact, NTRU can be viewed as a drop-in replacement for DH
 (with larger key shares) in some protocols. However, the equivalence is not
-exact; with NTRU, Bob cannot compute the ciphertext until he gets the public
-key. 
+exact; with NTRU, Bob cannot compute the ciphertext until he possesses the
+public key.
 
-In contrast, in Diffie-Hellman, both sides can generate their key share g^x
-mod p independently. Some use cases take advantage of this property of
+In contrast, in Diffie-Hellman, both sides can generate their key share g^x mod
+p independently. Some use cases take advantage of this property of
 Diffie-Hellman (for example, everyone publishes their key shares in a central
 directory; to generate keys with someone else, we can download their public key
 from the directory, and obtain the same key as they get when they download our
 key from the directory). A protocol that does this is known as a NonInteractive
-Key Exchange (NIKE) - NTRU does not do this; if you need this, you need to look
-for a different solution.
+Key Exchange (NIKE). NTRU does NOT provide NIKE capabilities, and if non
+interactive use cases are required to be supported, a different approach should
+be selected.
 
 # Security Considerations
 
-TODO Security; especially how secure are the various parameter sets
+Current best practices should be followed, especially in regards to known
+plaintext attacks, such as Meet-In-The-Middle (MITM), and known ciphertext
+attacks.
+
+Lattice reductions via Lenstra-Lenstra-Lovász may be possible against NTRU with
+weak parameter set selection.
+
+## Parameter set security
+
+In all paramter sets, indistinguishability under adaptive chosen ciphertext
+attack (IND-CCA2) is a desired property.
+
+Equivalent bit strengths of the described parameter sets are outlined in the
+table below:
+
++================+====================+==============+
+| Parameter Set  | Security Model     | Bit Strength |
++================+====================+==============+
+| ntruhps2048509 | IND-CCA2           |     128      |
++----------------+--------------------+--------------+
+| ntruhps2048677 | IND-CCA2           |     192      |
++----------------+--------------------+--------------+
+| ntruhps4096821 | IND-CCA2           |     256      |
++----------------+--------------------+--------------+
 
 ## Public key reuse
 
