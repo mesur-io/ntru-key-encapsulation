@@ -52,7 +52,8 @@ selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible
 patent claims against it and there are currently undisclosed agreements with the
 patent holders and NIST. It is unknown whether those agreements would be
 universally acceptable; if not, there will be organizations for which Kyber is
-unusable until the patents expire.
+unusable until the patents expire.  This lack of clarity around licensing or
+other restrictions on Kyber has provided the motivation to provide this draft.
 
 This document does not define any new cryptography, only describes an existing
 cryptographic system.
