@@ -123,9 +123,6 @@ Inverses can be computed efficiently, and also have the property that similar po
 
 ## Polynomial Addition
 
-[Now, I have working python code in ntru.py; should we just refer to that code, or bring in selected portions
-into this document?  I expect we don't want the preliminary versions of the code I wrote here...]
-
 When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.
 
 ## Polynomial Subtraction
@@ -142,8 +139,6 @@ Note that this can be optimized; in many cases, one of the polynomials will be o
 
 When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).
 
-Here, give the algorithm to invert a polynomial.
-
 ## Computing a Polynomial Modulo (x^n-1)/(x-1)
 
 At one point, we need to take a polynomial modulo x^(n-1)+x^(n-2)+...+1 = (x^n-1)/(x-1).
@@ -152,16 +147,18 @@ We refer to this operation as modPhiN, and can be performed by taking the top co
 # Selecting Random Polynomials
 
 When running NTRU, we need at times random polynomials with specific forms; doing this is referred to a sampling.
+
 We need to do this both when generating keys as well as when encrypting a message.
 It MUST rely on a cryptographically secure random number generator to select these values.
 
 ## Sample a random trinary polynomial
 
-This function (called sample_iid by the reference code) selects a random trinary polynomial,
+At times in NTRU, we need to selects a random trinary polynomial,
 that is, one whose all the coefficients are either 0, 1 or q-1, with the last coefficient 0.
 
-This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last coefficient to be 0)
-This isn't precisely uniform; it is close enough for security.
+This operation is performed by calling the rng n-1 times to generate n-1 bytes, and then
+taking each byte modulo 3, mapping 2 to q-1 (and setting the last coefficient to be 0)
+While this operation is not precisely uniform it is close enough for the purposes of NTRU.
 
 ## Sample a random balanced trinary polynomial
 
