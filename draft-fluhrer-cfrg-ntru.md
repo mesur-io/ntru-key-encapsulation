@@ -429,15 +429,11 @@ WOULD A BALANCED REPRESENTATION BE CLEARER?]
 
 # Parameter Sets
 
-+================+====================+===========+
 | Parameter Set  | Polynomial Size N  | Modulus Q |
-+================+====================+===========+
+|----------------|--------------------|-----------|
 | ntruhps2048509 |         509        |    2048   |
-+----------------+--------------------+-----------+
 | ntruhps2048677 |         677        |    2048   |
-+----------------+--------------------+-----------+
 | ntruhps4096821 |         821        |    4096   |
-+----------------+--------------------+-----------+
 
 Other parameter sets do exist, such as ntruhrss701, hovewver they are not
 supported by this RFC at this time as they introduce complexity without
@@ -508,15 +504,11 @@ attack (IND-CCA2) is a desired property.
 Equivalent bit strengths of the described parameter sets are outlined in the
 table below:
 
-+================+====================+==============+
 | Parameter Set  | Security Model     | Bit Strength |
-+================+====================+==============+
+|----------------|--------------------|--------------|
 | ntruhps2048509 | IND-CCA2           |     128      |
-+----------------+--------------------+--------------+
 | ntruhps2048677 | IND-CCA2           |     192      |
-+----------------+--------------------+--------------+
 | ntruhps4096821 | IND-CCA2           |     256      |
-+----------------+--------------------+--------------+
 
 ## Public key reuse
 
