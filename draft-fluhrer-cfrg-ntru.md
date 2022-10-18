@@ -199,8 +199,8 @@ algorithms may be available.
 
 ## Polynomial Inversion
 
-When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that
-polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).
+When NTRU 'inverts a polynomial' X, it finds a polynomial Y such that
+polynomial_multiply(X, Y) gives the polynomial 0x^(n-1) + 0x^(n-2) + ... + 0x^2 + 0x^1 + 1 = (1, 0, 0, 0, ..., 0).
 
 ## Computing a Polynomial Modulo (x^n-1)/(x-1)
 
@@ -219,17 +219,17 @@ select these values.
 
 ## Sample a random trinary polynomial
 
-At times in NTRU, we need to selects a random trinary polynomial, that is, one
+This function (called sample_iid in the reference code) selects a random trinary polynomial, that is, one
 whose all the coefficients are either 0, 1 or q-1, with the last coefficient 0.
 
 This operation is performed by calling the rng n-1 times to generate n-1 bytes,
 and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last
-coefficient to be 0) While this operation is not precisely uniform it is close
+coefficient to be 0) While this operation is not precisely uniform, it is close
 enough for the purposes of NTRU.
 
 ## Sample a random balanced trinary polynomial
 
-This function (called sample_fixed_type by the refence code) selects a random
+This function (called sample_fixed_type by the reference code) selects a random
 trinary sample with a specific weight; it consists of q/16-1 cofficients which
 are 1, q/16-1 coefficients which are q-1, and the remainder (which includes
 coefficient n) as 0.
@@ -237,7 +237,8 @@ coefficient n) as 0.
 This can be done by generating n-1 random values; tagging q/16-1 of the values
 as 1; q/16-1 of the values as q-1 and the rest tagged as 0.  Then, you can sort
 (in constant time) the random values; the resulting tags are in the required
-random order.
+random order.  You then scan through the list, and assign the coefficients to
+the values of the tags.
 
 # Validating polynomials
 
@@ -270,7 +271,7 @@ This function (called pack_Rq0 by the reference code) converts a polynomial into
 a byte string.
 
 This function takes the first n-1 coefficients (each a value between 0 and q-1),
-expresses each as a log_2(q) bit bit string as a little endian integer. Then, it
+expresses each as a log_2(q) bit bitstring as a little endian integer. Then, it
 concatinates those n-1 bit strings into a long bit string; the result is that
 bit string being parsed into bytes (with any trailing bits in the last byte
 being set to 0).
@@ -297,7 +298,8 @@ such polynomial will always be a multiple of x-1.
 ## Serialize a trinary polynomial
 
 This function (called pack_S3 by the reference code) converts a trinary
-polynomial into a byte string.
+polynomial into a byte string.  It works by taking the coefficients in
+groups of 5, and packing each such group into a byte.
 
 This function takes the n-1 coefficients in sets of 5; it converts the five
 coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2. This it sums up the
