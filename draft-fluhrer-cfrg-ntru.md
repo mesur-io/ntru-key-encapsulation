@@ -550,8 +550,16 @@ This document has no IANA actions.
 
 - There is a tiny chance of failure during key generation (if F happens to be
   selected as all 0); this happens with probability < 2^-800 (that is, it'll
-  never happen in practice, unless the random number generator broke).  Should
-  we ignore it or address it?
+  never happen in practice, unless the random number generator broke).  When
+  this happens, the computation of the inverse of F will fail; what happens
+  in that case would depend on the inverter implementation.
+  Should we ignore it or address it?
+  
+- It appears that the parameter set HPS4096821 was added lately to the NTRU
+  definition, and did not undergo the same vetting that the other parameter
+  sets did.  As such, it is unclear whether that parameter set gives the
+  claimed level of security.  Should we remove it from this RFC, or just add
+  some warning text within the security considerations?
 
 ## Test vectors
 
