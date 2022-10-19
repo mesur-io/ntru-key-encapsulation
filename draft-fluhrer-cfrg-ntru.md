@@ -184,6 +184,13 @@ B = inv(A).
 Inverses can be computed efficiently, and also have the property that similar
 polynomials have inverses that are quite different.
 
+### Trinary Polynomials
+
+Some of the polynomials that NTRU uses are 'trinary polynomials'.
+These are standard polynomials that have all their coefficients being either 0, 1 or Q-1.
+The standard operations (including polynomial multiplication and inversion) can be done the same.
+However, an implementation may decide to optimize some operations based on a specific polynomial being trinary.
+
 ## Polynomial Addition
 
 When NTRU adds two polynomials, it does it by adding each element of the vector
