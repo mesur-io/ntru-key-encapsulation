@@ -622,8 +622,8 @@ Table of Contents
    known plaintext attacks, such as Meet-In-The-Middle (MITM), and known
    ciphertext attacks.
 
-   Lattice reductions via Lenstra-Lenstra-Lov&#225;sz may be possible
-   against NTRU with weak parameter set selection.
+   Lattice reductions via Lenstra-Lenstra-Lovasz may be possible against
+   NTRU with weak parameter set selection.
 
 13.1.  Parameter set security
 
