@@ -540,11 +540,6 @@ This document has no IANA actions.
 
 # Open Questions
 
-- The NTRU reference code takes a seed and expands that into the random stream
-  that is used for the random sampling (because that is what NIST asked for);
-  should this mandate that (rather than the 'pick a random number as needed'
-  approach we currently specify)?
-
 - HRSS - currently, we omit that parameter set - it does perform slightly faster
   than the HPS parameter set at the same security level (at the cost of a larger
   public key/ciphertext).  My expectation is that the larger keyshare size for
