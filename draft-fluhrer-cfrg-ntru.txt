@@ -79,6 +79,7 @@ Table of Contents
      5.3.  NTRU-HPS 4096821
    6.  Cryptographic Dependencies
      6.1.  Polynomials
+       6.1.1.  Trinary Polynomials
      6.2.  Polynomial Addition
      6.3.  Polynomial Subtraction
      6.4.  Polynomial Multiplication
@@ -247,6 +248,15 @@ Table of Contents
 
    Inverses can be computed efficiently, and also have the property that
    similar polynomials have inverses that are quite different.
+
+6.1.1.  Trinary Polynomials
+
+   Some of the polynomials that NTRU uses are 'trinary polynomials'.
+   These are standard polynomials that have all their coefficients being
+   either 0, 1 or Q-1.  The standard operations (including polynomial
+   multiplication and inversion) can be done the same.  However, an
+   implementation may decide to optimize some operations based on a
+   specific polynomial being trinary.
 
 6.2.  Polynomial Addition
 

@@ -1190,6 +1190,11 @@ cryptographic system.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-polynomials" class="internal xref">Polynomials</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-trinary-polynomials" class="internal xref">Trinary Polynomials</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-polynomial-addition" class="internal xref">Polynomial Addition</a></p>
@@ -1476,6 +1481,17 @@ polynomial 1 = 0x^(n-1) + 0x^(n-2) + ... + 0x + 1. We state this relationship as
 B = inv(A).<a href="#section-6.1-8" class="pilcrow">¶</a></p>
 <p id="section-6.1-9">Inverses can be computed efficiently, and also have the property that similar
 polynomials have inverses that are quite different.<a href="#section-6.1-9" class="pilcrow">¶</a></p>
+<div id="trinary-polynomials">
+<section id="section-6.1.1">
+          <h4 id="name-trinary-polynomials">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-trinary-polynomials" class="section-name selfRef">Trinary Polynomials</a>
+          </h4>
+<p id="section-6.1.1-1">Some of the polynomials that NTRU uses are 'trinary polynomials'.
+These are standard polynomials that have all their coefficients being either 0, 1 or Q-1.
+The standard operations (including polynomial multiplication and inversion) can be done the same.
+However, an implementation may decide to optimize some operations based on a specific polynomial being trinary.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="polynomial-addition">
