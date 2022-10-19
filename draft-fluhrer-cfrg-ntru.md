@@ -512,7 +512,7 @@ Current best practices should be followed, especially in regards to known
 plaintext attacks, such as Meet-In-The-Middle (MITM), and known ciphertext
 attacks.
 
-Lattice reductions via Lenstra-Lenstra-Lovász may be possible against NTRU with
+Lattice reductions via Lenstra-Lenstra-Lovasz may be possible against NTRU with
 weak parameter set selection.
 
 ## Parameter set security
