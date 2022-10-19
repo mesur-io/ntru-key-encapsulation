@@ -39,14 +39,14 @@ fullname = "Sofia Celi"
 organization = "Brave"
   [author.address]
   email = "cherenkov@riseup.net"
-  
+
 [[author]]
 initials = "J."
 surname = "Gray"
 fullname = "John Gray"
 organization = "Entrust"
   [author.address]
-  email = "john.gray@entrust.com"  
+  email = "john.gray@entrust.com"
 %%%
 
 .# Abstract
@@ -152,7 +152,7 @@ evaluate; instead, it is a quantity in and of itself.
 When we multiply two polynomials, we first do it as we do in standard algebra;
 we multiply each pair of terms (including x exponential), and then sum the
 products which have the same resulting x term.  For example,
-(2x^2 + 3x + 5)(4x + 8) = 
+(2x^2 + 3x + 5)(4x + 8) =
 (2\*4)x^3 + (2\*8 + 3\*4)x^2 + (3\*8 + 4\*5)x + 5\*8 = 8x^3 + 28x^2 + 44x + 40.
 
 For NTRU, however, we do two additional reductions to this multiplication.
@@ -227,7 +227,7 @@ select these values.
 
 ## Sample a random trinary polynomial
 
-This function (called sample_iid in the reference code) selects a random trinary 
+This function (called sample_iid in the reference code) selects a random trinary
 polynomial, that is, one where all the coefficients are either 0, 1 or q-1, with
  the last coefficient 0.
 
@@ -282,7 +282,7 @@ a byte string.
 This function takes the first n-1 coefficients (each a value between 0 and q-1),
 expresses each as a log_2(q) bit bitstring as a little endian integer.  All n-1
 coefficients are of length log_2(q).  Then, it concatinates those n-1 bit strings
-into a long bit string; the result is that bit string being parsed into bytes 
+into a long bit string; the result is that bit string being parsed into bytes
 (with any trailing bits in the last byte being set to 0).
 
 The inverse function (called) unpack_Rq0) converts that byte string back into a
@@ -291,7 +291,7 @@ polynomial.
 It takes the byte string, parses it into n-1 consecutive log_2(q) bit strings,
 takes each such bit string as a little endian integer and sets the corresponding
 coefficient of the polynomial to that integer.  Since all bit strings are of equal
-length, this can be done efficiently.  Then, it adds all those n-1 coefficients 
+length, this can be done efficiently.  Then, it adds all those n-1 coefficients
 together, and sets the n-th coefficient to the negation of that sum
 modulo q.
 
@@ -524,7 +524,7 @@ table below:
 
 ## Public key reuse
 
-NTRU public/private keys can be safely reused for certain use cases.  
+NTRU public/private keys can be safely reused for certain use cases.
 Reusing an NTRU key may be tempting, because the NTRU key generation process is
 considerably more costly than the key encapsulation or decapsulation operations.
 On the other hand, if you do reuse NTRU keys, you lose the Perfect Forward
@@ -566,7 +566,7 @@ This document has no IANA actions.
   this happens, the computation of the inverse of F will fail; what happens
   in that case would depend on the inverter implementation.
   Should we ignore it or address it?
-  
+
 - It appears that the parameter set HPS4096821 was added lately to the NTRU
   definition, and did not undergo the same vetting that the other parameter
   sets did.  As such, it is unclear whether that parameter set gives the
