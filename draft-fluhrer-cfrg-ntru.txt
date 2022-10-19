@@ -4,9 +4,13 @@
 
 CFRG                                                          S. Fluhrer
 Internet-Draft                                             Cisco Systems
-Intended status: Informational                                M. Prorock
-Expires: 20 April 2023                                          mesur.io
-                                                         17 October 2022
+Intended status: Informational                                S. Prorock
+Expires: 22 April 2023                                          mesur.io
+                                                                 M. Celi
+                                                                   Brave
+                                                                 J. Gray
+                                                                 Entrust
+                                                         19 October 2022
 
 
                          NTRU Key Encapsulation
@@ -25,7 +29,9 @@ Abstract
    currently undisclosed agreements with the patent holders and NIST.
    It is unknown whether those agreements would be universally
    acceptable; if not, there will be organizations for which Kyber is
-   unusable until the patents expire.
+   unusable until the patents expire.  This lack of clarity around
+   licensing or other restrictions on Kyber has provided the motivation
+   to author this draft.
 
    This document does not define any new cryptography, only describes an
    existing cryptographic system.
@@ -45,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2023.
+   This Internet-Draft will expire on 22 April 2023.
 
 Copyright Notice
 
@@ -63,67 +69,62 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Introduction
-   2.  Conventions and Definitions
-   3.  Notation and Terminology
-   4.  Parameter sets
-     4.1.  NTRU-HPS 2048509
-     4.2.  NTRU-HPS 2048677
-     4.3.  NTRU-HPS 4096821
-   5.  Cryptographic Dependencies
-     5.1.  Polynomials
-     5.2.  Polynomial Addition
-     5.3.  Polynomial Subtraction
-     5.4.  Polynomial Multiplication
-     5.5.  Polynomial Inversion
-     5.6.  Computing a Polynomial Modulo (x^(n-1)/(x-1))
-   6.  Selecting Random Polynomials
-     6.1.  Sample a random trinary polynomial
-     6.2.  Sample a random balanced trinary polynomial
-   7.  Validating polynomials
-     7.1.  ValidR
-     7.2.  ValidM
-   8.  Converting Between Polynomials and Byte Strings
-     8.1.  Serialize a polynomial base q
-     8.2.  Serialize a trinary polynomial
-   9.  NTRU
-     9.1.  Overview
-     9.2.  Private and Public Key Generation
-     9.3.  Key Encapsulation
-     9.4.  Key Decapsulation
-   10. Parameter Sets
-   11. Usage
-     11.1.  Comparison with DH
-   12. Security Considerations
-     12.1.  Public key reuse
-   13. IANA Considerations
-   14. Open Questions
-     14.1.  Test vectors
+   1.  Conventions and Definitions
+   2.  Notational Conventions
+   3.  Terminology
+   4.  Introduction
+   5.  Parameter sets
+     5.1.  NTRU-HPS 2048509
+     5.2.  NTRU-HPS 2048677
+     5.3.  NTRU-HPS 4096821
+   6.  Cryptographic Dependencies
+     6.1.  Polynomials
+     6.2.  Polynomial Addition
+     6.3.  Polynomial Subtraction
+     6.4.  Polynomial Multiplication
+     6.5.  Polynomial Inversion
+     6.6.  Computing a Polynomial Modulo (x^(n-1)/(x-1))
+   7.  Selecting Random Polynomials
+     7.1.  Sample a random trinary polynomial
+     7.2.  Sample a random balanced trinary polynomial
+   8.  Validating polynomials
+     8.1.  ValidR
+     8.2.  ValidM
+   9.  Converting Between Polynomials and Byte Strings
+     9.1.  Serialize a polynomial base q
+     9.2.  Serialize a trinary polynomial
+   10. NTRU
+     10.1.  Overview
+     10.2.  Private and Public Key Generation
+     10.3.  Key Encapsulation
+     10.4.  Key Decapsulation
+   11. Parameter Sets
+   12. Usage
+     12.1.  Comparison with DH
+   13. Security Considerations
+     13.1.  Parameter set security
+     13.2.  Public key reuse
+   14. IANA Considerations
+   15. Open Questions
+     15.1.  Test vectors
+   16. Normative References
    Appendix A.  Acknowledgments
    Authors' Addresses
 
-1.  Introduction
-
-   This document describes the key encapsulation mechanism (KEM) scheme
-   based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme,
-   commonly referred to as NTRU.  NTRU is constructed from a
-   deterministic public key scheme (correct DPKE) into a KEM (which has
-   tight proof of IND-CCA2 security in a classical and quantum model).
-   The method described here is based on a combination of prior
-   approaches, which eventually merged into the NTRUEncrypt and NTRU-
-   HRSS-KEM submissions (as submitted to Round 2 of the NIST PQC
-   project).  The algorithm described here is based on the Round 3
-   submission and permits the use of four well defined and reviewed
-   parameter sets.
-
-2.  Conventions and Definitions
+1.  Conventions and Definitions
 
    {::boilerplate bcp14-tagged}
 
-3.  Notation and Terminology
+2.  Notational Conventions
 
-   The following functions and notation are used throughout the
-   document.
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+3.  Terminology
+
+   The following functions, terminology and notation are used throughout
+   the document.
 
    *  For any object x, we write len(x) to denote its length in bytes.
 
@@ -138,11 +139,25 @@ Table of Contents
       of the polynomials (treated as a zero indexed arrays), and the
       latter refers to the modulus.
 
-4.  Parameter sets
+4.  Introduction
+
+   This document describes the key encapsulation mechanism (KEM) scheme
+   based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme,
+   commonly referred to as NTRU.  NTRU is constructed from a
+   deterministic public key scheme (correct DPKE) into a KEM (which has
+   tight proof of IND-CCA2 security in a classical and quantum model).
+   The method described here is based on a combination of prior
+   approaches, which eventually merged into the NTRUEncrypt and NTRU-
+   HRSS-KEM submissions (as submitted to Round 2 of the NIST PQC
+   project).  The algorithm described here is based on the Round 3
+   submission and permits the use of three well defined and reviewed
+   parameter sets.
+
+5.  Parameter sets
 
    We define three parameter sets:
 
-4.1.  NTRU-HPS 2048509
+5.1.  NTRU-HPS 2048509
 
    *  Type: HPS
 
@@ -154,7 +169,7 @@ Table of Contents
 
    *  ID: 0x0001
 
-4.2.  NTRU-HPS 2048677
+5.2.  NTRU-HPS 2048677
 
    *  Type: HPS
 
@@ -166,7 +181,7 @@ Table of Contents
 
    *  ID: 0x0002
 
-4.3.  NTRU-HPS 4096821
+5.3.  NTRU-HPS 4096821
 
    *  Type: HPS
 
@@ -178,9 +193,9 @@ Table of Contents
 
    *  ID: 0x0003
 
-5.  Cryptographic Dependencies
+6.  Cryptographic Dependencies
 
-5.1.  Polynomials
+6.1.  Polynomials
 
    NTRU is based on polynomials; these can be viewed as a vector of N
    small values (either between 0 and Q-1, or sometimes either 0, 1 or
@@ -233,24 +248,19 @@ Table of Contents
    Inverses can be computed efficiently, and also have the property that
    similar polynomials have inverses that are quite different.
 
-5.2.  Polynomial Addition
-
-   [Now, I have working python code in ntru.py; should we just refer to
-   that code, or bring in selected portions into this document?  I
-   expect we don't want the preliminary versions of the code I wrote
-   here...]
+6.2.  Polynomial Addition
 
    When NTRU adds two polynomials, it does it by adding each element of
    the vector independently modulo Q.
 
-5.3.  Polynomial Subtraction
+6.3.  Polynomial Subtraction
 
    When NTRU subtracts two polynomials, it does it by subtracting each
    element of the vector independently modulo Q; that is, if the
    subtraction of two elements results in a negative value, it adds Q to
    the difference.
 
-5.4.  Polynomial Multiplication
+6.4.  Polynomial Multiplication
 
    When NTRU multiplies two polynomials, it does it by multiplying each
    pair of elements from each polynomial, and adding that result to the
@@ -261,87 +271,90 @@ Table of Contents
    polynomials will be of special form (for example, consists of only 0,
    1 and -1), more efficient algorithms may be available.
 
-5.5.  Polynomial Inversion
+6.5.  Polynomial Inversion
 
-   When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that
-   polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).
+   When NTRU 'inverts a polynomial' X, it finds a polynomial Y such that
+   polynomial_multiply(X, Y) gives the polynomial 0x^(n-1) + 0x^(n-2) +
+   ... + 0x^2 + 0x^1 + 1 = (1, 0, 0, 0, ..., 0).
 
-   Here, give the algorithm to invert a polynomial.
-
-5.6.  Computing a Polynomial Modulo (x^(n-1)/(x-1))
+6.6.  Computing a Polynomial Modulo (x^(n-1)/(x-1))
 
    At one point, we need to take a polynomial modulo
    x^((n-1)+x)(n-2)+...+1 = (x^n-1)/(x-1).  We refer to this operation
    as modPhiN, and can be performed by taking the top coefficient, and
-   subtracting it fall all the other coefficients.
+   subtracting it from all the other coefficients.
 
-6.  Selecting Random Polynomials
+7.  Selecting Random Polynomials
 
    When running NTRU, we need at times random polynomials with specific
-   forms; doing this is referred to a sampling.  We need to do this both
-   when generating keys as well as when encrypting a message.  It MUST
-   rely on a cryptographically secure random number generator to select
-   these values.
+   forms; doing this is referred to a sampling.
 
-6.1.  Sample a random trinary polynomial
+   We need to do this both when generating keys as well as when
+   encrypting a message.  It MUST rely on a cryptographically secure
+   random number generator to select these values.
 
-   This function (called sample_iid by the reference code) selects a
-   random trinary polynomial, that is, one whose all the coefficients
+7.1.  Sample a random trinary polynomial
+
+   This function (called sample_iid in the reference code) selects a
+   random trinary polynomial, that is, one where all the coefficients
    are either 0, 1 or q-1, with the last coefficient 0.
 
-   This can be done by calling the rng n-1 times to generate n-1 bytes,
-   and then taking each byte modulo 3, mapping 2 to q-1 (and setting the
-   last coefficient to be 0) This isn't precisely uniform; it is close
-   enough for security.
+   This operation is performed by calling the rng n-1 times to generate
+   n-1 bytes, and then taking each byte modulo 3, mapping 2 to q-1 (and
+   setting the last coefficient to be 0) While this operation is not
+   precisely uniform, it is close enough for the purposes of NTRU.
 
-6.2.  Sample a random balanced trinary polynomial
+7.2.  Sample a random balanced trinary polynomial
 
-   This function (called sample_fixed_type by the refence code) selects
-   a random trinary sample with a specific weight; it consists of q/16-1
-   cofficients which are 1, q/16-1 coefficients which are q-1, and the
-   remainder (which includes coefficient n) as 0.
+   This function (called sample_fixed_type by the reference code)
+   selects a random trinary sample with a specific weight; it consists
+   of q/16-1 cofficients which are 1, q/16-1 coefficients which are q-1,
+   and the remainder (which includes coefficient n) as 0.
 
    This can be done by generating n-1 random values; tagging q/16-1 of
    the values as 1; q/16-1 of the values as q-1 and the rest tagged as
    0.  Then, you can sort (in constant time) the random values; the
-   resulting tags are in the required random order.
+   resulting tags are in the required random order.  You then scan
+   through the list, and assign the coefficients to the values of the
+   tags.
 
-7.  Validating polynomials
+8.  Validating polynomials
 
    We also need to validate polynomials generated during decapsulation;
    that is, whether they were possible outputs of the sample_iid or
    sample_fixed_type procedures.
 
-7.1.  ValidR
+8.1.  ValidR
 
    This verifies that R is a possible output of the sample_iid
    procedure; that is, that the coefficients of the polynomial R
    consists only of 0, 1 and q-1, and that the last coefficient is 0.
 
-7.2.  ValidM
+8.2.  ValidM
 
    This verifies that M is a possible output of the sample_fixed_type
    procedure; that is, that the coefficients of the polynomial R
    consists only of 0, 1 and q-1, that the last coefficient is 0, and
    that there are precisely q/16-1 1 values and q/16-2 q-1 values.
 
-8.  Converting Between Polynomials and Byte Strings
+9.  Converting Between Polynomials and Byte Strings
 
-   NTRU needs to convert polynomials into byte strings and vica versa,
-   both the export public keys and ciphertexts, as well as being able to
+   NTRU needs to convert polynomials into byte strings and vice versa,
+   both to export public keys and ciphertexts, as well as being able to
    hash those polynomials.  We refer to this process as serialization
    and deserialization.
 
-8.1.  Serialize a polynomial base q
+9.1.  Serialize a polynomial base q
 
    This function (called pack_Rq0 by the reference code) converts a
    polynomial into a byte string.
 
    This function takes the first n-1 coefficients (each a value between
-   0 and q-1), expresses each as a log_2(q) bit bit string as a little
-   endian integer.  Then, it concatinates those n-1 bit strings into a
-   long bit string; the result is that bit string being parsed into
-   bytes (with any trailing bits in the last byte being set to 0).
+   0 and q-1), expresses each as a log_2(q) bit bitstring as a little
+   endian integer.  All n-1 coefficients are of length log_2(q).  Then,
+   it concatinates those n-1 bit strings into a long bit string; the
+   result is that bit string being parsed into bytes (with any trailing
+   bits in the last byte being set to 0).
 
    The inverse function (called) unpack_Rq0) converts that byte string
    back into a polynomial.
@@ -349,8 +362,9 @@ Table of Contents
    It takes the byte string, parses it into n-1 consecutive log_2(q) bit
    strings, takes each such bit string as a little endian integer and
    sets the corresponding coefficient of the polynomial to that integer.
-   Then, it adds all those n-1 coefficients together, and sets the n-th
-   coefficient to the negation of that sum modulo q.
+   Since all bit strings are of equal length, this can be done
+   efficiently.  Then, it adds all those n-1 coefficients together, and
+   sets the n-th coefficient to the negation of that sum modulo q.
 
    A close reading of the above algorithms will note that the pack_Rq0
    doesn't actually depend on the last coefficient.  This is because
@@ -364,14 +378,15 @@ Table of Contents
    coefficients (with the rest 0), and any such polynomial will always
    be a multiple of x-1.
 
-8.2.  Serialize a trinary polynomial
+9.2.  Serialize a trinary polynomial
 
    This function (called pack_S3 by the reference code) converts a
-   trinary polynomial into a byte string.
+   trinary polynomial into a byte string.  It works by taking the
+   coefficients in groups of 5, and packing each such group into a byte.
 
    This function takes the n-1 coefficients in sets of 5; it converts
    the five coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2.
-   This it sums up the coefficients as c0 + 3_c1 + 9_c2 + 27_c3 + 81_c4,
+   Then it sums up the coefficients as c0 + 3_c1 + 9_c2 + 27_c3 + 81_c4,
    and then stores that value as the next byte in the byte string.
 
    If the last set of 5 is incomplete (which will happen if n-1 is not a
@@ -389,12 +404,13 @@ Table of Contents
    This output of this function will be used only for hashing, hence
    there is no need for an inverse function.
 
-9.  NTRU
+10.  NTRU
 
-9.1.  Overview
+10.1.  Overview
 
-   Here is a simplified overview how NTRU works (omitting some of the
-   necessary tests used to address active attacks).
+   This section provides a simplified overview how NTRU works.  Minor
+   details are omitted for clarity reasons, and the Security
+   Considerations section should be consulted prior to implementation.
 
    To generate a public/private keypair, Alice selects two 'short'
    polynomials F and G (where short means that the coefficients are all
@@ -405,7 +421,7 @@ Table of Contents
    She also computes Inv(H), and stores that in the private key.
 
    To generate a KEM key share with the public key H, Bob selects two
-   short polynomials R and M, and compute C = R x H + M; that is the
+   short polynomials R and M, and computes C = R x H + M; that is the
    ciphertext.  Bob also hashes R and M to generate his copy of the
    shared secret.
 
@@ -429,13 +445,11 @@ Table of Contents
    recieved Bob's ciphertext C correctly, they will derive the same
    shared secret.
 
-9.2.  Private and Public Key Generation
+10.2.  Private and Public Key Generation
 
    To generate a public/private keypair, we can follow this procedure:
 
-   TODO: this two random functions could be integrated into one.
-
-   *  Generate a random polynomial f using using the ``sample_iid''
+   *  Generate a random polynomial f using using the sample_iid
       procedure.
 
    *  Generate a random polynomial g using the the sample_fixed_type
@@ -457,11 +471,14 @@ Table of Contents
    procedure); the resulting private key are the values F, H_inv, F_inv
    and S.  Any other intermediate values should be securely disposed.
 
-9.3.  Key Encapsulation
+   n.b. the initial generation of random polynomials can be combined
+   into a single procedure
+
+10.3.  Key Encapsulation
 
    This takes a public key H, and generates both a ciphertext C as well
    as a secret string K.  The ciphertext C should be sent to the holder
-   of the private key; the key K should be used as the secret.
+   of the private key; the string K should be used as the secret.
 
    We can follow this procedure:
 
@@ -481,12 +498,12 @@ Table of Contents
 
    *  Return K and C serialized using the pack_Rq0 procedure
 
-9.4.  Key Decapsulation
+10.4.  Key Decapsulation
 
    This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and
    produces a secret string K.  If the ciphertext is the same as what
    was proceduced by the key encapsulation procedure, then this will
-   generate the same secret key K.
+   generate the same secret string K.
 
    We can follow this procedure:
 
@@ -501,7 +518,7 @@ Table of Contents
    [THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE
    0..Q-1 - WOULD A BALANCED REPRESENTATION BE CLEARER?]
 
-   *  Compute M = A*F_inv (modulo 3) - yes, we are switching modulii
+   *  Compute M = A*F_inv (modulo 3) - note the change of moduli
 
    *  For each 2 coefficient within M, replace it with q-1
 
@@ -520,35 +537,35 @@ Table of Contents
 
    *  If Success, return K=K1; otherwise, return K=K2
 
-10.  Parameter Sets
+11.  Parameter Sets
 
-   +================+====================+===========+ | Parameter Set |
-   Polynomial Size N | Modulus Q |
-   +================+====================+===========+ |
-   ntruhps2048509 | 509 | 2048 |
-   +----------------+--------------------+-----------+ |
-   ntruhps2048677 | 677 | 2048 |
-   +----------------+--------------------+-----------+ |
-   ntruhps4096821 | 821 | 4096 |
-   +----------------+--------------------+-----------+
+            +================+===================+===========+
+            | Parameter Set  | Polynomial Size N | Modulus Q |
+            +================+===================+===========+
+            | ntruhps2048509 | 509               | 2048      |
+            +----------------+-------------------+-----------+
+            | ntruhps2048677 | 677               | 2048      |
+            +----------------+-------------------+-----------+
+            | ntruhps4096821 | 821               | 4096      |
+            +----------------+-------------------+-----------+
 
-   [Question: do we want to support the ntruhrss701 parameter set?  I'm
-   thinking not, because as far as I can see, that doesn't actually
-   bring anything to the table (while adding complication) -
-   ntruhps2048677 appears to be smaller/more secure and the performance
-   delta is not that large]
+                                 Table 1
 
-11.  Usage
+   Other parameter sets do exist, such as ntruhrss701, hovewver they are
+   not supported by this RFC at this time as they introduce complexity
+   without significant value to security, size or performance.
 
-   Here is the problem that NTRU solves; we have two systems (we'll call
-   them Alice and Bob) who wish to establish a common secret string that
-   they can use to derive keys to protect future communication.  They
-   share a communication path that is authenticated (that is, the
-   problem of detecting changes to messages between Alice and Bob is
-   solved by something else), but that communication path may be
-   monitored.  What NTRU tries to achieve is to ensure that someone
-   monitoring the communication path cannot rederive the common secret
-   string (and hence cannot derive the communication keys).
+12.  Usage
+
+   NTRU solves the problem where two systems (we'll call them Alice and
+   Bob) wish to establish a common secret string that they can use to
+   derive keys to protect future communication.  They share a
+   communication path that is authenticated (that is, the problem of
+   detecting changes to messages between Alice and Bob is solved by
+   something else), but that communication path may be monitored.  What
+   NTRU tries to achieve is to ensure that someone monitoring the
+   communication path cannot rederive the common secret string (and
+   hence cannot derive the communication keys).
 
    To do this, Alice and Bob follow this three step process
 
@@ -567,45 +584,76 @@ Table of Contents
       private key, or keep it around for next time.
 
    The secret strings that Alice and Bob generate are the same, and can
-   be used for creating symmetric keys
+   be used for creating symmetric keys or other key shared material used
+   to protect future communications.
 
-11.1.  Comparison with DH
+12.1.  Comparison with DH
 
-   If you look over the above Usage text, it sounds like it's doing the
-   same job as Diffie-Hellman.  In fact, NTRU can be viewed as a drop-in
+   NTRU at first glace appears as though it may be performing the same
+   job as Diffie-Hellman.  In fact, NTRU can be viewed as a drop-in
    replacement for DH (with larger key shares) in some protocols.
    However, the equivalence is not exact; with NTRU, Bob cannot compute
-   the ciphertext until he gets the public key.  In contrast, in Diffie-
-   Hellman, both sides can generate their key share g^x mod p
-   independently.  Some use cases take advantage of this property of
-   Diffie-Hellman (for example, everyone publishes their key shares in a
-   central directory; to generate keys with someone else, we can
-   download their public key from the directory, and obtain the same key
-   as they get when they download our key from the directory).  A
+   the ciphertext until he possesses the public key.
+
+   In contrast, in Diffie-Hellman, both sides can generate their key
+   share g^x mod p independently.  Some use cases take advantage of this
+   property of Diffie-Hellman (for example, everyone publishes their key
+   shares in a central directory; to generate keys with someone else, we
+   can download their public key from the directory, and obtain the same
+   key as they get when they download our key from the directory).  A
    protocol that does this is known as a NonInteractive Key Exchange
-   (NIKE) - NTRU does not do this; if you need this, you need to look
-   for a different solution.
+   (NIKE).  NTRU does NOT provide NIKE capabilities, and if non
+   interactive use cases are required to be supported, a different
+   approach should be selected.
 
-12.  Security Considerations
+13.  Security Considerations
 
-   TODO Security; especially how secure are the various parameter sets
+   Current best practices should be followed, especially in regards to
+   known plaintext attacks, such as Meet-In-The-Middle (MITM), and known
+   ciphertext attacks.
 
-12.1.  Public key reuse
+   Lattice reductions via Lenstra-Lenstra-Lov&#225;sz may be possible
+   against NTRU with weak parameter set selection.
 
-   NTRU public/private keys can be safely reused.  Reusing an NTRU key
-   may be tempting, because the NTRU key generation process is
-   considerably more costly than the key encapsulation or decapsulation
-   operations.  On the other hand, if you do reuse NTRU keys, you lose
-   the Perfect Forward Secrecy property.  That is, as long as you don't
-   zeroize the NTRU private key, then an attacker that can break into
-   the system can extract that private key, and then recover any
-   symmetric keys that were negotiated with that private key.
+13.1.  Parameter set security
 
-13.  IANA Considerations
+   In all paramter sets, indistinguishability under adaptive chosen
+   ciphertext attack (IND-CCA2) is a desired property.
+
+   Equivalent bit strengths of the described parameter sets are outlined
+   in the table below:
+
+            +================+================+==============+
+            | Parameter Set  | Security Model | Bit Strength |
+            +================+================+==============+
+            | ntruhps2048509 | IND-CCA2       | 128          |
+            +----------------+----------------+--------------+
+            | ntruhps2048677 | IND-CCA2       | 192          |
+            +----------------+----------------+--------------+
+            | ntruhps4096821 | IND-CCA2       | 256          |
+            +----------------+----------------+--------------+
+
+                                 Table 2
+
+13.2.  Public key reuse
+
+   NTRU public/private keys can be safely reused for certain use cases.
+   Reusing an NTRU key may be tempting, because the NTRU key generation
+   process is considerably more costly than the key encapsulation or
+   decapsulation operations.  On the other hand, if you do reuse NTRU
+   keys, you lose the Perfect Forward Secrecy property.  That is, as
+   long as you don't zeroize the NTRU private key, then an attacker that
+   can break into the system can extract that private key, and then
+   recover any symmetric keys that were negotiated with that private
+   key.
+
+   If keys are reused, key revocation mechansims should be considered.
+
+14.  IANA Considerations
 
    This document has no IANA actions.
 
-14.  Open Questions
+15.  Open Questions
 
    *  The NTRU reference code takes a seed and expands that into the
       random stream that is used for the random sampling (because that
@@ -632,15 +680,32 @@ Table of Contents
    *  There is a tiny chance of failure during key generation (if F
       happens to be selected as all 0); this happens with probability <
       2^-800 (that is, it'll never happen in practice, unless the random
-      number generator broke).  Should we ignore it or address it?
+      number generator broke).  When this happens, the computation of
+      the inverse of F will fail; what happens in that case would depend
+      on the inverter implementation.  Should we ignore it or address
+      it?
 
-14.1.  Test vectors
+   *  It appears that the parameter set HPS4096821 was added lately to
+      the NTRU definition, and did not undergo the same vetting that the
+      other parameter sets did.  As such, it is unclear whether that
+      parameter set gives the claimed level of security.  Should we
+      remove it from this RFC, or just add some warning text within the
+      security considerations?
 
-   //TODO
+15.1.  Test vectors
+
+   TBD
+
+16.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
 Appendix A.  Acknowledgments
 
-   TODO acknowledge.
+   Acknowledge TBD.
 
 Authors' Addresses
 
@@ -652,3 +717,13 @@ Authors' Addresses
    Michael Prorock
    mesur.io
    Email: mprorock@mesur.io
+
+
+   Sofia Celi
+   Brave
+   Email: cherenkov@riseup.net
+
+
+   John Gray
+   Entrust
+   Email: john.gray@entrust.com

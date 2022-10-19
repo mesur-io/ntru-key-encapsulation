@@ -7,18 +7,29 @@
 <title>NTRU Key Encapsulation</title>
 <meta content="Scott Fluhrer" name="author">
 <meta content="Michael Prorock" name="author">
+<meta content="Sofia Celi" name="author">
+<meta content="John Gray" name="author">
 <meta content="
-       This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM) scheme. The NTRU method from KEM is believed to be IPR free and cryptographically sound for both classical and post-quantum threat environments. 
-       NIST has run a competition to select post-quantum primitives and preliminary selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire. 
-       This document does not define any new cryptography, only describes an existing cryptographic system. 
+       This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM)
+scheme. The NTRU method from KEM is believed to be IPR free and
+cryptographically sound for both classical and post-quantum threat environments. 
+       NIST has run a competition to select post-quantum primitives and preliminary
+selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible
+patent claims against it and there are currently undisclosed agreements with the
+patent holders and NIST. It is unknown whether those agreements would be
+universally acceptable; if not, there will be organizations for which Kyber is
+unusable until the patents expire.  This lack of clarity around licensing or
+other restrictions on Kyber has provided the motivation to author this draft. 
+       This document does not define any new cryptography, only describes an existing
+cryptographic system. 
     " name="description">
-<meta content="xml2rfc 3.15.0" name="generator">
+<meta content="xml2rfc 3.15.1" name="generator">
 <meta content="NTRU" name="keyword">
 <meta content="post quantum" name="keyword">
 <meta content="kem" name="keyword">
 <meta content="draft-fluhrer-cfrg-ntru-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.0
+  xml2rfc 3.15.1
     Python 3.10.5
     appdirs 1.4.4
     ConfigArgParse 1.5.3
@@ -1043,8 +1054,8 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <td class="right">October 2022</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Fluhrer &amp; Prorock</td>
-<td class="center">Expires 20 April 2023</td>
+<td class="left">Fluhrer, et al.</td>
+<td class="center">Expires 22 April 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1057,12 +1068,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-fluhrer-cfrg-ntru-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-10-17" class="published">17 October 2022</time>
+<time datetime="2022-10-19" class="published">19 October 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-04-20">20 April 2023</time></dd>
+<dd class="expires"><time datetime="2023-04-22">22 April 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1070,8 +1081,16 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <div class="org">Cisco Systems</div>
 </div>
 <div class="author">
-      <div class="author-name">M. Prorock</div>
+      <div class="author-name">S. Prorock</div>
 <div class="org">mesur.io</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Celi</div>
+<div class="org">Brave</div>
+</div>
+<div class="author">
+      <div class="author-name">J. Gray</div>
+<div class="org">Entrust</div>
 </div>
 </dd>
 </dl>
@@ -1079,9 +1098,18 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <h1 id="title">NTRU Key Encapsulation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM) scheme. The NTRU method from KEM is believed to be IPR free and cryptographically sound for both classical and post-quantum threat environments.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">NIST has run a competition to select post-quantum primitives and preliminary selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible patent claims against it and there are currently undisclosed agreements with the patent holders and NIST. It is unknown whether those agreements would be universally acceptable; if not, there will be organizations for which Kyber is unusable until the patents expire.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">This document does not define any new cryptography, only describes an existing cryptographic system.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This draft documents NTRU as a post-quantum Key Encapsulation Mechanism (KEM)
+scheme. The NTRU method from KEM is believed to be IPR free and
+cryptographically sound for both classical and post-quantum threat environments.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">NIST has run a competition to select post-quantum primitives and preliminary
+selected Kyber for standarization as a KEM.  Kyber unfortunately has plausible
+patent claims against it and there are currently undisclosed agreements with the
+patent holders and NIST. It is unknown whether those agreements would be
+universally acceptable; if not, there will be organizations for which Kyber is
+unusable until the patents expire.  This lack of clarity around licensing or
+other restrictions on Kyber has provided the motivation to author this draft.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document does not define any new cryptography, only describes an existing
+cryptographic system.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1102,7 +1130,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1132,239 +1160,268 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-notational-conventions" class="internal xref">Notational Conventions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-notation-and-terminology" class="internal xref">Notation and Terminology</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-parameter-sets" class="internal xref">Parameter sets</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-ntru-hps-2048509" class="internal xref">NTRU-HPS 2048509</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-ntru-hps-2048677" class="internal xref">NTRU-HPS 2048677</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-ntru-hps-4096821" class="internal xref">NTRU-HPS 4096821</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-cryptographic-dependencies" class="internal xref">Cryptographic Dependencies</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-parameter-sets" class="internal xref">Parameter sets</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-polynomials" class="internal xref">Polynomials</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-ntru-hps-2048509" class="internal xref">NTRU-HPS 2048509</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-polynomial-addition" class="internal xref">Polynomial Addition</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-ntru-hps-2048677" class="internal xref">NTRU-HPS 2048677</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-polynomial-subtraction" class="internal xref">Polynomial Subtraction</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-polynomial-multiplication" class="internal xref">Polynomial Multiplication</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
-                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-polynomial-inversion" class="internal xref">Polynomial Inversion</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
-                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-computing-a-polynomial-modu" class="internal xref">Computing a Polynomial Modulo (x<sup>n-1)/(x-1)</sup></a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-ntru-hps-4096821" class="internal xref">NTRU-HPS 4096821</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-selecting-random-polynomial" class="internal xref">Selecting Random Polynomials</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-cryptographic-dependencies" class="internal xref">Cryptographic Dependencies</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-sample-a-random-trinary-pol" class="internal xref">Sample a random trinary polynomial</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-polynomials" class="internal xref">Polynomials</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-sample-a-random-balanced-tr" class="internal xref">Sample a random balanced trinary polynomial</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-polynomial-addition" class="internal xref">Polynomial Addition</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-polynomial-subtraction" class="internal xref">Polynomial Subtraction</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-polynomial-multiplication" class="internal xref">Polynomial Multiplication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-polynomial-inversion" class="internal xref">Polynomial Inversion</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6">
+                <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="auto internal xref">6.6</a>.  <a href="#name-computing-a-polynomial-modu" class="internal xref">Computing a Polynomial Modulo (x<sup>n-1)/(x-1)</sup></a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-validating-polynomials" class="internal xref">Validating polynomials</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-selecting-random-polynomial" class="internal xref">Selecting Random Polynomials</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-validr" class="internal xref">ValidR</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-sample-a-random-trinary-pol" class="internal xref">Sample a random trinary polynomial</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-validm" class="internal xref">ValidM</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-sample-a-random-balanced-tr" class="internal xref">Sample a random balanced trinary polynomial</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-converting-between-polynomi" class="internal xref">Converting Between Polynomials and Byte Strings</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-validating-polynomials" class="internal xref">Validating polynomials</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-serialize-a-polynomial-base" class="internal xref">Serialize a polynomial base q</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-validr" class="internal xref">ValidR</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-serialize-a-trinary-polynom" class="internal xref">Serialize a trinary polynomial</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-validm" class="internal xref">ValidM</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-ntru" class="internal xref">NTRU</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-converting-between-polynomi" class="internal xref">Converting Between Polynomials and Byte Strings</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-serialize-a-polynomial-base" class="internal xref">Serialize a polynomial base q</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-private-and-public-key-gene" class="internal xref">Private and Public Key Generation</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-key-encapsulation" class="internal xref">Key Encapsulation</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-key-decapsulation" class="internal xref">Key Decapsulation</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-serialize-a-trinary-polynom" class="internal xref">Serialize a trinary polynomial</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-parameter-sets-2" class="internal xref">Parameter Sets</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-usage" class="internal xref">Usage</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-ntru" class="internal xref">NTRU</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-comparison-with-dh" class="internal xref">Comparison with DH</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-private-and-public-key-gene" class="internal xref">Private and Public Key Generation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-key-encapsulation" class="internal xref">Key Encapsulation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-key-decapsulation" class="internal xref">Key Decapsulation</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-parameter-sets-2" class="internal xref">Parameter Sets</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-usage" class="internal xref">Usage</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-public-key-reuse" class="internal xref">Public key reuse</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-comparison-with-dh" class="internal xref">Comparison with DH</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-open-questions" class="internal xref">Open Questions</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="auto internal xref">14.1</a>.  <a href="#name-test-vectors" class="internal xref">Test vectors</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-parameter-set-security" class="internal xref">Parameter set security</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref">13.2</a>.  <a href="#name-public-key-reuse" class="internal xref">Public key reuse</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-open-questions" class="internal xref">Open Questions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-test-vectors" class="internal xref">Test vectors</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
 </section>
 </div>
-<div id="introduction">
-<section id="section-1">
-      <h2 id="name-introduction">
-<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
-      </h2>
-<p id="section-1-1">This document describes the key encapsulation mechanism (KEM) scheme based on Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to as NTRU. NTRU is constructed from a deterministic public key scheme (correct DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and quantum model).  The method described here is based on a combination of prior approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM submissions (as submitted to Round 2 of the NIST PQC project). The algorithm described here is based on the Round 3 submission and permits the use of four well defined and reviewed parameter sets.<a href="#section-1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="conventions-and-definitions">
-<section id="section-2">
+<section id="section-1">
       <h2 id="name-conventions-and-definitions">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-2-1">{::boilerplate bcp14-tagged}<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">{::boilerplate bcp14-tagged}<a href="#section-1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="notation-and-terminology">
-<section id="section-3">
-      <h2 id="name-notation-and-terminology">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-notation-and-terminology" class="section-name selfRef">Notation and Terminology</a>
+<div id="notational-conventions">
+<section id="section-2">
+      <h2 id="name-notational-conventions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-notational-conventions" class="section-name selfRef">Notational Conventions</a>
       </h2>
-<p id="section-3-1">The following functions and notation are used throughout the document.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>",
+"<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this
+document are to be interpreted as described in <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-3">
+      <h2 id="name-terminology">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-3-1">The following functions, terminology and notation are used throughout the
+document.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-2.1">For any object <code>x</code>, we write <code>len(x)</code> to denote its length in bytes.<a href="#section-3-2.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-3-2.2">For two byte arrays <code>x</code> and <code>y</code>, write <code>x || y</code> to denote their
 concatenation.<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-2.3">I2OSP(x, xLen): Converts a non-negative integer <code>x</code> into a byte array
-of specified length <code>xLen</code> as described in {{!RFC8017}}. Note that
-this function returns a byte array in big-endian byte order.<a href="#section-3-2.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-2.3">I2OSP(x, xLen): Converts a non-negative integer <code>x</code> into a byte array of
+specified length <code>xLen</code> as described in {{!RFC8017}}. Note that this function
+returns a byte array in big-endian byte order.<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-3-2.4">
           <code>n</code> and <code>q</code> are coprime positive integers. The first defines the size of the
-polynomials (treated as a zero indexed arrays), and the latter refers to the modulus.<a href="#section-3-2.4" class="pilcrow">¶</a>
+polynomials (treated as a zero indexed arrays), and the latter refers to the
+modulus.<a href="#section-3-2.4" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
 </div>
-<div id="parameter-sets">
+<div id="introduction">
 <section id="section-4">
-      <h2 id="name-parameter-sets">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-parameter-sets" class="section-name selfRef">Parameter sets</a>
+      <h2 id="name-introduction">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-4-1">We define three parameter sets:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">This document describes the key encapsulation mechanism (KEM) scheme based on
+Hoffstein, Pipher, and Silverman's NTRU encryption scheme, commonly referred to
+as NTRU. NTRU is constructed from a deterministic public key scheme (correct
+DPKE) into a KEM (which has tight proof of IND-CCA2 security in a classical and
+quantum model).  The method described here is based on a combination of prior
+approaches, which eventually merged into the NTRUEncrypt and NTRU-HRSS-KEM
+submissions (as submitted to Round 2 of the NIST PQC project). The algorithm
+described here is based on the Round 3 submission and permits the use of three
+well defined and reviewed parameter sets.<a href="#section-4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="parameter-sets">
+<section id="section-5">
+      <h2 id="name-parameter-sets">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-parameter-sets" class="section-name selfRef">Parameter sets</a>
+      </h2>
+<p id="section-5-1">We define three parameter sets:<a href="#section-5-1" class="pilcrow">¶</a></p>
 <div id="ntru-hps-2048509">
-<section id="section-4.1">
+<section id="section-5.1">
         <h3 id="name-ntru-hps-2048509">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ntru-hps-2048509" class="section-name selfRef">NTRU-HPS 2048509</a>
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-ntru-hps-2048509" class="section-name selfRef">NTRU-HPS 2048509</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-4.1-1.1">Type: HPS<a href="#section-4.1-1.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.1-1.1">Type: HPS<a href="#section-5.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.1-1.2">N: 509<a href="#section-4.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.1-1.2">N: 509<a href="#section-5.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.1-1.3">Q: 2048<a href="#section-4.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.1-1.3">Q: 2048<a href="#section-5.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.1-1.4">Hash: SHA3-256.<a href="#section-4.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.1-1.4">Hash: SHA3-256.<a href="#section-5.1-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.1-1.5">ID: 0x0001<a href="#section-4.1-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.1-1.5">ID: 0x0001<a href="#section-5.1-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="ntru-hps-2048677">
-<section id="section-4.2">
+<section id="section-5.2">
         <h3 id="name-ntru-hps-2048677">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-ntru-hps-2048677" class="section-name selfRef">NTRU-HPS 2048677</a>
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-ntru-hps-2048677" class="section-name selfRef">NTRU-HPS 2048677</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-4.2-1.1">Type: HPS<a href="#section-4.2-1.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.2-1.1">Type: HPS<a href="#section-5.2-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-1.2">N: 677<a href="#section-4.2-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.2-1.2">N: 677<a href="#section-5.2-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-1.3">Q: 2048<a href="#section-4.2-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.2-1.3">Q: 2048<a href="#section-5.2-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-1.4">Hash: SHA3-256.<a href="#section-4.2-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.2-1.4">Hash: SHA3-256.<a href="#section-5.2-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-1.5">ID: 0x0002<a href="#section-4.2-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.2-1.5">ID: 0x0002<a href="#section-5.2-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="ntru-hps-4096821">
-<section id="section-4.3">
+<section id="section-5.3">
         <h3 id="name-ntru-hps-4096821">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-ntru-hps-4096821" class="section-name selfRef">NTRU-HPS 4096821</a>
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-ntru-hps-4096821" class="section-name selfRef">NTRU-HPS 4096821</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-4.3-1.1">Type: HPS<a href="#section-4.3-1.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.3-1.1">Type: HPS<a href="#section-5.3-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.3-1.2">N: 821<a href="#section-4.3-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.3-1.2">N: 821<a href="#section-5.3-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.3-1.3">Q: 4096<a href="#section-4.3-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.3-1.3">Q: 4096<a href="#section-5.3-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.3-1.4">Hash: SHA3-256.<a href="#section-4.3-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.3-1.4">Hash: SHA3-256.<a href="#section-5.3-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.3-1.5">ID: 0x0003<a href="#section-4.3-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.3-1.5">ID: 0x0003<a href="#section-5.3-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -1372,308 +1429,392 @@ polynomials (treated as a zero indexed arrays), and the latter refers to the mod
 </section>
 </div>
 <div id="cryptographic-dependencies">
-<section id="section-5">
+<section id="section-6">
       <h2 id="name-cryptographic-dependencies">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-cryptographic-dependencies" class="section-name selfRef">Cryptographic Dependencies</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cryptographic-dependencies" class="section-name selfRef">Cryptographic Dependencies</a>
       </h2>
 <div id="polynomials">
-<section id="section-5.1">
+<section id="section-6.1">
         <h3 id="name-polynomials">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-polynomials" class="section-name selfRef">Polynomials</a>
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-polynomials" class="section-name selfRef">Polynomials</a>
         </h3>
-<p id="section-5.1-1">NTRU is based on polynomials; these can be viewed as a vector of N small values (either between 0 and Q-1, or sometimes either 0, 1 or -1), where the values of both N and Q are specified by the parameter set.  In all parameter sets, Q is less than 65536, hence each small value fits within a 16 bit value.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the implicit polynomial being
-a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0) (where x is an independent variable that doesn't take a specific value).
-In this case, we don't think of a polynomial as a function of x that we can evaluate; instead, it is a quantity in and of itself.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">When we multiply two polynomials, we first do it as we do in standard algebra; we multiply each pair of terms (including x exponential), and then sum the products which have the same resulting x term.  For example, (2x^2 + 3x + 5)(4x + 8) = (2*4)x^3 + (2*8 + 3*4)x^2 + (3*8 + 4*5)x + 5*8 = 8x^3 + 28x^2 + 44x + 40.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">For NTRU, however, we do two additional reductions to this multiplication.  First, for each sum of the product, we compute that sum modulo a constant factor (either 3 or the value Q; NTRU uses both at times).  In the above example, if we were reducing things modulo 3, we would actually get the resulting polynomial (8 mod 3)x^3 + (28 mod 3)x^2 + (44 mod 3)x + (40 mod 3) = 2x^3 + x^2 + 2x + 1.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">In addition, we compute the multiplication modulo x^n - 1 (where the value of n is specified in the parameter set); that is, we subtract multiples of x^n-1 until the result is a
-polynomial of degree n-1 or less.
-An equivalent way of expressing this is to add the resulting coefficent to the term x^(i+n) to the coefficent to the term x^i (modulo the constant factor), and then discard all terms x^n and above.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1-6">In the above example, assuming n=2, the final result would be (2+2 mod 3)x + (1+1 mod 3) = x + 2.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
-<p id="section-5.1-7">A polynomal can be conveniently represented by an array of n values (with the x^i factor being implicit in the positions in the array); 16 bits per value are sufficient to represent all the coefficients that are encountered within NTRU.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
-<p id="section-5.1-8">For most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0),
-there is a second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when we multiply A and B together
-(and do the above reductions), we end up with the polynomial 1 = 0x^(n-1) + 0x^(n-2) + ... + 0x + 1.
-We state this relationship as B = inv(A).<a href="#section-5.1-8" class="pilcrow">¶</a></p>
-<p id="section-5.1-9">Inverses can be computed efficiently, and also have the property that similar polynomials have inverses that are quite different.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">NTRU is based on polynomials; these can be viewed as a vector of N small values
+(either between 0 and Q-1, or sometimes either 0, 1 or -1), where the values of
+both N and Q are specified by the parameter set.  In all parameter sets, Q is
+less than 65536, hence each small value fits within a 16 bit value.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">Each polynomial is an array of values a(n-1), a(n-2), ..., a(0), with the
+implicit polynomial being
+a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(2)x^2 + a(1)x + a(0)
+(where x is an independent variable that doesn't take a specific value).
+In this case, we don't think of a polynomial as a function of x that we can
+evaluate; instead, it is a quantity in and of itself.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">When we multiply two polynomials, we first do it as we do in standard algebra;
+we multiply each pair of terms (including x exponential), and then sum the
+products which have the same resulting x term.  For example,
+(2x^2 + 3x + 5)(4x + 8) =
+(2*4)x^3 + (2*8 + 3*4)x^2 + (3*8 + 4*5)x + 5*8 = 8x^3 + 28x^2 + 44x + 40.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">For NTRU, however, we do two additional reductions to this multiplication.
+First, for each sum of the product, we compute that sum modulo a constant factor
+(either 3 or the value Q; NTRU uses both at times).  In the above example, if we
+were reducing things modulo 3, we would actually get the resulting polynomial (8
+mod 3)x^3 + (28 mod 3)x^2 + (44 mod 3)x + (40 mod 3) = 2x^3 + x^2 + 2x + 1.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">In addition, we compute the multiplication modulo x^n - 1 (where the value of n
+is specified in the parameter set); that is, we subtract multiples of x^n-1
+until the result is a polynomial of degree n-1 or less. An equivalent way of
+expressing this is to add the resulting coefficent to the term x^(i+n) to the
+coefficent to the term x^i (modulo the constant factor), and then discard all
+terms x^n and above.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">In the above example, assuming n=2, the final result would be (2+2 mod 3)x +
+(1+1 mod 3) = x + 2.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-7">A polynomal can be conveniently represented by an array of n values (with the
+x^i factor being implicit in the positions in the array); 16 bits per value are
+sufficient to represent all the coefficients that are encountered within NTRU.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.1-8">For most polynomials A = a(n-1)x^(n-1) + a(n-2)x^(n-2) + ... + a(0), there is a
+second polynomial B = b(n-1)x^(n-1) + b(n-2)x^(n-2) + ... + b(0), such that when
+we multiply A and B together (and do the above reductions), we end up with the
+polynomial 1 = 0x^(n-1) + 0x^(n-2) + ... + 0x + 1. We state this relationship as
+B = inv(A).<a href="#section-6.1-8" class="pilcrow">¶</a></p>
+<p id="section-6.1-9">Inverses can be computed efficiently, and also have the property that similar
+polynomials have inverses that are quite different.<a href="#section-6.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="polynomial-addition">
-<section id="section-5.2">
+<section id="section-6.2">
         <h3 id="name-polynomial-addition">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-polynomial-addition" class="section-name selfRef">Polynomial Addition</a>
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-polynomial-addition" class="section-name selfRef">Polynomial Addition</a>
         </h3>
-<p id="section-5.2-1">[Now, I have working python code in ntru.py; should we just refer to that code, or bring in selected portions
-into this document?  I expect we don't want the preliminary versions of the code I wrote here...]<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">When NTRU adds two polynomials, it does it by adding each element of the vector independently modulo Q.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">When NTRU adds two polynomials, it does it by adding each element of the vector
+independently modulo Q.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="polynomial-subtraction">
-<section id="section-5.3">
+<section id="section-6.3">
         <h3 id="name-polynomial-subtraction">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-polynomial-subtraction" class="section-name selfRef">Polynomial Subtraction</a>
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-polynomial-subtraction" class="section-name selfRef">Polynomial Subtraction</a>
         </h3>
-<p id="section-5.3-1">When NTRU subtracts two polynomials, it does it by subtracting each element of the vector independently modulo Q; that is, if the subtraction of two elements results in a negative value, it adds Q to the difference.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">When NTRU subtracts two polynomials, it does it by subtracting each element of
+the vector independently modulo Q; that is, if the subtraction of two elements
+results in a negative value, it adds Q to the difference.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="polynomial-multiplication">
-<section id="section-5.4">
+<section id="section-6.4">
         <h3 id="name-polynomial-multiplication">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-polynomial-multiplication" class="section-name selfRef">Polynomial Multiplication</a>
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-polynomial-multiplication" class="section-name selfRef">Polynomial Multiplication</a>
         </h3>
-<p id="section-5.4-1">When NTRU multiplies two polynomials, it does it by multiplying each pair of elements from each polynomial, and adding that result to the element indexed by the sum of the indicies (wrapping around if the sum is N or more).<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Note that this can be optimized; in many cases, one of the polynomials will be of special form (for example, consists of only 0, 1 and -1), more efficient algorithms may be available.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-6.4-1">When NTRU multiplies two polynomials, it does it by multiplying each pair of
+elements from each polynomial, and adding that result to the element indexed by
+the sum of the indicies (wrapping around if the sum is N or more).<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.4-2">Note that this can be optimized; in many cases, one of the polynomials will be
+of special form (for example, consists of only 0, 1 and -1), more efficient
+algorithms may be available.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="polynomial-inversion">
-<section id="section-5.5">
+<section id="section-6.5">
         <h3 id="name-polynomial-inversion">
-<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-polynomial-inversion" class="section-name selfRef">Polynomial Inversion</a>
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-polynomial-inversion" class="section-name selfRef">Polynomial Inversion</a>
         </h3>
-<p id="section-5.5-1">When NTRU 'inverse a polynomial' X, it finds a polynomial Y such that polynomial_multiply(X, Y) gives the polynomial (1, 0, 0, 0, ..., 0).<a href="#section-5.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.5-2">Here, give the algorithm to invert a polynomial.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.5-1">When NTRU 'inverts a polynomial' X, it finds a polynomial Y such that
+polynomial_multiply(X, Y) gives the polynomial 0x^(n-1) + 0x^(n-2) + ... + 0x^2 + 0x^1 + 1 = (1, 0, 0, 0, ..., 0).<a href="#section-6.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="computing-a-polynomial-modulo-x-n-1-x-1">
-<section id="section-5.6">
+<section id="section-6.6">
         <h3 id="name-computing-a-polynomial-modu">
-<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-computing-a-polynomial-modu" class="section-name selfRef">Computing a Polynomial Modulo (x<sup>n-1)/(x-1)</sup></a>
+<a href="#section-6.6" class="section-number selfRef">6.6. </a><a href="#name-computing-a-polynomial-modu" class="section-name selfRef">Computing a Polynomial Modulo (x<sup>n-1)/(x-1)</sup></a>
         </h3>
-<p id="section-5.6-1">At one point, we need to take a polynomial modulo x<sup>(n-1)+x</sup>(n-2)+...+1 = (x^n-1)/(x-1).
-We refer to this operation as modPhiN, and can be performed by taking the top coefficient, and subtracting it fall all the other coefficients.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+<p id="section-6.6-1">At one point, we need to take a polynomial modulo x<sup>(n-1)+x</sup>(n-2)+...+1 =
+(x^n-1)/(x-1). We refer to this operation as modPhiN, and can be performed by
+taking the top coefficient, and subtracting it from all the other coefficients.<a href="#section-6.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="selecting-random-polynomials">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-selecting-random-polynomial">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-selecting-random-polynomial" class="section-name selfRef">Selecting Random Polynomials</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-selecting-random-polynomial" class="section-name selfRef">Selecting Random Polynomials</a>
       </h2>
-<p id="section-6-1">When running NTRU, we need at times random polynomials with specific forms; doing this is referred to a sampling.
-We need to do this both when generating keys as well as when encrypting a message.
-It MUST rely on a cryptographically secure random number generator to select these values.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">When running NTRU, we need at times random polynomials with specific forms;
+doing this is referred to a sampling.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">We need to do this both when generating keys as well as when encrypting a
+message. It MUST rely on a cryptographically secure random number generator to
+select these values.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <div id="sample-a-random-trinary-polynomial">
-<section id="section-6.1">
+<section id="section-7.1">
         <h3 id="name-sample-a-random-trinary-pol">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-sample-a-random-trinary-pol" class="section-name selfRef">Sample a random trinary polynomial</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-sample-a-random-trinary-pol" class="section-name selfRef">Sample a random trinary polynomial</a>
         </h3>
-<p id="section-6.1-1">This function (called sample_iid by the reference code) selects a random trinary polynomial,
-that is, one whose all the coefficients are either 0, 1 or q-1, with the last coefficient 0.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">This can be done by calling the rng n-1 times to generate n-1 bytes, and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last coefficient to be 0)
-This isn't precisely uniform; it is close enough for security.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">This function (called sample_iid in the reference code) selects a random trinary
+polynomial, that is, one where all the coefficients are either 0, 1 or q-1, with
+ the last coefficient 0.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">This operation is performed by calling the rng n-1 times to generate n-1 bytes,
+and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last
+coefficient to be 0) While this operation is not precisely uniform, it is close
+enough for the purposes of NTRU.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sample-a-random-balanced-trinary-polynomial">
-<section id="section-6.2">
+<section id="section-7.2">
         <h3 id="name-sample-a-random-balanced-tr">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-sample-a-random-balanced-tr" class="section-name selfRef">Sample a random balanced trinary polynomial</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-sample-a-random-balanced-tr" class="section-name selfRef">Sample a random balanced trinary polynomial</a>
         </h3>
-<p id="section-6.2-1">This function (called sample<em>fixed</em>type by the refence code) selects a random trinary sample with a specific weight; it consists of q/16-1 cofficients which are 1, q/16-1 coefficients which are q-1, and the remainder (which includes coefficient n) as 0.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">This can be done by generating n-1 random values; tagging q/16-1 of the values as 1; q/16-1 of the values as q-1 and the rest tagged as 0.  Then, you can sort (in constant time) the random values; the resulting tags are in the required random order.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">This function (called sample<em>fixed</em>type by the reference code) selects a random
+trinary sample with a specific weight; it consists of q/16-1 cofficients which
+are 1, q/16-1 coefficients which are q-1, and the remainder (which includes
+coefficient n) as 0.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">This can be done by generating n-1 random values; tagging q/16-1 of the values
+as 1; q/16-1 of the values as q-1 and the rest tagged as 0.  Then, you can sort
+(in constant time) the random values; the resulting tags are in the required
+random order.  You then scan through the list, and assign the coefficients to
+the values of the tags.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="validating-polynomials">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-validating-polynomials">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-validating-polynomials" class="section-name selfRef">Validating polynomials</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-validating-polynomials" class="section-name selfRef">Validating polynomials</a>
       </h2>
-<p id="section-7-1">We also need to validate polynomials generated during decapsulation; that is, whether they were possible
-outputs of the sample<em>iid or sample</em>fixed_type procedures.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">We also need to validate polynomials generated during decapsulation; that is,
+whether they were possible outputs of the sample<em>iid or sample</em>fixed_type
+procedures.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="validr">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-validr">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-validr" class="section-name selfRef">ValidR</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-validr" class="section-name selfRef">ValidR</a>
         </h3>
-<p id="section-7.1-1">This verifies that R is a possible output of the sample_iid procedure; that is, that the coefficients of the polynomial R consists only of 0, 1 and q-1, and that the last coefficient is 0.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">This verifies that R is a possible output of the sample_iid procedure; that is,
+that the coefficients of the polynomial R consists only of 0, 1 and q-1, and
+that the last coefficient is 0.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="validm">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-validm">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-validm" class="section-name selfRef">ValidM</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-validm" class="section-name selfRef">ValidM</a>
         </h3>
-<p id="section-7.2-1">This verifies that M is a possible output of the sample<em>fixed</em>type procedure; that is, that the coefficients of the polynomial R consists only of 0, 1 and q-1, that the last coefficient is 0, and that there are precisely q/16-1 1 values and q/16-2 q-1 values.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">This verifies that M is a possible output of the sample<em>fixed</em>type procedure;
+that is, that the coefficients of the polynomial R consists only of 0, 1 and
+q-1, that the last coefficient is 0, and that there are precisely q/16-1 1
+values and q/16-2 q-1 values.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="converting-between-polynomials-and-byte-strings">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-converting-between-polynomi">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-converting-between-polynomi" class="section-name selfRef">Converting Between Polynomials and Byte Strings</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-converting-between-polynomi" class="section-name selfRef">Converting Between Polynomials and Byte Strings</a>
       </h2>
-<p id="section-8-1">NTRU needs to convert polynomials into byte strings and vica versa,
-both the export public keys and ciphertexts, as well as being able to hash those polynomials.
-We refer to this process as serialization and deserialization.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">NTRU needs to convert polynomials into byte strings and vice versa, both to
+export public keys and ciphertexts, as well as being able to hash those
+polynomials. We refer to this process as serialization and deserialization.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <div id="serialize-a-polynomial-base-q">
-<section id="section-8.1">
+<section id="section-9.1">
         <h3 id="name-serialize-a-polynomial-base">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-serialize-a-polynomial-base" class="section-name selfRef">Serialize a polynomial base q</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-serialize-a-polynomial-base" class="section-name selfRef">Serialize a polynomial base q</a>
         </h3>
-<p id="section-8.1-1">This function (called pack_Rq0 by the reference code) converts a polynomial into a byte string.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">This function takes the first n-1 coefficients (each a value between 0 and q-1), expresses each
-as a log_2(q) bit bit string as a little endian integer.
-Then, it concatinates those n-1 bit strings into a long bit string; the result
-is that bit string being parsed into bytes (with any trailing bits in the last byte being set to 0).<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">The inverse function (called) unpack_Rq0) converts that byte string back into a polynomial.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">It takes the byte string, parses it into n-1 consecutive log_2(q) bit strings, takes each such
-bit string as a little endian integer and sets the corresponding coefficient of the polynomial to
-that integer.  Then, it adds all those n-1 coefficients together, and sets the n-th coefficient
-to the negation of that sum modulo q.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.1-5">A close reading of the above algorithms will note that the pack<em>Rq0 doesn't actually depend on the
-last coefficient.  This is because this code assumes that the polynomial is a multiple of the
-polynomial x-1; the unpack</em>Rq0 code uses that assumption to reconstruct that last coefficient.<a href="#section-8.1-5" class="pilcrow">¶</a></p>
-<p id="section-8.1-6">This assumption is true within NTRU because pack_Rq0 will be called only for polynomials that
-are a multiple of the polynomial G; we always sample G values that have an equal number of 1 and
--1 coefficients (with the rest 0), and any such polynomial will always be a multiple of x-1.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
+<p id="section-9.1-1">This function (called pack_Rq0 by the reference code) converts a polynomial into
+a byte string.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">This function takes the first n-1 coefficients (each a value between 0 and q-1),
+expresses each as a log<em>2(q) bit bitstring as a little endian integer.  All n-1
+coefficients are of length log</em>2(q).  Then, it concatinates those n-1 bit strings
+into a long bit string; the result is that bit string being parsed into bytes
+(with any trailing bits in the last byte being set to 0).<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.1-3">The inverse function (called) unpack_Rq0) converts that byte string back into a
+polynomial.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.1-4">It takes the byte string, parses it into n-1 consecutive log_2(q) bit strings,
+takes each such bit string as a little endian integer and sets the corresponding
+coefficient of the polynomial to that integer.  Since all bit strings are of equal
+length, this can be done efficiently.  Then, it adds all those n-1 coefficients
+together, and sets the n-th coefficient to the negation of that sum
+modulo q.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
+<p id="section-9.1-5">A close reading of the above algorithms will note that the pack<em>Rq0 doesn't
+actually depend on the last coefficient.  This is because this code assumes that
+the polynomial is a multiple of the polynomial x-1; the unpack</em>Rq0 code uses
+that assumption to reconstruct that last coefficient.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
+<p id="section-9.1-6">This assumption is true within NTRU because pack_Rq0 will be called only for
+polynomials that are a multiple of the polynomial G; we always sample G values
+that have an equal number of 1 and -1 coefficients (with the rest 0), and any
+such polynomial will always be a multiple of x-1.<a href="#section-9.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="serialize-a-trinary-polynomial">
-<section id="section-8.2">
+<section id="section-9.2">
         <h3 id="name-serialize-a-trinary-polynom">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-serialize-a-trinary-polynom" class="section-name selfRef">Serialize a trinary polynomial</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-serialize-a-trinary-polynom" class="section-name selfRef">Serialize a trinary polynomial</a>
         </h3>
-<p id="section-8.2-1">This function (called pack_S3 by the reference code) converts a trinary polynomial into a byte string.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">This function takes the n-1 coefficients in sets of 5; it converts the five coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2.
-This it sums up the coefficients as c0 + 3<em>c1 + 9</em>c2 + 27<em>c3 + 81</em>c4, and then stores that value as the next byte in the byte string.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.2-3">If the last set of 5 is incomplete (which will happen if n-1 is not a multiple of 5), then the higher missing coefficients are assumed to be zero.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
-<p id="section-8.2-4">Now, if the polynomial happens to not be trinary, then it doesn't matter what byte we store; we need to store some value, and this code still needs to be constant time.
-The reason we don't care is this happens only on decryption failure (someone handed us an invalid ciphertext); in that case, the value of the hash will end up being ignored.
-Of course, no matter what the coefficient is, this still needs to be done in constant time.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
-<p id="section-8.2-5">This output of this function will be used only for hashing, hence there is no need for an inverse function.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-9.2-1">This function (called pack_S3 by the reference code) converts a trinary
+polynomial into a byte string.  It works by taking the coefficients in
+groups of 5, and packing each such group into a byte.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">This function takes the n-1 coefficients in sets of 5; it converts the five
+coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2. Then it sums up the
+coefficients as c0 + 3<em>c1 + 9</em>c2 + 27<em>c3 + 81</em>c4, and then stores that value as
+the next byte in the byte string.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.2-3">If the last set of 5 is incomplete (which will happen if n-1 is not a multiple
+of 5), then the higher missing coefficients are assumed to be zero.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2-4">Now, if the polynomial happens to not be trinary, then it doesn't matter what
+byte we store; we need to store some value, and this code still needs to be
+constant time. The reason we don't care is this happens only on decryption
+failure (someone handed us an invalid ciphertext); in that case, the value of
+the hash will end up being ignored. Of course, no matter what the coefficient
+is, this still needs to be done in constant time.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.2-5">This output of this function will be used only for hashing, hence there is no
+need for an inverse function.<a href="#section-9.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="ntru">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-ntru">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-ntru" class="section-name selfRef">NTRU</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-ntru" class="section-name selfRef">NTRU</a>
       </h2>
 <div id="overview">
-<section id="section-9.1">
+<section id="section-10.1">
         <h3 id="name-overview">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
-<p id="section-9.1-1">Here is a simplified overview how NTRU works (omitting some of the necessary tests used to address active attacks).<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">To generate a public/private keypair,
-Alice selects two 'short' polynomials F and G (where short means that the coefficients are all 0, 1 or q-1).
-She then multiplies each coefficient of G by 3, and then computes H = Inv(F) x G; that is the public key.
-She stores F in the private key, and computes Inv(F) (with this inverse taken over the modulo 3 polynomial), and stores that in the private key as well.
-She also computes Inv(H), and stores that in the private key.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1-3">To generate a KEM key share with the public key H, Bob selects two short polynomials R and M, and compute C = R x H + M; that is the ciphertext.
-Bob also hashes R and M to generate his copy of the shared secret.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
-<p id="section-9.1-4">When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this results in C x F = R x G + M x F.
-Since all the polynomials R, G, M, F are short, the resulting coefficients are not large (that is, always less than Q/2 in absolute value),
-and so the fact that we computed everything modulo Q can be ignored.
-Note that some of the coefficients may be 'negative' (that is, in the range Q/2 to Q-1); those need to be treated as negative values for this next step.
-Then, she take all the coefficients modulo 3 (taking into account the negative coefficients); because all the coefficients of G are multiples are 3 (and so is R x G), those drop out, and Alice is left with M x F (with each coefficient taken modulo 3).
-She then multiples that polynomial by Inv(F) (this time over the modulo 3 polynomial), recovering M.
-She then uses M, the original ciphertext and the stored value Inv(H) to recover R.
-She then hashes R and M together to generate her copy of the shared secret.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
-<p id="section-9.1-5">Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's ciphertext C correctly, they will derive the same shared secret.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
+<p id="section-10.1-1">This section provides a simplified overview how NTRU works. Minor details are
+omitted for clarity reasons, and the Security Considerations section should be
+consulted prior to implementation.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.1-2">To generate a public/private keypair, Alice selects two 'short' polynomials F
+and G (where short means that the coefficients are all 0, 1 or q-1). She then
+multiplies each coefficient of G by 3, and then computes H = Inv(F) x G; that is
+the public key. She stores F in the private key, and computes Inv(F) (with this
+inverse taken over the modulo 3 polynomial), and stores that in the private key
+as well. She also computes Inv(H), and stores that in the private key.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
+<p id="section-10.1-3">To generate a KEM key share with the public key H, Bob selects two short
+polynomials R and M, and computes C = R x H + M; that is the ciphertext. Bob also
+hashes R and M to generate his copy of the shared secret.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
+<p id="section-10.1-4">When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this
+results in C x F = R x G + M x F. Since all the polynomials R, G, M, F are
+short, the resulting coefficients are not large (that is, always less than Q/2
+in absolute value), and so the fact that we computed everything modulo Q can be
+ignored. Note that some of the coefficients may be 'negative' (that is, in the
+range Q/2 to Q-1); those need to be treated as negative values for this next
+step. Then, she take all the coefficients modulo 3 (taking into account the
+negative coefficients); because all the coefficients of G are multiples are 3
+(and so is R x G), those drop out, and Alice is left with M x F (with each
+coefficient taken modulo 3). She then multiples that polynomial by Inv(F) (this
+time over the modulo 3 polynomial), recovering M. She then uses M, the original
+ciphertext and the stored value Inv(H) to recover R. She then hashes R and M
+together to generate her copy of the shared secret.<a href="#section-10.1-4" class="pilcrow">¶</a></p>
+<p id="section-10.1-5">Assuming Bob received Alice's public key H correctly, and Alice recieved Bob's
+ciphertext C correctly, they will derive the same shared secret.<a href="#section-10.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="private-and-public-key-generation">
-<section id="section-9.2">
+<section id="section-10.2">
         <h3 id="name-private-and-public-key-gene">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-private-and-public-key-gene" class="section-name selfRef">Private and Public Key Generation</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-private-and-public-key-gene" class="section-name selfRef">Private and Public Key Generation</a>
         </h3>
-<p id="section-9.2-1">To generate a public/private keypair, we can follow this procedure:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">TODO: this two random functions could be integrated into one.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-10.2-1">To generate a public/private keypair, we can follow this procedure:<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-3.1">Generate a random polynomial f using using the ``sample_iid'' procedure.<a href="#section-9.2-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-10.2-2.1">Generate a random polynomial f using using the <code>sample_iid</code> procedure.<a href="#section-10.2-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.2">Generate a random polynomial g using the the <code>sample_fixed_type</code> procedure<a href="#section-9.2-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.2">Generate a random polynomial g using the the <code>sample_fixed_type</code> procedure<a href="#section-10.2-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.3">Multiply each coefficient of g by 3.<a href="#section-9.2-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.3">Multiply each coefficient of g by 3.<a href="#section-10.2-2.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.4">Compute FG_inv = Inverse( f * g  mod q)  mod q.<a href="#section-9.2-3.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.4">Compute FG_inv = Inverse( f * g  mod q)  mod q.<a href="#section-10.2-2.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.5">Compute H = FG_inv * g * g (modulo q)<a href="#section-9.2-3.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.5">Compute H = FG_inv * g * g (modulo q)<a href="#section-10.2-2.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.6">Compute H<em>inv = FG</em>inv * f * f (modulo q)<a href="#section-9.2-3.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.6">Compute H<em>inv = FG</em>inv * f * f (modulo q)<a href="#section-10.2-2.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.7">Compute F_inv = Inverse( f ) (this computation is done modulo 3)<a href="#section-9.2-3.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.7">Compute F_inv = Inverse( f ) (this computation is done modulo 3)<a href="#section-10.2-2.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.2-3.8">Generate a random 32 byte value s randomly<a href="#section-9.2-3.8" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.2-2.8">Generate a random 32 byte value s randomly<a href="#section-10.2-2.8" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-9.2-4">The resulting public key is the value H (serialized by the pack<em>Rq0 procedure); the resulting private key are the values F, H</em>inv, F_inv and S.  Any other intermediate values should be securely disposed.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
+<p id="section-10.2-3">The resulting public key is the value H (serialized by the pack<em>Rq0 procedure);
+the resulting private key are the values F, H</em>inv, F_inv and S.  Any other
+intermediate values should be securely disposed.<a href="#section-10.2-3" class="pilcrow">¶</a></p>
+<p id="section-10.2-4">n.b. the initial generation of random polynomials can be combined into a single
+procedure<a href="#section-10.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-encapsulation">
-<section id="section-9.3">
+<section id="section-10.3">
         <h3 id="name-key-encapsulation">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-key-encapsulation" class="section-name selfRef">Key Encapsulation</a>
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-key-encapsulation" class="section-name selfRef">Key Encapsulation</a>
         </h3>
-<p id="section-9.3-1">This takes a public key H, and generates both a ciphertext C as well as a secret string K.
-The ciphertext C should be sent to the holder of the private key; the key K should be used as the secret.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
-<p id="section-9.3-2">We can follow this procedure:<a href="#section-9.3-2" class="pilcrow">¶</a></p>
+<p id="section-10.3-1">This takes a public key H, and generates both a ciphertext C as well as a secret
+string K. The ciphertext C should be sent to the holder of the private key; the
+string K should be used as the secret.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<p id="section-10.3-2">We can follow this procedure:<a href="#section-10.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.3-3.1">Unpack the public key (using the unpack_Rq0 procedure) to obtain the polynomial H<a href="#section-9.3-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-10.3-3.1">Unpack the public key (using the unpack_Rq0 procedure) to obtain the
+polynomial H<a href="#section-10.3-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.3-3.2">Sample a random R using the sample_iid procedure<a href="#section-9.3-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.3-3.2">Sample a random R using the sample_iid procedure<a href="#section-10.3-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.3-3.3">Sample a random M using the sample<em>fixed</em>type procedure<a href="#section-9.3-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.3-3.3">Sample a random M using the sample<em>fixed</em>type procedure<a href="#section-10.3-3.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.3-3.4">Compute C = R*H + M (perfoming both the polynomial multiplication and polynomial addition modulo q)<a href="#section-9.3-3.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.3-3.4">Compute C = R*H + M (perfoming both the polynomial multiplication and
+polynomial addition modulo q)<a href="#section-10.3-3.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.3-3.5">Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is the secret string K<a href="#section-9.3-3.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.3-3.5">Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256
+to hash the concatination; the resulting 32 bytes is the secret string K<a href="#section-10.3-3.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-9.3-3.6">Return K and C serialized using the pack_Rq0 procedure<a href="#section-9.3-3.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-10.3-3.6">Return K and C serialized using the pack_Rq0 procedure<a href="#section-10.3-3.6" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="key-decapsulation">
-<section id="section-9.4">
+<section id="section-10.4">
         <h3 id="name-key-decapsulation">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-key-decapsulation" class="section-name selfRef">Key Decapsulation</a>
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-key-decapsulation" class="section-name selfRef">Key Decapsulation</a>
         </h3>
-<p id="section-9.4-1">This takes a private key (F, H<em>inv, F</em>inv, S) and a ciphertext C, and produces a secret string K.
-If the ciphertext is the same as what was proceduced by the key encapsulation procedure, then this will generate the same secret key K.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<p id="section-9.4-2">We can follow this procedure:<a href="#section-9.4-2" class="pilcrow">¶</a></p>
+<p id="section-10.4-1">This takes a private key (F, H<em>inv, F</em>inv, S) and a ciphertext C, and produces a
+secret string K. If the ciphertext is the same as what was proceduced by the key
+encapsulation procedure, then this will generate the same secret string K.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+<p id="section-10.4-2">We can follow this procedure:<a href="#section-10.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.4-3.1">
-            <p id="section-9.4-3.1.1">Unpack the ciphertext (using the unpack_Rq0 procedure) to obtain the polynomial C<a href="#section-9.4-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-10.4-3.1">
+            <p id="section-10.4-3.1.1">Unpack the ciphertext (using the unpack_Rq0 procedure) to obtain the polynomial C<a href="#section-10.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-3.2">
-            <p id="section-9.4-3.2.1">Compute A = C*F (modulo q)<a href="#section-9.4-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-3.2">
+            <p id="section-10.4-3.2.1">Compute A = C*F (modulo q)<a href="#section-10.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-3.3">
-            <p id="section-9.4-3.3.1">For each coeffient x in A, if it is &lt; q/2, replace it with x mod 3; if it is &gt;= q/2, replace it with 2 - (q-1-x) mod 3<a href="#section-9.4-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-3.3">
+            <p id="section-10.4-3.3.1">For each coeffient x in A, if it is &lt; q/2, replace it with x mod 3; if it is
+&gt;= q/2, replace it with 2 - (q-1-x) mod 3<a href="#section-10.4-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-9.4-4">[THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 - WOULD A BALANCED REPRESENTATION BE CLEARER?]<a href="#section-9.4-4" class="pilcrow">¶</a></p>
+<p id="section-10.4-4">[THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 -
+WOULD A BALANCED REPRESENTATION BE CLEARER?]<a href="#section-10.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.4-5.1">
-            <p id="section-9.4-5.1.1">Compute M = A*F_inv (modulo 3) - yes, we are switching modulii<a href="#section-9.4-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-10.4-5.1">
+            <p id="section-10.4-5.1.1">Compute M = A*F_inv (modulo 3) - note the change of moduli<a href="#section-10.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.2">
-            <p id="section-9.4-5.2.1">For each 2 coefficient within M, replace it with q-1<a href="#section-9.4-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.2">
+            <p id="section-10.4-5.2.1">For each 2 coefficient within M, replace it with q-1<a href="#section-10.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.3">
-            <p id="section-9.4-5.3.1">Compute R = (C - M) * H_inv (modulo q)<a href="#section-9.4-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.3">
+            <p id="section-10.4-5.3.1">Compute R = (C - M) * H_inv (modulo q)<a href="#section-10.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.4">
-            <p id="section-9.4-5.4.1">Compute R = modPhiN(R) (modulo q)<a href="#section-9.4-5.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.4">
+            <p id="section-10.4-5.4.1">Compute R = modPhiN(R) (modulo q)<a href="#section-10.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.5">
-            <p id="section-9.4-5.5.1">Set Success = ValidM(M) AND ValidR(R)<a href="#section-9.4-5.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.5">
+            <p id="section-10.4-5.5.1">Set Success = ValidM(M) AND ValidR(R)<a href="#section-10.4-5.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.6">
-            <p id="section-9.4-5.6.1">Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256 to hash the concatination; the resulting 32 bytes is K1<a href="#section-9.4-5.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.6">
+            <p id="section-10.4-5.6.1">Serialize both R and M (using the pack_S3 procedure on both) and use SHA3-256
+to hash the concatination; the resulting 32 bytes is K1<a href="#section-10.4-5.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.7">
-            <p id="section-9.4-5.7.1">Use SHA3-256 to hash the concatination of S (from the private key) and C, the resulting 32 bytes is K2<a href="#section-9.4-5.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.7">
+            <p id="section-10.4-5.7.1">Use SHA3-256 to hash the concatination of S (from the private key) and C, the
+resulting 32 bytes is K2<a href="#section-10.4-5.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-9.4-5.8">
-            <p id="section-9.4-5.8.1">If Success, return K=K1; otherwise, return K=K2<a href="#section-9.4-5.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-10.4-5.8">
+            <p id="section-10.4-5.8.1">If Success, return K=K1; otherwise, return K=K2<a href="#section-10.4-5.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1681,120 +1822,245 @@ If the ciphertext is the same as what was proceduced by the key encapsulation pr
 </section>
 </div>
 <div id="parameter-sets-1">
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-parameter-sets-2">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-parameter-sets-2" class="section-name selfRef">Parameter Sets</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-parameter-sets-2" class="section-name selfRef">Parameter Sets</a>
       </h2>
-<p id="section-10-1">+================+====================+===========+
-| Parameter Set  | Polynomial Size N  | Modulus Q |
-+================+====================+===========+
-| ntruhps2048509 |         509        |    2048   |
-+----------------+--------------------+-----------+
-| ntruhps2048677 |         677        |    2048   |
-+----------------+--------------------+-----------+
-| ntruhps4096821 |         821        |    4096   |
-+----------------+--------------------+-----------+<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">[Question: do we want to support the ntruhrss701 parameter set?  I'm thinking not, because as far as I
-can see, that doesn't actually bring anything to the table (while adding complication) - ntruhps2048677 appears to be smaller/more secure and the performance delta is not that large]<a href="#section-10-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+          <tr>
+            <th class="text-left" rowspan="1" colspan="1">Parameter Set</th>
+            <th class="text-left" rowspan="1" colspan="1">Polynomial Size N</th>
+            <th class="text-left" rowspan="1" colspan="1">Modulus Q</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">ntruhps2048509</td>
+            <td class="text-left" rowspan="1" colspan="1">509</td>
+            <td class="text-left" rowspan="1" colspan="1">2048</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">ntruhps2048677</td>
+            <td class="text-left" rowspan="1" colspan="1">677</td>
+            <td class="text-left" rowspan="1" colspan="1">2048</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">ntruhps4096821</td>
+            <td class="text-left" rowspan="1" colspan="1">821</td>
+            <td class="text-left" rowspan="1" colspan="1">4096</td>
+          </tr>
+        </tbody>
+      </table>
+<p id="section-11-2">Other parameter sets do exist, such as ntruhrss701, hovewver they are not
+supported by this RFC at this time as they introduce complexity without
+significant value to security, size or performance.<a href="#section-11-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="usage">
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-usage">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-usage" class="section-name selfRef">Usage</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-usage" class="section-name selfRef">Usage</a>
       </h2>
-<p id="section-11-1">Here is the problem that NTRU solves; we have two systems (we'll call them Alice and Bob) who wish to establish a common secret string that they can use to derive keys to protect future communication.
-They share a communication path that is authenticated (that is, the problem of detecting changes to messages between Alice and Bob is solved by something else), but that communication path may be monitored.
-What NTRU tries to achieve is to ensure that someone monitoring the communication path cannot rederive the common secret string (and hence cannot derive the communication keys).<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">To do this, Alice and Bob follow this three step process<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-12-1">NTRU solves the problem where two systems (we'll call them Alice and Bob) wish
+to establish a common secret string that they can use to derive keys to protect
+future communication. They share a communication path that is authenticated
+(that is, the problem of detecting changes to messages between Alice and Bob is
+solved by something else), but that communication path may be monitored. What
+NTRU tries to achieve is to ensure that someone monitoring the communication
+path cannot rederive the common secret string (and hence cannot derive the
+communication keys).<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">To do this, Alice and Bob follow this three step process<a href="#section-12-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11-3.1">
-          <p id="section-11-3.1.1">Step 1: Alice follows the 'Private and Public Key Generation' procedure; this creates a private key (which Alice keeps to herself) and a public key, which she sends to Bob.  Alternatively, she may decide to reuse a previously generated keypair.<a href="#section-11-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-12-3.1">
+          <p id="section-12-3.1.1">Step 1: Alice follows the 'Private and Public Key Generation' procedure; this
+creates a private key (which Alice keeps to herself) and a public key, which
+she sends to Bob.  Alternatively, she may decide to reuse a previously
+generated keypair.<a href="#section-12-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-3.2">
-          <p id="section-11-3.2.1">Step 2: Bob receives Alice's public key, and follows the 'Key Encapsulation' procedure; this creates a secret string (which Bob keeps to himself) and a ciphertext, which he sends to Alice<a href="#section-11-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-12-3.2">
+          <p id="section-12-3.2.1">Step 2: Bob receives Alice's public key, and follows the 'Key Encapsulation'
+procedure; this creates a secret string (which Bob keeps to himself) and a
+ciphertext, which he sends to Alice<a href="#section-12-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-3.3">
-          <p id="section-11-3.3.1">Step 3: Alice recieves Bob's ciphertext, and follows the 'Key Decapuslation' procedure; this creates a secret string (which Alice keeps to herself).  Alice can then either destroy her private key, or keep it around for next time.<a href="#section-11-3.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-12-3.3">
+          <p id="section-12-3.3.1">Step 3: Alice recieves Bob's ciphertext, and follows the 'Key Decapuslation'
+procedure; this creates a secret string (which Alice keeps to herself).  Alice
+can then either destroy her private key, or keep it around for next time.<a href="#section-12-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-11-4">The secret strings that Alice and Bob generate are the same, and can be used for creating symmetric keys<a href="#section-11-4" class="pilcrow">¶</a></p>
+<p id="section-12-4">The secret strings that Alice and Bob generate are the same, and can be used for
+creating symmetric keys or other key shared material used to protect future
+communications.<a href="#section-12-4" class="pilcrow">¶</a></p>
 <div id="comparison-with-dh">
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-comparison-with-dh">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-comparison-with-dh" class="section-name selfRef">Comparison with DH</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-comparison-with-dh" class="section-name selfRef">Comparison with DH</a>
         </h3>
-<p id="section-11.1-1">If you look over the above Usage text, it sounds like it's doing the same job as Diffie-Hellman.
-In fact, NTRU can be viewed as a drop-in replacement for DH (with larger key shares) in some protocols.
-However, the equivalence is not exact; with NTRU, Bob cannot compute the ciphertext until he gets the public key.
-In contrast, in Diffie-Hellman, both sides can generate their key share g^x mod p independently.
-Some use cases take advantage of this property of Diffie-Hellman (for example, everyone publishes their key shares in a central directory; to generate keys with someone else, we can download their public key from the directory, and obtain the same key as they get when they download our key from the directory).
-A protocol that does this is known as a NonInteractive Key Exchange (NIKE) - NTRU does not do this; if you need this, you need to look for a different solution.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<p id="section-12.1-1">NTRU at first glace appears as though it may be performing the same job as
+Diffie-Hellman. In fact, NTRU can be viewed as a drop-in replacement for DH
+(with larger key shares) in some protocols. However, the equivalence is not
+exact; with NTRU, Bob cannot compute the ciphertext until he possesses the
+public key.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
+<p id="section-12.1-2">In contrast, in Diffie-Hellman, both sides can generate their key share g^x mod
+p independently. Some use cases take advantage of this property of
+Diffie-Hellman (for example, everyone publishes their key shares in a central
+directory; to generate keys with someone else, we can download their public key
+from the directory, and obtain the same key as they get when they download our
+key from the directory). A protocol that does this is known as a NonInteractive
+Key Exchange (NIKE). NTRU does NOT provide NIKE capabilities, and if non
+interactive use cases are required to be supported, a different approach should
+be selected.<a href="#section-12.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-12">
+<section id="section-13">
       <h2 id="name-security-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-12-1">TODO Security; especially how secure are the various parameter sets<a href="#section-12-1" class="pilcrow">¶</a></p>
-<div id="public-key-reuse">
-<section id="section-12.1">
-        <h3 id="name-public-key-reuse">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-public-key-reuse" class="section-name selfRef">Public key reuse</a>
+<p id="section-13-1">Current best practices should be followed, especially in regards to known
+plaintext attacks, such as Meet-In-The-Middle (MITM), and known ciphertext
+attacks.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-13-2">Lattice reductions via Lenstra-Lenstra-Lov&amp;#225;sz may be possible against NTRU with
+weak parameter set selection.<a href="#section-13-2" class="pilcrow">¶</a></p>
+<div id="parameter-set-security">
+<section id="section-13.1">
+        <h3 id="name-parameter-set-security">
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-parameter-set-security" class="section-name selfRef">Parameter set security</a>
         </h3>
-<p id="section-12.1-1">NTRU public/private keys can be safely reused.  Reusing an NTRU key may be tempting, because the NTRU key generation process is considerably more costly than the key encapsulation or decapsulation operations.
-On the other hand, if you do reuse NTRU keys, you lose the Perfect Forward Secrecy property.
-That is, as long as you don't zeroize the NTRU private key, then an attacker that can break into the system can extract that private key, and then recover any symmetric keys that were negotiated with that private key.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
+<p id="section-13.1-1">In all paramter sets, indistinguishability under adaptive chosen ciphertext
+attack (IND-CCA2) is a desired property.<a href="#section-13.1-1" class="pilcrow">¶</a></p>
+<p id="section-13.1-2">Equivalent bit strengths of the described parameter sets are outlined in the
+table below:<a href="#section-13.1-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Parameter Set</th>
+              <th class="text-left" rowspan="1" colspan="1">Security Model</th>
+              <th class="text-left" rowspan="1" colspan="1">Bit Strength</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ntruhps2048509</td>
+              <td class="text-left" rowspan="1" colspan="1">IND-CCA2</td>
+              <td class="text-left" rowspan="1" colspan="1">128</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ntruhps2048677</td>
+              <td class="text-left" rowspan="1" colspan="1">IND-CCA2</td>
+              <td class="text-left" rowspan="1" colspan="1">192</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ntruhps4096821</td>
+              <td class="text-left" rowspan="1" colspan="1">IND-CCA2</td>
+              <td class="text-left" rowspan="1" colspan="1">256</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+<div id="public-key-reuse">
+<section id="section-13.2">
+        <h3 id="name-public-key-reuse">
+<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-public-key-reuse" class="section-name selfRef">Public key reuse</a>
+        </h3>
+<p id="section-13.2-1">NTRU public/private keys can be safely reused for certain use cases.
+Reusing an NTRU key may be tempting, because the NTRU key generation process is
+considerably more costly than the key encapsulation or decapsulation operations.
+On the other hand, if you do reuse NTRU keys, you lose the Perfect Forward
+Secrecy property. That is, as long as you don't zeroize the NTRU private key,
+then an attacker that can break into the system can extract that private key,
+and then recover any symmetric keys that were negotiated with that private key.<a href="#section-13.2-1" class="pilcrow">¶</a></p>
+<p id="section-13.2-2">If keys are reused, key revocation mechansims should be considered.<a href="#section-13.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-13">
+<section id="section-14">
       <h2 id="name-iana-considerations">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-13-1">This document has no IANA actions.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-14-1">This document has no IANA actions.<a href="#section-14-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="open-questions">
-<section id="section-14">
+<section id="section-15">
       <h2 id="name-open-questions">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-open-questions" class="section-name selfRef">Open Questions</a>
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-open-questions" class="section-name selfRef">Open Questions</a>
       </h2>
 <ul class="normal">
-<li class="normal" id="section-14-1.1">
-          <p id="section-14-1.1.1">The NTRU reference code takes a seed and expands that into the random stream that is used for the random sampling (because that is what NIST asked for); should this mandate that (rather than the 'pick a random number as needed' approach we currently specify)?<a href="#section-14-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-15-1.1">
+          <p id="section-15-1.1.1">The NTRU reference code takes a seed and expands that into the random stream
+that is used for the random sampling (because that is what NIST asked for);
+should this mandate that (rather than the 'pick a random number as needed'
+approach we currently specify)?<a href="#section-15-1.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-1.2">
-          <p id="section-14-1.2.1">HRSS - currently, we omit that parameter set - it does perform slightly faster than the HPS parameter set at the same security level (at the cost of a larger public key/ciphertext).  My expectation is that the larger keyshare size for HRSS is a more significant cost than the larger computational cost for HPS.  It would also complicate the logic somewhat (as we would need to specify both the HPS and the HRSS ways of doing things).  Is the decision to leave it out the correct one?<a href="#section-14-1.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-15-1.2">
+          <p id="section-15-1.2.1">HRSS - currently, we omit that parameter set - it does perform slightly faster
+than the HPS parameter set at the same security level (at the cost of a larger
+public key/ciphertext).  My expectation is that the larger keyshare size for
+HRSS is a more significant cost than the larger computational cost for HPS.
+It would also complicate the logic somewhat (as we would need to specify both
+the HPS and the HRSS ways of doing things).  Is the decision to leave it out
+the correct one?<a href="#section-15-1.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-1.3">
-          <p id="section-14-1.3.1">We don't specify a flattened format for a private key.  In my view, there is no need; systems will generally use ephemerial public/private key pairs, that is, create them on the fly, use them for one or a handful of exchanges and then throw them away.  In this use case, there is no need to transfer a private key to another device.  Now, it is possible for NTRU to be used with static keys - should we try to address that case?<a href="#section-14-1.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-15-1.3">
+          <p id="section-15-1.3.1">We don't specify a flattened format for a private key.  In my view, there is
+no need; systems will generally use ephemerial public/private key pairs, that
+is, create them on the fly, use them for one or a handful of exchanges and
+then throw them away.  In this use case, there is no need to transfer a
+private key to another device.  Now, it is possible for NTRU to be used with
+static keys - should we try to address that case?<a href="#section-15-1.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-1.4">
-          <p id="section-14-1.4.1">There is a tiny chance of failure during key generation (if F happens to be selected as all 0); this happens with probability &lt; 2^-800 (that is, it'll never happen in practice, unless the random number generator broke).  Should we ignore it or address it?<a href="#section-14-1.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-15-1.4">
+          <p id="section-15-1.4.1">There is a tiny chance of failure during key generation (if F happens to be
+selected as all 0); this happens with probability &lt; 2^-800 (that is, it'll
+never happen in practice, unless the random number generator broke).  When
+this happens, the computation of the inverse of F will fail; what happens
+in that case would depend on the inverter implementation.
+Should we ignore it or address it?<a href="#section-15-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-15-1.5">
+          <p id="section-15-1.5.1">It appears that the parameter set HPS4096821 was added lately to the NTRU
+definition, and did not undergo the same vetting that the other parameter
+sets did.  As such, it is unclear whether that parameter set gives the
+claimed level of security.  Should we remove it from this RFC, or just add
+some warning text within the security considerations?<a href="#section-15-1.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="test-vectors">
-<section id="section-14.1">
+<section id="section-15.1">
         <h3 id="name-test-vectors">
-<a href="#section-14.1" class="section-number selfRef">14.1. </a><a href="#name-test-vectors" class="section-name selfRef">Test vectors</a>
+<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-test-vectors" class="section-name selfRef">Test vectors</a>
         </h3>
-<p id="section-14.1-1">//TODO<a href="#section-14.1-1" class="pilcrow">¶</a></p>
+<p id="section-15.1-1">TBD<a href="#section-15.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
+<section id="section-16">
+      <h2 id="name-normative-references">
+<a href="#section-16" class="section-number selfRef">16. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+    <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
 <div id="acknowledgments">
 <section id="appendix-A">
       <h2 id="name-acknowledgments">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Acknowledge TBD.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
@@ -1816,6 +2082,22 @@ That is, as long as you don't zeroize the NTRU private key, then an attacker tha
 <div class="email">
 <span>Email:</span>
 <a href="mailto:mprorock@mesur.io" class="email">mprorock@mesur.io</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Sofia Celi</span></div>
+<div dir="auto" class="left"><span class="org">Brave</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cherenkov@riseup.net" class="email">cherenkov@riseup.net</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">John Gray</span></div>
+<div dir="auto" class="left"><span class="org">Entrust</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:john.gray@entrust.com" class="email">john.gray@entrust.com</a>
 </div>
 </address>
 </section>
