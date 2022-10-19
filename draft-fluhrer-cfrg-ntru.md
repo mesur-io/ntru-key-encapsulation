@@ -39,6 +39,14 @@ fullname = "Sofia Celi"
 organization = "Brave"
   [author.address]
   email = "cherenkov@riseup.net"
+  
+[[author]]
+initials = "J."
+surname = "Gray"
+fullname = "John Gray"
+organization = "Entrust"
+  [author.address]
+  email = "john.gray@entrust.com"  
 %%%
 
 .# Abstract
@@ -206,7 +214,7 @@ polynomial_multiply(X, Y) gives the polynomial 0x^(n-1) + 0x^(n-2) + ... + 0x^2 
 
 At one point, we need to take a polynomial modulo x^(n-1)+x^(n-2)+...+1 =
 (x^n-1)/(x-1). We refer to this operation as modPhiN, and can be performed by
-taking the top coefficient, and subtracting it fall all the other coefficients.
+taking the top coefficient, and subtracting it from all the other coefficients.
 
 # Selecting Random Polynomials
 
@@ -219,8 +227,9 @@ select these values.
 
 ## Sample a random trinary polynomial
 
-This function (called sample_iid in the reference code) selects a random trinary polynomial, that is, one
-whose all the coefficients are either 0, 1 or q-1, with the last coefficient 0.
+This function (called sample_iid in the reference code) selects a random trinary 
+polynomial, that is, one where all the coefficients are either 0, 1 or q-1, with
+ the last coefficient 0.
 
 This operation is performed by calling the rng n-1 times to generate n-1 bytes,
 and then taking each byte modulo 3, mapping 2 to q-1 (and setting the last
@@ -261,7 +270,7 @@ values and q/16-2 q-1 values.
 
 # Converting Between Polynomials and Byte Strings
 
-NTRU needs to convert polynomials into byte strings and vica versa, both the
+NTRU needs to convert polynomials into byte strings and vice versa, both to
 export public keys and ciphertexts, as well as being able to hash those
 polynomials. We refer to this process as serialization and deserialization.
 
@@ -271,18 +280,19 @@ This function (called pack_Rq0 by the reference code) converts a polynomial into
 a byte string.
 
 This function takes the first n-1 coefficients (each a value between 0 and q-1),
-expresses each as a log_2(q) bit bitstring as a little endian integer. Then, it
-concatinates those n-1 bit strings into a long bit string; the result is that
-bit string being parsed into bytes (with any trailing bits in the last byte
-being set to 0).
+expresses each as a log_2(q) bit bitstring as a little endian integer.  All n-1
+coefficients are of length log_2(q).  Then, it concatinates those n-1 bit strings
+into a long bit string; the result is that bit string being parsed into bytes 
+(with any trailing bits in the last byte being set to 0).
 
 The inverse function (called) unpack_Rq0) converts that byte string back into a
 polynomial.
 
 It takes the byte string, parses it into n-1 consecutive log_2(q) bit strings,
 takes each such bit string as a little endian integer and sets the corresponding
-coefficient of the polynomial to that integer.  Then, it adds all those n-1
-coefficients together, and sets the n-th coefficient to the negation of that sum
+coefficient of the polynomial to that integer.  Since all bit strings are of equal
+length, this can be done efficiently.  Then, it adds all those n-1 coefficients 
+together, and sets the n-th coefficient to the negation of that sum
 modulo q.
 
 A close reading of the above algorithms will note that the pack_Rq0 doesn't
@@ -302,7 +312,7 @@ polynomial into a byte string.  It works by taking the coefficients in
 groups of 5, and packing each such group into a byte.
 
 This function takes the n-1 coefficients in sets of 5; it converts the five
-coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2. This it sums up the
+coefficients c0, c1, c2, c3, c4 into the values 0, 1 or 2. Then it sums up the
 coefficients as c0 + 3*c1 + 9*c2 + 27*c3 + 81*c4, and then stores that value as
 the next byte in the byte string.
 
@@ -335,7 +345,7 @@ inverse taken over the modulo 3 polynomial), and stores that in the private key
 as well. She also computes Inv(H), and stores that in the private key.
 
 To generate a KEM key share with the public key H, Bob selects two short
-polynomials R and M, and compute C = R x H + M; that is the ciphertext. Bob also
+polynomials R and M, and computes C = R x H + M; that is the ciphertext. Bob also
 hashes R and M to generate his copy of the shared secret.
 
 When Alice receives C = R x Inv(F) x G + M, she first multiplies that by F; this
@@ -379,7 +389,7 @@ procedure
 
 This takes a public key H, and generates both a ciphertext C as well as a secret
 string K. The ciphertext C should be sent to the holder of the private key; the
-key K should be used as the secret.
+string K should be used as the secret.
 
 We can follow this procedure:
 
@@ -397,7 +407,7 @@ We can follow this procedure:
 
 This takes a private key (F, H_inv, F_inv, S) and a ciphertext C, and produces a
 secret string K. If the ciphertext is the same as what was proceduced by the key
-encapsulation procedure, then this will generate the same secret key K.
+encapsulation procedure, then this will generate the same secret string K.
 
 We can follow this procedure:
 
@@ -411,7 +421,7 @@ We can follow this procedure:
 [THIS STEP IS NEEDED BECAUSE WE REPRESENT COEFFICIENTS IN THE RANGE 0..Q-1 -
 WOULD A BALANCED REPRESENTATION BE CLEARER?]
 
-- Compute M = A*F_inv (modulo 3) - note the change of modulii
+- Compute M = A*F_inv (modulo 3) - note the change of moduli
 
 - For each 2 coefficient within M, replace it with q-1
 
