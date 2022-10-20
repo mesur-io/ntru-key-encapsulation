@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-09T02:03:27.137202+00:00",
+  "timestamp": "2022-10-20T02:07:06.410425+00:00",
   "repo": "mesur-io/ntru-key-encapsulation",
   "labels": [
     {
@@ -65,6 +65,48 @@
       "body": "One issue is that, without NIST approval, there is not really definitive definition of NTRU.  The closest would be the NIST Round 3 submission, however the description there is targeted towards cryptographers/mathematicians, and I believe that a standard security engineer would not be able to understand it.  Should we try to write up an equivalent definition (targeted towards engineers without extensive math background)?\r\nShould we include reference code (either in addition to or instead of the above description)?  Or, should we point people to the reference code in the Round 3 submission?",
       "createdAt": "2022-08-08T19:28:41Z",
       "updatedAt": "2022-08-08T19:28:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOHu2pbM5UQvgi",
+      "title": "Should we include the NTRU-HPS 4096821 parameter set",
+      "url": "https://github.com/mesur-io/ntru-key-encapsulation/issues/4",
+      "state": "OPEN",
+      "author": "sfluhrer",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "question"
+      ],
+      "body": "According the Daniel Apon (who was at NIST), the HPS4096821 was added at the last minute for the round 3 introduction; apparently, it is gotten fairly light vetting, and it is unclear whether it meets the claimed security goals.\r\nMy question: should we include it?  If we do, we need to mention our concerns.",
+      "createdAt": "2022-10-18T18:36:48Z",
+      "updatedAt": "2022-10-18T19:00:53Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "claucece",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Probably not then. But the clarifying text is good!",
+          "createdAt": "2022-10-18T19:00:52Z",
+          "updatedAt": "2022-10-18T19:00:52Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOHu2pbM5USs1A",
+      "title": "Should we include public and private key encodings?",
+      "url": "https://github.com/mesur-io/ntru-key-encapsulation/issues/5",
+      "state": "OPEN",
+      "author": "johngray-dev",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We describe a method in how to genereate the public and private keys, and even how the polynomials are packed into byte arrays.   Should we also include placeholder Object Identifiers for the 3 parameter sets, as well as ASN.1 encodings for the public and private keys (even if they are just OCTET_STRINGS) containing the packed encodings currently specified in the draft.   That would allow us to experiment with NTRU keys and certificate material for various relevant KEM use cases (like we can already do with Kyber today).\r\n",
+      "createdAt": "2022-10-19T02:57:28Z",
+      "updatedAt": "2022-10-19T02:57:28Z",
       "closedAt": null,
       "comments": []
     }
