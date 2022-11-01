@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-20T02:07:06.410425+00:00",
+  "timestamp": "2022-11-01T02:09:29.837059+00:00",
   "repo": "mesur-io/ntru-key-encapsulation",
   "labels": [
     {
@@ -107,6 +107,22 @@
       "body": "We describe a method in how to genereate the public and private keys, and even how the polynomials are packed into byte arrays.   Should we also include placeholder Object Identifiers for the 3 parameter sets, as well as ASN.1 encodings for the public and private keys (even if they are just OCTET_STRINGS) containing the packed encodings currently specified in the draft.   That would allow us to experiment with NTRU keys and certificate material for various relevant KEM use cases (like we can already do with Kyber today).\r\n",
       "createdAt": "2022-10-19T02:57:28Z",
       "updatedAt": "2022-10-19T02:57:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOHu2pbM5VQRN1",
+      "title": "Update initials for author \"mprorock\"",
+      "url": "https://github.com/mesur-io/ntru-key-encapsulation/issues/6",
+      "state": "OPEN",
+      "author": "brownoxford",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "First name initial is currently set to \"S.\"",
+      "createdAt": "2022-10-31T18:52:20Z",
+      "updatedAt": "2022-10-31T18:52:20Z",
       "closedAt": null,
       "comments": []
     }
