@@ -249,9 +249,9 @@ independently modulo Q.
 
 For example, compute the addition of A = 7x + 6 and B = 5x + 4 where Q = 8, below:
 
-    A + B = (7+5 mod 8)x + (5+4  mod 8)
-          = (12  mod 8)x + (9    mod 8)
-          =          4 x +           1
+    A + B = (7+5 mod 8)x + (6+4  mod 8)
+          = (12  mod 8)x + (10    mod 8)
+          =          4 x +           2
 
 ### Polynomial Subtraction  {#polynomial_subtraction}
 
@@ -370,7 +370,7 @@ Such a polynomial MAY be obtained with the following steps:
 1. Call `sample_iid` to sample a base ternary polynomial V~3~
 2. Let V be V~3~ changed modulus from 3 to Q
 3. Compute T = the sum of the products of each pair of adjacent coefficients of V; v~N-1~v~N-2~ + v~N-2~v~N-3~ + v~N-3~v~N-4~ + ... + v~2~v~1~ + v~1~v~0~ where v~n~ is the coefficient of x^n^ in the polynomial V
-4. If T is a negative value, then multiply the even coefficients of V~3~ by -1. That is, for i = 0, 2, 4, 6, ..., N-3, N-1: v~i~ = -v~i~.
+4. If T is a negative value, then multiply the even coefficients of V~3~ by -1. That is, for i = 0, 2, 4, 6, ..., N-3: v~3~[i] = -v~3~[i].
 5. Output a sampled ternary plus polynomial with the value of V~3~
 
 # Encoding Mechanisms  {#encoding_mechanisms}
