@@ -1674,9 +1674,9 @@ However, an implementation may decide to optimize some operations based on a spe
 independently modulo Q.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.2-2">For example, compute the addition of A = 7x + 6 and B = 5x + 4 where Q = 8, below:<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.2-3">
-<pre>A + B = (7+5 mod 8)x + (5+4  mod 8)
-      = (12  mod 8)x + (9    mod 8)
-      =          4 x +           1
+<pre>A + B = (7+5 mod 8)x + (6+4  mod 8)
+      = (12  mod 8)x + (10    mod 8)
+      =          4 x +           2
 
 </pre><a href="#section-5.1.2-3" class="pilcrow">¶</a>
 </div>
@@ -1834,7 +1834,7 @@ Since the coefficients need to be generated modulo 3, the coefficient values of 
 </li>
             <li id="section-5.2.3-3.3">Compute T = the sum of the products of each pair of adjacent coefficients of V; v<sub>N-1</sub>v<sub>N-2</sub> + v<sub>N-2</sub>v<sub>N-3</sub> + v<sub>N-3</sub>v<sub>N-4</sub> + ... + v<sub>2</sub>v<sub>1</sub> + v<sub>1</sub>v<sub>0</sub> where v<sub>n</sub> is the coefficient of x<sup>n</sup> in the polynomial V<a href="#section-5.2.3-3.3" class="pilcrow">¶</a>
 </li>
-            <li id="section-5.2.3-3.4">If T is a negative value, then multiply the even coefficients of V<sub>3</sub> by -1. That is, for i = 0, 2, 4, 6, ..., N-3, N-1: v<sub>i</sub> = -v<sub>i</sub>.<a href="#section-5.2.3-3.4" class="pilcrow">¶</a>
+            <li id="section-5.2.3-3.4">If T is a negative value, then multiply the even coefficients of V<sub>3</sub> by -1. That is, for i = 0, 2, 4, 6, ..., N-3: v<sub>3</sub>[i] = -v<sub>3</sub>[i].<a href="#section-5.2.3-3.4" class="pilcrow">¶</a>
 </li>
             <li id="section-5.2.3-3.5">Output a sampled ternary plus polynomial with the value of V<sub>3</sub><a href="#section-5.2.3-3.5" class="pilcrow">¶</a>
 </li>

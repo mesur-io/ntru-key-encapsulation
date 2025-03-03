@@ -341,9 +341,9 @@ Table of Contents
    For example, compute the addition of A = 7x + 6 and B = 5x + 4 where
    Q = 8, below:
 
-   A + B = (7+5 mod 8)x + (5+4  mod 8)
-         = (12  mod 8)x + (9    mod 8)
-         =          4 x +           1
+   A + B = (7+5 mod 8)x + (6+4  mod 8)
+         = (12  mod 8)x + (10    mod 8)
+         =          4 x +           2
 
 5.1.3.  Polynomial Subtraction
 
@@ -499,8 +499,8 @@ Table of Contents
        v_(N-3)v_(N-4) + ... + v_2v_1 + v_1v_0 where v_n is the
        coefficient of x^n in the polynomial V
    4.  If T is a negative value, then multiply the even coefficients of
-       V_3 by -1.  That is, for i = 0, 2, 4, 6, ..., N-3, N-1: v_i =
-       -v_i.
+       V_3 by -1.  That is, for i = 0, 2, 4, 6, ..., N-3: v_3[i] =
+       -v_3[i].
    5.  Output a sampled ternary plus polynomial with the value of V_3
 
 6.  Encoding Mechanisms
