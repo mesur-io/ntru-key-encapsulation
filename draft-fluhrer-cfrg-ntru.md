@@ -177,22 +177,35 @@ sample_fixed_type
 
 We define four parameter sets on the NTRU-HPS algorithm.
 
-| Parameter Set   | Polynomial Size N | Modulus Q |   Hash   |
-|-----------------|-------------------|-----------|----------|
-| ntruhps2048677  |         677       |    2048   | SHA3-256 |
-| ntruhps4096821  |         821       |    4096   | SHA3-256 |
-| ntruhps40961229 |        1229       |    4096   | SHA3-256 |
+| Parameter Set   | Polynomial Size N |    Modulus Q   |   Hash   |
+|-----------------|-------------------|----------------|----------|
+| ntruhps2048677  |         677       |    2048=2^11   | SHA3-256 |
+| ntruhps4096821  |         821       |    4096=2^12   | SHA3-256 |
+| ntruhps40961229 |        1229       |    4096=2^12   | SHA3-256 |
 Table: NTRU-HPS parameter sets
+
+| Parameter Set   | Private key | Public key | Ciphertext C | Secret string K |
+|-----------------|-------------|------------|--------------|-----------------|
+| ntruhps2048677  |    1,234    |    930     |     930      |       32
+| ntruhps4096821  |    1,590    |    1,230   |    1,230     |       32
+| ntruhps40961229 |    2,366    |    1,842   |    1,842     |       32
+Table: Data Size in NTRU-HPS (Bytes)
 
 ## NTRU-HRSS
 
 We define two parameter sets on the NTRU-HRSS algorithm.
 
-| Parameter Set  | Polynomial Size N | Modulus Q |   Hash   |
-|----------------|-------------------|-----------|----------|
-| ntruhrss701    |         701       |    8192   | SHA3-256 |
-| ntruhrss1373   |        1373       |   16384   | SHA3-256 |
+| Parameter Set  | Polynomial Size N | Modulus Q    |   Hash   |
+|----------------|-------------------|--------------|----------|
+| ntruhrss701    |         701       |    8192=2^13 | SHA3-256 |
+| ntruhrss1373   |        1373       |   16384=2^14 | SHA3-256 |
 Table: NTRU-HRSS parameter sets
+
+| Parameter Set | Private key | Public key | Ciphertext C | Secret string K |
+|---------------|-------------|------------|--------------|-----------------|
+| ntruhrss701   |     1,450   |    1,138   |   1,138      |        32       |
+| ntruhrss1373  |     2,983   |    2,401   |   2,401      |        32       |
+Table: Data Size in NTRU-HRSS　(Bytes)
 
 # Cryptographic Dependencies {#cryptographic_dependencies}
 
