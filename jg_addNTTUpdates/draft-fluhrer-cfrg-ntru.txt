@@ -523,8 +523,8 @@ Table of Contents
        v_(N-3)v_(N-4) + ... + v_2v_1 + v_1v_0 where v_n is the
        coefficient of x^n in the polynomial V
    4.  If T is a negative value, then multiply the even coefficients of
-       V_3 by -1.  That is, for i = 0, 2, 4, 6, ..., N-3, N-1: v_i =
-       -v_i.
+       V_3 by -1.  That is, for i = 0, 2, 4, 6, ..., N-3: v_3[i] =
+       -v_3[i].
    5.  Output a sampled ternary plus polynomial with the value of V_3
 
 6.  Encoding Mechanisms
