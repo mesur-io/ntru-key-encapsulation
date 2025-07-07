@@ -5,7 +5,7 @@
 CFRG                                                          S. Fluhrer
 Internet-Draft                                             Cisco Systems
 Intended status: Informational                                S. Prorock
-Expires: 4 September 2025                                       mesur.io
+Expires: 8 January 2026                                         mesur.io
                                                                  M. Celi
                                                                    Brave
                                                                  J. Gray
@@ -14,7 +14,7 @@ Expires: 4 September 2025                                       mesur.io
                                                                      TII
                                                                H. Kosuge
                                                                      NTT
-                                                            3 March 2025
+                                                             7 July 2025
 
 
                          NTRU Key Encapsulation
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 8 January 2026.
 
 Copyright Notice
 
@@ -235,28 +235,52 @@ Table of Contents
       +=================+===================+===========+==========+
       | Parameter Set   | Polynomial Size N | Modulus Q | Hash     |
       +=================+===================+===========+==========+
-      | ntruhps2048677  | 677               | 2048      | SHA3-256 |
+      | ntruhps2048677  | 677               | 2048=2^11 | SHA3-256 |
       +-----------------+-------------------+-----------+----------+
-      | ntruhps4096821  | 821               | 4096      | SHA3-256 |
+      | ntruhps4096821  | 821               | 4096=2^12 | SHA3-256 |
       +-----------------+-------------------+-----------+----------+
-      | ntruhps40961229 | 1229              | 4096      | SHA3-256 |
+      | ntruhps40961229 | 1229              | 4096=2^12 | SHA3-256 |
       +-----------------+-------------------+-----------+----------+
 
                      Table 1: NTRU-HPS parameter sets
+
+    +=================+=============+========+============+==========+
+    | Parameter Set   | Private key | Public | Ciphertext | Secret   |
+    |                 |             | key    | C          | string K |
+    +=================+=============+========+============+==========+
+    | ntruhps2048677  | 1,234       | 930    | 930        | 32       |
+    +-----------------+-------------+--------+------------+----------+
+    | ntruhps4096821  | 1,590       | 1,230  | 1,230      | 32       |
+    +-----------------+-------------+--------+------------+----------+
+    | ntruhps40961229 | 2,366       | 1,842  | 1,842      | 32       |
+    +-----------------+-------------+--------+------------+----------+
+
+                  Table 2: Data Size in NTRU-HPS (Bytes)
 
 4.2.  NTRU-HRSS
 
    We define two parameter sets on the NTRU-HRSS algorithm.
 
-       +===============+===================+===========+==========+
-       | Parameter Set | Polynomial Size N | Modulus Q | Hash     |
-       +===============+===================+===========+==========+
-       | ntruhrss701   | 701               | 8192      | SHA3-256 |
-       +---------------+-------------------+-----------+----------+
-       | ntruhrss1373  | 1373              | 16384     | SHA3-256 |
-       +---------------+-------------------+-----------+----------+
+       +===============+===================+============+==========+
+       | Parameter Set | Polynomial Size N | Modulus Q  | Hash     |
+       +===============+===================+============+==========+
+       | ntruhrss701   | 701               | 8192=2^13  | SHA3-256 |
+       +---------------+-------------------+------------+----------+
+       | ntruhrss1373  | 1373              | 16384=2^14 | SHA3-256 |
+       +---------------+-------------------+------------+----------+
 
-                    Table 2: NTRU-HRSS parameter sets
+                     Table 3: NTRU-HRSS parameter sets
+
+   +===============+=============+============+============+==========+
+   | Parameter Set | Private key | Public key | Ciphertext | Secret   |
+   |               |             |            | C          | string K |
+   +===============+=============+============+============+==========+
+   | ntruhrss701   | 1,450       | 1,138      | 1,138      | 32       |
+   +---------------+-------------+------------+------------+----------+
+   | ntruhrss1373  | 2,983       | 2,401      | 2,401      | 32       |
+   +---------------+-------------+------------+------------+----------+
+
+                 Table 4: Data Size in NTRU-HRSS　(Bytes)
 
 5.  Cryptographic Dependencies
 
@@ -2732,7 +2756,7 @@ Table of Contents
             | ntruhrss1373    | IND-CCA2       | 256          |
             +-----------------+----------------+--------------+
 
-                                  Table 3
+                                  Table 5
 
 10.2.  Public key reuse
 
