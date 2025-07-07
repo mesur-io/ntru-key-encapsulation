@@ -262,9 +262,9 @@ independently modulo Q.
 
 For example, compute the addition of A = 7x + 6 and B = 5x + 4 where Q = 8, below:
 
-    A + B = (7+5 mod 8)x + (5+4  mod 8)
-          = (12  mod 8)x + (9    mod 8)
-          =          4 x +           1
+    A + B = (7+5 mod 8)x + (6+4  mod 8)
+          = (12  mod 8)x + (10    mod 8)
+          =          4 x +           2
 
 ### Polynomial Subtraction  {#polynomial_subtraction}
 
