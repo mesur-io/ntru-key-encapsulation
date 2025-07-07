@@ -177,22 +177,35 @@ sample_fixed_type
 
 We define four parameter sets on the NTRU-HPS algorithm.
 
-| Parameter Set   | Polynomial Size N | Modulus Q |   Hash   |
-|-----------------|-------------------|-----------|----------|
-| ntruhps2048677  |         677       |    2048   | SHA3-256 |
-| ntruhps4096821  |         821       |    4096   | SHA3-256 |
-| ntruhps40961229 |        1229       |    4096   | SHA3-256 |
+| Parameter Set   | Polynomial Size N |    Modulus Q   |   Hash   |
+|-----------------|-------------------|----------------|----------|
+| ntruhps2048677  |         677       |    2048=2^11   | SHA3-256 |
+| ntruhps4096821  |         821       |    4096=2^12   | SHA3-256 |
+| ntruhps40961229 |        1229       |    4096=2^12   | SHA3-256 |
 Table: NTRU-HPS parameter sets
+
+| Parameter Set   | Private key | Public key | Ciphertext C | Secret string K |
+|-----------------|-------------|------------|--------------|-----------------|
+| ntruhps2048677  |    1,234    |    930     |     930      |       32
+| ntruhps4096821  |    1,590    |    1,230   |    1,230     |       32
+| ntruhps40961229 |    2,366    |    1,842   |    1,842     |       32
+Table: Data Size in NTRU-HPS (Bytes)
 
 ## NTRU-HRSS
 
 We define two parameter sets on the NTRU-HRSS algorithm.
 
-| Parameter Set  | Polynomial Size N | Modulus Q |   Hash   |
-|----------------|-------------------|-----------|----------|
-| ntruhrss701    |         701       |    8192   | SHA3-256 |
-| ntruhrss1373   |        1373       |   16384   | SHA3-256 |
+| Parameter Set  | Polynomial Size N | Modulus Q    |   Hash   |
+|----------------|-------------------|--------------|----------|
+| ntruhrss701    |         701       |    8192=2^13 | SHA3-256 |
+| ntruhrss1373   |        1373       |   16384=2^14 | SHA3-256 |
 Table: NTRU-HRSS parameter sets
+
+| Parameter Set | Private key | Public key | Ciphertext C | Secret string K |
+|---------------|-------------|------------|--------------|-----------------|
+| ntruhrss701   |     1,450   |    1,138   |   1,138      |        32       |
+| ntruhrss1373  |     2,983   |    2,401   |   2,401      |        32       |
+Table: Data Size in NTRU-HRSS　(Bytes)
 
 # Cryptographic Dependencies {#cryptographic_dependencies}
 
@@ -249,9 +262,9 @@ independently modulo Q.
 
 For example, compute the addition of A = 7x + 6 and B = 5x + 4 where Q = 8, below:
 
-    A + B = (7+5 mod 8)x + (6+4  mod 8)
-          = (12  mod 8)x + (10    mod 8)
-          =          4 x +           2
+    A + B = (7+5 mod 8)x + (5+4  mod 8)
+          = (12  mod 8)x + (9    mod 8)
+          =          4 x +           1
 
 ### Polynomial Subtraction  {#polynomial_subtraction}
 
@@ -370,7 +383,7 @@ Such a polynomial MAY be obtained with the following steps:
 1. Call `sample_iid` to sample a base ternary polynomial V~3~
 2. Let V be V~3~ changed modulus from 3 to Q
 3. Compute T = the sum of the products of each pair of adjacent coefficients of V; v~N-1~v~N-2~ + v~N-2~v~N-3~ + v~N-3~v~N-4~ + ... + v~2~v~1~ + v~1~v~0~ where v~n~ is the coefficient of x^n^ in the polynomial V
-4. If T is a negative value, then multiply the even coefficients of V~3~ by -1. That is, for i = 0, 2, 4, 6, ..., N-3: v~3~[i] = -v~3~[i].
+4. If T is a negative value, then multiply the even coefficients of V~3~ by -1. That is, for i = 0, 2, 4, 6, ..., N-3, N-1: v~i~ = -v~i~.
 5. Output a sampled ternary plus polynomial with the value of V~3~
 
 # Encoding Mechanisms  {#encoding_mechanisms}
