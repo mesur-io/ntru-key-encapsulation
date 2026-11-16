@@ -16,25 +16,25 @@
 The well-defined and reviewed parameter sets for the scheme are defined and recommended.
 The test vectors are also provided. 
     " name="description">
-<meta content="xml2rfc 3.29.0" name="generator">
+<meta content="xml2rfc 3.35.0" name="generator">
 <meta content="NTRU" name="keyword">
 <meta content="post-quantum" name="keyword">
 <meta content="Kem" name="keyword">
 <meta content="draft-fluhrer-cfrg-ntru-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.29.0
-    Python 3.12.11
-    ConfigArgParse 1.7
+  xml2rfc 3.35.0
+    Python 3.14.10
+    ConfigArgParse 1.9.0
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.3.8
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.14.3
     pycountry 24.6.1
-    PyYAML 6.0.2
-    requests 2.32.4
-    setuptools 80.9.0
-    wcwidth 0.2.13
+    PyYAML 6.0.3
+    requests 2.33.1
+    wcwidth 0.9.4
 -->
 <link href="draft-fluhrer-cfrg-ntru.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -70,7 +70,6 @@ The test vectors are also provided.
   src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: italic;
@@ -119,7 +118,6 @@ The test vectors are also provided.
   src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 @font-face {
   font-family: 'Lora';
   font-style: normal;
@@ -175,7 +173,7 @@ The test vectors are also provided.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -183,7 +181,7 @@ The test vectors are also provided.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -300,16 +298,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -329,10 +330,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -343,59 +344,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -433,26 +434,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -468,20 +468,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -517,9 +519,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -529,17 +531,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -575,6 +579,7 @@ aside, blockquote {
 }
 blockquote {
   margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
 }
 cite {
   display: block;
@@ -588,25 +593,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -626,13 +623,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -643,18 +633,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -713,9 +701,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -805,23 +793,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -832,19 +824,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -865,54 +859,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -931,26 +925,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -966,12 +960,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1033,17 +1028,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill], [fill] *)) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1053,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">NTRU</td>
-<td class="right">July 2025</td>
+<td class="right">November 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fluhrer, et al.</td>
-<td class="center">Expires 8 January 2026</td>
+<td class="center">Expires 20 May 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-fluhrer-cfrg-ntru-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-07" class="published">7 July 2025</time>
+<time datetime="2026-11-16" class="published">16 November 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-08">8 January 2026</time></dd>
+<dd class="expires"><time datetime="2027-05-20">20 May 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1128,7 @@ The test vectors are also provided.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1140,7 +1137,7 @@ The test vectors are also provided.<a href="#section-abstract-1" class="pilcrow"
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2025 IETF Trust and the persons identified as the
+            Copyright (c) 2026 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1258,6 +1255,9 @@ The test vectors are also provided.<a href="#section-abstract-1" class="pilcrow"
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.2">
                     <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-serialize-a-ternary-polynom" class="internal xref">Serialize a ternary polynomial</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.3">
+                    <p id="section-toc.1-1.6.2.2.2.3.1"><a href="#section-6.2.3" class="auto internal xref">6.2.3</a>.  <a href="#name-serialize-a-polynomial-in-s" class="internal xref">Serialize a polynomial in S modulo q</a></p>
 </li>
                 </ul>
 </li>
@@ -1531,7 +1531,7 @@ This procedure is described in <a href="#sample_fixed_type" class="auto internal
         <h3 id="name-ntru-hps">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ntru-hps" class="section-name selfRef">NTRU-HPS</a>
         </h3>
-<p id="section-4.1-1">We define four parameter sets on the NTRU-HPS algorithm.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">We define three parameter sets on the NTRU-HPS algorithm.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <span id="name-ntru-hps-parameter-sets"></span><table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
@@ -1948,9 +1948,9 @@ that the last coefficient is 0.<a href="#section-6.1.1-1" class="pilcrow">¶</a>
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-valid_fixed_type" class="section-name selfRef">valid_fixed_type</a>
           </h4>
 <p id="section-6.1.2-1">This verifies that M is a possible output of the sample_fixed_type procedure;
-that is, that the coefficients of the polynomial R consist only of 0, 1, and
+that is, that the coefficients of the polynomial M consist only of 0, 1, and
 -1, that the last coefficient is 0, and that there are precisely Q/16-1 1
-values and Q/16-2 Q-1 values.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+values and Q/16-1 Q-1 values.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1968,29 +1968,27 @@ polynomials. We refer to this process as serialization and deserialization.<a hr
           <h4 id="name-serialize-a-polynomial-base">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-serialize-a-polynomial-base" class="section-name selfRef">Serialize a polynomial base q</a>
           </h4>
-<p id="section-6.2.1-1">This function (referred to as pack_Rq0 below) converts a polynomial into
-a byte string.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-2">This function takes the first N-1 coefficients (each a value between 0 and q-1),
+<p id="section-6.2.1-1">The pack_Rq0 function converts a polynomial into a byte string, and the
+unpack_Rq0 function converts that byte string back into a polynomial.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">The pack_Rq0 function takes the first N-1 coefficients (each a value between 0 and q-1),
 and expresses each as a log<sub>2</sub>(Q) bit bitstring as a little-endian integer. All N-1
 coefficients are of length log<sub>2</sub>(Q).  Then, it concatenates those N-1 bit strings
 into a long bit string; the result is that bit string parsed into bytes
 (with any trailing bits in the last byte being set to 0).<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-3">The inverse function (called) unpack_Rq0 converts that byte string back into a
-polynomial.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-4">It takes the byte string, parses it into N-1 consecutive log<sub>2</sub>(Q) bit strings,
+<p id="section-6.2.1-3">The unpack_Rq0 function takes the byte string, parses it into N-1 consecutive log<sub>2</sub>(Q) bit strings,
 takes each such bit string as a little-endian integer, and sets the corresponding
 coefficient of the polynomial to that integer. Since all bit strings are of equal
 length, this can be done efficiently. Then, it adds all those N-1 coefficients
 together and sets the N-th coefficient to the negation of that sum
-modulo Q.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">A close reading of the above algorithms will note that the pack_Rq0 doesn't
+modulo Q.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-4">A close reading of the above algorithms will note that the pack_Rq0 doesn't
 actually depend on the last coefficient. This is because this code assumes that
 the polynomial is a multiple of the polynomial x-1; the unpack_Rq0 code uses
-that assumption to reconstruct that last coefficient.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-6">This assumption is true within NTRU because pack_Rq0 will be called only for
+that assumption to reconstruct that last coefficient.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-5">This assumption is true within NTRU because pack_Rq0 will be called only for
 polynomials that are a multiple of the polynomial G; we always sample G values
 that have an equal number of 1 and -1 coefficients (with the rest 0), and any
-such a polynomial will always be a multiple of x-1.<a href="#section-6.2.1-6" class="pilcrow">¶</a></p>
+such a polynomial will always be a multiple of x-1.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="serialize-a-ternary-polynomial">
@@ -1998,11 +1996,13 @@ such a polynomial will always be a multiple of x-1.<a href="#section-6.2.1-6" cl
           <h4 id="name-serialize-a-ternary-polynom">
 <a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-serialize-a-ternary-polynom" class="section-name selfRef">Serialize a ternary polynomial</a>
           </h4>
-<p id="section-6.2.2-1">This function (referred to as pack_S3 below) converts a ternary
-polynomial into a byte string. It works by taking the coefficients in
-groups of 5 and packing each such group into a byte.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2-2">This function takes the N-1 coefficients in sets of 5; it converts the five
-coefficients c0, c1, c2, c3, and c4 into the values 0, 1, or 2. Then, it sums up the
+<p id="section-6.2.2-1">The pack_S3 function converts a ternary polynomial into a byte string, and the
+unpack_S3 function converts that byte string back into a ternary polynomial
+when the polynomial is serialized as part of a private key. The pack_S3 function
+works by taking the coefficients in groups of 5 and packing each such group
+into a byte.<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-2">The pack_S3 function takes the N-1 coefficients in sets of 5; it converts each of the five
+coefficients c0, c1, c2, c3, and c4 into the value 0, 1, or 2. Then, it sums up the
 coefficients as c0 + 3*c1 + 9*c2 + 27*c3 + 81*c4 and then stores that value as
 the next byte in the byte string.<a href="#section-6.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2.2-3">If the last set of 5 is incomplete (which will happen if N-1 is not a multiple
@@ -2013,8 +2013,34 @@ constant time. The reason we don't care is this happens only on decryption
 failure (someone handed us an invalid ciphertext); in that case, the value of
 the hash will end up being ignored. Of course, no matter what the coefficient
 is, this still needs to be done in constant time.<a href="#section-6.2.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.2-5">The output of this function will be used only for hashing; hence, there is no
-need for an inverse function.<a href="#section-6.2.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-5">When the output of pack_S3 is used only for hashing, there is no need for
+an inverse function. When the polynomial is serialized as part of a private key,
+unpack_S3 converts that byte string back into a ternary polynomial.
+The unpack_S3 function parses each byte as a base-3 value and extracts up to five coefficients,
+starting from the least significant base-3 digit. If the final group is
+incomplete, the missing higher coefficients are treated as zero. The final
+coefficient is set to zero, and the resulting polynomial is reduced modulo
+(3, S).<a href="#section-6.2.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="serialize-a-polynomial-in-s-modulo-q">
+<section id="section-6.2.3">
+          <h4 id="name-serialize-a-polynomial-in-s">
+<a href="#section-6.2.3" class="section-number selfRef">6.2.3. </a><a href="#name-serialize-a-polynomial-in-s" class="section-name selfRef">Serialize a polynomial in S modulo q</a>
+          </h4>
+<p id="section-6.2.3-1">The pack_Sq function converts a polynomial in S modulo q into a byte string,
+and the unpack_Sq function converts that byte string back into a polynomial
+in S modulo q.<a href="#section-6.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-2">The pack_Sq function takes the first N-1 coefficients (each a value between 0 and q-1),
+and expresses each as a log<sub>2</sub>(Q) bit bitstring as a little-endian integer. All N-1
+coefficients are of length log<sub>2</sub>(Q). Then, it concatenates those N-1 bit strings
+into a long bit string; the result is that bit string parsed into bytes
+(with any trailing bits in the last byte being set to 0).<a href="#section-6.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-3">The unpack_Sq function takes the byte string, parses it into N-1 consecutive log<sub>2</sub>(Q) bit strings,
+takes each such bit string as a little-endian integer, and sets the corresponding
+coefficient of the polynomial to that integer. Since all bit strings are of equal
+length, this can be done efficiently. Unlike unpack_Rq0, unpack_Sq sets the
+N-th coefficient to 0.<a href="#section-6.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2068,7 +2094,7 @@ communications.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
         <h3 id="name-private-and-public-key-gene">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-private-and-public-key-gene" class="section-name selfRef">Private and Public Key Generation</a>
         </h3>
-<p id="section-7.2-1">This generates both a private_key and a public_key.
+<p id="section-7.2-1">The <code>KeyGen</code> function generates both a private_key and a public_key.
 The private_key should be kept securely stored, and the public_key should be made public to the communication partner.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">The brief procedure to generate a public/private keypair is given below:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="compact type-1" id="section-7.2-3">
@@ -2122,7 +2148,7 @@ Introducing medium variable V<sub>0</sub> and V<sub>1</sub> reduces one inverse 
           <li id="section-7.2-6.4">Compute H<sub>inv</sub> = V<sub>1</sub> * F * F<a href="#section-7.2-6.4" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-7.2-7">The recommended strict procedure to generate a public/private keypair is defined below:<a href="#section-7.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.2-7">The recommended strict procedure for <code>KeyGen</code> is defined below:<a href="#section-7.2-7" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="compact type-1" id="section-7.2-8">
 <li id="section-7.2-8.1">
             <p id="section-7.2-8.1.1">Generate a random polynomial F<sub>3</sub> and G<sub>3</sub> using the sample_fg procedure<a href="#section-7.2-8.1.1" class="pilcrow">¶</a></p>
@@ -2145,18 +2171,20 @@ Introducing medium variable V<sub>0</sub> and V<sub>1</sub> reduces one inverse 
 </li>
           <li id="section-7.2-8.8">Compute F<sub>inv,3</sub> = Inv<sub>S,3</sub>(F<sub>3</sub>)<a href="#section-7.2-8.8" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.2-8.9">Output a public key with the value H<a href="#section-7.2-8.9" class="pilcrow">¶</a>
+          <li id="section-7.2-8.9">Generate a random 32-byte value s<a href="#section-7.2-8.9" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.2-8.10">Output a private key with a set of the values (F<sub>3</sub>, F<sub>inv,3</sub>, H<sub>inv</sub>)<a href="#section-7.2-8.10" class="pilcrow">¶</a>
+          <li id="section-7.2-8.10">Output a public key with the value H<a href="#section-7.2-8.10" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.2-8.11">Dispose of any other intermediate values securely<a href="#section-7.2-8.11" class="pilcrow">¶</a>
+          <li id="section-7.2-8.11">Output a private key with a set of the values (F<sub>3</sub>, F<sub>inv,3</sub>, H<sub>inv</sub>, s)<a href="#section-7.2-8.11" class="pilcrow">¶</a>
+</li>
+          <li id="section-7.2-8.12">Dispose of any other intermediate values securely<a href="#section-7.2-8.12" class="pilcrow">¶</a>
 </li>
         </ol>
 <p id="section-7.2-9">These keys should be serialized as below:<a href="#section-7.2-9" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-7.2-10.1">public_key = pack_Rq0(H)<a href="#section-7.2-10.1" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-7.2-10.2">private_key = pack_S3(F<sub>3</sub>) || pack_S3(F<sub>inv,3</sub>) || pack_Sq(H<sub>inv</sub>)<a href="#section-7.2-10.2" class="pilcrow">¶</a>
+          <li class="compact" id="section-7.2-10.2">private_key = pack_S3(F<sub>3</sub>) || pack_S3(F<sub>inv,3</sub>) || pack_Sq(H<sub>inv</sub>) || s<a href="#section-7.2-10.2" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -2166,7 +2194,7 @@ Introducing medium variable V<sub>0</sub> and V<sub>1</sub> reduces one inverse 
         <h3 id="name-key-encapsulation">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-key-encapsulation" class="section-name selfRef">Key Encapsulation</a>
         </h3>
-<p id="section-7.3-1">This takes a public key H, and generates both a ciphertext C as well as a secret
+<p id="section-7.3-1">The <code>Encaps</code> function takes a public key H, and generates both a ciphertext C as well as a secret
 string K. The ciphertext C should be sent to the holder of the private key; the
 string K should be used as the secret.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.3-2">The brief procedure is as follows:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
@@ -2183,7 +2211,7 @@ string K should be used as the secret.<a href="#section-7.3-1" class="pilcrow">�
 <ul class="compact">
 <li class="compact" id="section-7.3-3.2.2.1">R<sub>shared</sub> and M<sub>shared</sub> here refer to serialized ones<a href="#section-7.3-3.2.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="compact" id="section-7.3-3.2.2.2">The hash function is defined in the parameter set<a href="#section-7.3-3.2.2.2" class="pilcrow">¶</a>
+              <li class="compact" id="section-7.3-3.2.2.2">The hash function is <code>SHA3-256</code><a href="#section-7.3-3.2.2.2" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-7.3-3.2.2.3">The octet string K is the secret string.<a href="#section-7.3-3.2.2.3" class="pilcrow">¶</a>
 </li>
@@ -2199,7 +2227,7 @@ string K should be used as the secret.<a href="#section-7.3-1" class="pilcrow">�
         </ol>
 <p id="section-7.3-4">The set of R<sub>shared</sub> and M<sub>shared</sub> is a secret key shared with NTRU encryption scheme.
 In the NTRU KEM scheme, it takes a hash value of this shared key to enhance strength against security attacks. It ensures the same value on both sides of the key share.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
-<p id="section-7.3-5">The recommended strict procedure of the key encapsulation is defined below:<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+<p id="section-7.3-5">The recommended strict procedure for <code>Encaps</code> is defined below:<a href="#section-7.3-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="compact type-1" id="section-7.3-6">
 <li id="section-7.3-6.1">
             <p id="section-7.3-6.1.1">Generate a random polynomial R<sub>shared,3</sub> and M<sub>shared,3</sub> using the sample_rm procedure<a href="#section-7.3-6.1.1" class="pilcrow">¶</a></p>
@@ -2210,15 +2238,17 @@ In the NTRU KEM scheme, it takes a hash value of this shared key to enhance stre
 </li>
           <li id="section-7.3-6.2">Set packed_rm = pack_S3(R<sub>shared,3</sub>) || pack_S3(M<sub>shared,3</sub>)<a href="#section-7.3-6.2" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.3-6.3">Compute K = Hash(packed_rm) where <code>Hash</code> is the hash function defined in the parameter set<a href="#section-7.3-6.3" class="pilcrow">¶</a>
+          <li id="section-7.3-6.3">Compute K = SHA3-256(packed_rm)<a href="#section-7.3-6.3" class="pilcrow">¶</a>
 </li>
           <li id="section-7.3-6.4">Output a secret string with the value of K<a href="#section-7.3-6.4" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.3-6.5">Let R<sub>shared</sub> and M<sub>shared</sub> be R<sub>shared,3</sub> and M<sub>shared,3</sub> changed modulus from 3 to Q<a href="#section-7.3-6.5" class="pilcrow">¶</a>
+          <li id="section-7.3-6.5">Let R<sub>shared</sub> be R<sub>shared,3</sub> changed modulus from 3 to Q<a href="#section-7.3-6.5" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.3-6.6">Compute C = modPhi1PhiN(R<sub>shared</sub> * H + M<sub>shared</sub> mod Q)<a href="#section-7.3-6.6" class="pilcrow">¶</a>
+          <li id="section-7.3-6.6">Let M<sub>shared</sub> be Lift(M<sub>shared,3</sub>)<a href="#section-7.3-6.6" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.3-6.7">Output a ciphertext with the value C<a href="#section-7.3-6.7" class="pilcrow">¶</a>
+          <li id="section-7.3-6.7">Compute C = modPhi1PhiN(R<sub>shared</sub> * H + M<sub>shared</sub> mod Q)<a href="#section-7.3-6.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-7.3-6.8">Output a ciphertext with the value C<a href="#section-7.3-6.8" class="pilcrow">¶</a>
 </li>
         </ol>
 <p id="section-7.3-7">Related to this procedure, the polynomials should be deserialized and serialized as below:<a href="#section-7.3-7" class="pilcrow">¶</a></p>
@@ -2235,7 +2265,7 @@ In the NTRU KEM scheme, it takes a hash value of this shared key to enhance stre
         <h3 id="name-key-decapsulation">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-key-decapsulation" class="section-name selfRef">Key Decapsulation</a>
         </h3>
-<p id="section-7.4-1">This takes a private key (F, F<sub>inv</sub>, H<sub>inv</sub>) and a ciphertext C, and produces a
+<p id="section-7.4-1">The <code>Decaps</code> function takes a private key (F, F<sub>inv</sub>, H<sub>inv</sub>, s) and a ciphertext C, and produces a
 secret string K. If the ciphertext is the same as what was produced by the key
 encapsulation procedure, then this will generate the same secret string K.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">The brief procedure to decapsulate an encapsulated key C and to obtain a secret string K is given below:<a href="#section-7.4-2" class="pilcrow">¶</a></p>
@@ -2251,14 +2281,14 @@ encapsulation procedure, then this will generate the same secret string K.<a hre
 </li>
           <li id="section-7.4-3.3">Compute R<sub>shared</sub> = (C - M<sub>shared</sub>) * H<sub>inv</sub>  mod (Q, S)<a href="#section-7.4-3.3" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.4-3.4">Set Success = ValidM(M<sub>shared</sub>) AND ValidR(R<sub>shared</sub>)<a href="#section-7.4-3.4" class="pilcrow">¶</a>
+          <li id="section-7.4-3.4">Set Success = valid_m(M<sub>shared</sub>) AND valid_r(R<sub>shared</sub>)<a href="#section-7.4-3.4" class="pilcrow">¶</a>
 </li>
           <li id="section-7.4-3.5">
             <p id="section-7.4-3.5.1">Compute K1 as the hash value of concatenated octets (R<sub>shared</sub> || M<sub>shared</sub>)<a href="#section-7.4-3.5.1" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-7.4-3.5.2.1">R<sub>shared</sub> and M<sub>shared</sub> here refer to serialized ones<a href="#section-7.4-3.5.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="compact" id="section-7.4-3.5.2.2">The hash function is defined in the parameter set<a href="#section-7.4-3.5.2.2" class="pilcrow">¶</a>
+              <li class="compact" id="section-7.4-3.5.2.2">The hash function is <code>SHA3-256</code><a href="#section-7.4-3.5.2.2" class="pilcrow">¶</a>
 </li>
               <li class="compact" id="section-7.4-3.5.2.3">The octet string K is the secret string.<a href="#section-7.4-3.5.2.3" class="pilcrow">¶</a>
 </li>
@@ -2278,7 +2308,7 @@ coefficient taken modulo 3) must be left as the reminder.
 Then, multiplying that polynomial by F<sub>inv</sub> will recover M<sub>shared</sub>.
 It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
 <p id="section-7.4-5">The set of R<sub>shared</sub> and M<sub>shared</sub>, which are a secret key shared with the NTRU encryption scheme, is equal on both sides, so taking a hash value of them produces a copy of the secret string K.<a href="#section-7.4-5" class="pilcrow">¶</a></p>
-<p id="section-7.4-6">The recommended strict procedure of the key decapsulation is defined below:<a href="#section-7.4-6" class="pilcrow">¶</a></p>
+<p id="section-7.4-6">The recommended strict procedure for <code>Decaps</code> is defined below:<a href="#section-7.4-6" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="compact type-1" id="section-7.4-7">
 <li id="section-7.4-7.1">Let F be F<sub>3</sub> changed modulus from 3 to Q<a href="#section-7.4-7.1" class="pilcrow">¶</a>
 </li>
@@ -2294,7 +2324,7 @@ It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a>
             </ul>
 </li>
           <li id="section-7.4-7.5">
-            <p id="section-7.4-7.5.1">Compute m<sub>1</sub> = Lift(M<sub>0,3</sub>)<a href="#section-7.4-7.5.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-7.5.1">Compute M<sub>1</sub> = Lift(M<sub>0,3</sub>)<a href="#section-7.4-7.5.1" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-7.4-7.5.2.1">The <code>Lift</code> procedure varies depending on NTRU Type, NTRU-HPS and NTRU-HRSS, and it is described in their respective subsections in <a href="#variants" class="auto internal xref">Section 8</a><a href="#section-7.4-7.5.2.1" class="pilcrow">¶</a>
 </li>
@@ -2305,22 +2335,23 @@ It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a>
           <li id="section-7.4-7.7">Let R<sub>shared,3</sub> be R<sub>shared</sub> changed modulus from Q to 3<a href="#section-7.4-7.7" class="pilcrow">¶</a>
 </li>
           <li id="section-7.4-7.8">
-            <p id="section-7.4-7.8.1">Set Success = ValidM(M<sub>shared,3</sub>) AND ValidR(R<sub>shared,3</sub>)<a href="#section-7.4-7.8.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-7.8.1">Set Success = valid_m(M<sub>shared,3</sub>) AND valid_r(R<sub>shared,3</sub>)<a href="#section-7.4-7.8.1" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="section-7.4-7.8.2.1">The <code>ValidR</code> procedure and <code>ValidM</code> procedure vary depending on NTRU Type, NTRU-HPS and NTRU-HRSS, and it is described in their respective subsections in <a href="#variants" class="auto internal xref">Section 8</a><a href="#section-7.4-7.8.2.1" class="pilcrow">¶</a>
+<li class="compact" id="section-7.4-7.8.2.1">The <code>valid_r</code> procedure and <code>valid_m</code> procedure vary depending on NTRU Type, NTRU-HPS and NTRU-HRSS, and it is described in their respective subsections in <a href="#variants" class="auto internal xref">Section 8</a><a href="#section-7.4-7.8.2.1" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
           <li id="section-7.4-7.9">Set packed_rm = pack_S3(R<sub>shared,3</sub>) || pack_S3(M<sub>shared,3</sub>)<a href="#section-7.4-7.9" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.4-7.10">Compute K1 = Hash(packed_rm) where <code>Hash</code> is the hash function defined in the parameter set<a href="#section-7.4-7.10" class="pilcrow">¶</a>
+          <li id="section-7.4-7.10">Compute K1 = SHA3-256(packed_rm)<a href="#section-7.4-7.10" class="pilcrow">¶</a>
 </li>
-          <li id="section-7.4-7.11">Compute K2 = Hash(s || C) where <code>Hash</code> is the hash function defined in the parameter set<a href="#section-7.4-7.11" class="pilcrow">¶</a>
+          <li id="section-7.4-7.11">Compute K2 = SHA3-256(s || C)<a href="#section-7.4-7.11" class="pilcrow">¶</a>
 </li>
           <li id="section-7.4-7.12">If Success, output a secret string with the value of K=K1; otherwise, return K=K2<a href="#section-7.4-7.12" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-7.4-8">Related to this procedure, the polynomials should be deserialized and serialized as below:<a href="#section-7.4-8" class="pilcrow">¶</a></p>
+<p id="section-7.4-8">Related to this procedure, the ciphertext and the private key should be
+deserialized as below:<a href="#section-7.4-8" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-7.4-9.1">C = unpack_Rq0(ciphertext)<a href="#section-7.4-9.1" class="pilcrow">¶</a>
 </li>
@@ -2328,7 +2359,9 @@ It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a>
 </li>
           <li class="compact" id="section-7.4-9.3">F<sub>inv,3</sub> = unpack_S3(F<sub>inv,3,serialized</sub>)<a href="#section-7.4-9.3" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-7.4-9.4">H<sub>inv,3</sub> = unpack_Sq(H<sub>inv,3,serialized</sub>)<a href="#section-7.4-9.4" class="pilcrow">¶</a>
+          <li class="compact" id="section-7.4-9.4">H<sub>inv</sub> = unpack_Sq(H<sub>inv,serialized</sub>)<a href="#section-7.4-9.4" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.4-9.5">s is the final 32 bytes of private_key<a href="#section-7.4-9.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
@@ -2383,7 +2416,7 @@ It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a>
           <h4 id="name-key-decapsulation-2">
 <a href="#section-8.1.3" class="section-number selfRef">8.1.3. </a><a href="#name-key-decapsulation-2" class="section-name selfRef">Key Decapsulation</a>
           </h4>
-<p id="section-8.1.3-1">In the HPS type, the <code>ValidR</code> procedure is equivalent to <code>valid_iid</code> procedure, and the <code>ValidM</code> procedure is equivalent to <code>valid_fixed_type</code> procedure.<a href="#section-8.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.1.3-1">In the HPS type, the <code>valid_r</code> procedure is equivalent to <code>valid_iid</code> procedure, and the <code>valid_m</code> procedure is equivalent to <code>valid_fixed_type</code> procedure.<a href="#section-8.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.1.3-2">The Lift(M<sub>3</sub>) procedure of the HPS type is an identity function, input is a polynomial parameter M<sub>3</sub>, and it is described as follows:<a href="#section-8.1.3-2" class="pilcrow">¶</a></p>
 <ul class="compact">
 <li class="compact" id="section-8.1.3-3.1">Let M be M<sub>3</sub> changed modulus from 3 to Q<a href="#section-8.1.3-3.1" class="pilcrow">¶</a>
@@ -2443,10 +2476,10 @@ It must be equal to the original.<a href="#section-7.4-4" class="pilcrow">¶</a>
           <h4 id="name-key-decapsulation-3">
 <a href="#section-8.2.3" class="section-number selfRef">8.2.3. </a><a href="#name-key-decapsulation-3" class="section-name selfRef">Key Decapsulation</a>
           </h4>
-<p id="section-8.2.3-1">In the HRSS type, the <code>ValidR</code> procedure is equivalent to <code>valid_iid</code> procedure, and the <code>ValidM</code> procedure is a tautology function; it always returns true.<a href="#section-8.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.2.3-1">In the HRSS type, the <code>valid_r</code> procedure is equivalent to <code>valid_iid</code> procedure, and the <code>valid_m</code> procedure is a tautology function; it always returns true.<a href="#section-8.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.2.3-2">The Lift(M<sub>0,3</sub>) procedure of the HRSS type is a function, input is a polynomial parameter M<sub>0,3</sub>, and it is described as follows:<a href="#section-8.2.3-2" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="section-8.2.3-3.1">Compute V<sub>0,3</sub> = modPhiN(M<sub>0</sub> * Inv<sub>3,S</sub>(Phi<sub>1</sub>) mod 3) mod 3<a href="#section-8.2.3-3.1" class="pilcrow">¶</a>
+<li class="compact" id="section-8.2.3-3.1">Compute V<sub>0,3</sub> = modPhiN(M<sub>0</sub> * Inv<sub>S,3</sub>(Phi<sub>1</sub>) mod 3) mod 3<a href="#section-8.2.3-3.1" class="pilcrow">¶</a>
 </li>
             <li class="compact" id="section-8.2.3-3.2">Let V<sub>0</sub> be V<sub>0,3</sub> changed modulus from 3 to Q<a href="#section-8.2.3-3.2" class="pilcrow">¶</a>
 </li>
@@ -2477,19 +2510,19 @@ Each subsection contains a sequence of test vectors.<a href="#section-9-1" class
         <dd class="break"></dd>
 <dt id="section-9-3.3">R<sub>shared,3</sub>, M<sub>shared,3</sub>
 </dt>
-        <dd style="margin-left: 1.5em" id="section-9-3.4">The secret values generated internally by an RNG in Key Encapsulation API.
+        <dd style="margin-left: 1.5em" id="section-9-3.4">The secret values generated internally by an RNG in the <code>Encaps</code> API.
 The values are serialized with the <code>pack_S3</code> function.
 Although these values are not parameters, they are included in the test vectors to ensure that the testing process is deterministic.<a href="#section-9-3.4" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 <dt id="section-9-3.5">CIPHER TEXT</dt>
-        <dd style="margin-left: 1.5em" id="section-9-3.6">The encrypted message generated by Key Encapsulation API.
-Key Encapsulation API assumes that the RNG generates R<sub>shared,3</sub> and M<sub>shared,3</sub> with values provided in the test vector.<a href="#section-9-3.6" class="pilcrow">¶</a>
+        <dd style="margin-left: 1.5em" id="section-9-3.6">The encrypted message generated by the <code>Encaps</code> API.
+The <code>Encaps</code> API assumes that the RNG generates R<sub>shared,3</sub> and M<sub>shared,3</sub> with values provided in the test vector.<a href="#section-9-3.6" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 <dt id="section-9-3.7">SECRET STRING</dt>
         <dd style="margin-left: 1.5em" id="section-9-3.8">The secret string shared on both sides of the key share.
-Both of Key Encapsulation API and Key Decapsulation API return this value.<a href="#section-9-3.8" class="pilcrow">¶</a>
+Both the <code>Encaps</code> API and the <code>Decaps</code> API return this value.<a href="#section-9-3.8" class="pilcrow">¶</a>
 </dd>
       <dd class="break"></dd>
 </dl>

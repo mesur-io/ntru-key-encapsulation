@@ -5,7 +5,7 @@
 CFRG                                                          S. Fluhrer
 Internet-Draft                                             Cisco Systems
 Intended status: Informational                                S. Prorock
-Expires: 8 January 2026                                         mesur.io
+Expires: 20 May 2027                                            mesur.io
                                                                  M. Celi
                                                                    Brave
                                                                  J. Gray
@@ -14,7 +14,7 @@ Expires: 8 January 2026                                         mesur.io
                                                                      TII
                                                                H. Kosuge
                                                                      NTT
-                                                             7 July 2025
+                                                        16 November 2026
 
 
                          NTRU Key Encapsulation
@@ -44,11 +44,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 20 May 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -91,6 +91,7 @@ Table of Contents
      6.2.  Converting Between Polynomials and Byte Strings
        6.2.1.  Serialize a polynomial base q
        6.2.2.  Serialize a ternary polynomial
+       6.2.3.  Serialize a polynomial in S modulo q
    7.  NTRU KEM
      7.1.  Scheme Overview
      7.2.  Private and Public Key Generation
@@ -230,7 +231,7 @@ Table of Contents
 
 4.1.  NTRU-HPS
 
-   We define four parameter sets on the NTRU-HPS algorithm.
+   We define three parameter sets on the NTRU-HPS algorithm.
 
       +=================+===================+===========+==========+
       | Parameter Set   | Polynomial Size N | Modulus Q | Hash     |
@@ -544,9 +545,9 @@ Table of Contents
 6.1.2.  valid_fixed_type
 
    This verifies that M is a possible output of the sample_fixed_type
-   procedure; that is, that the coefficients of the polynomial R consist
+   procedure; that is, that the coefficients of the polynomial M consist
    only of 0, 1, and -1, that the last coefficient is 0, and that there
-   are precisely Q/16-1 1 values and Q/16-2 Q-1 values.
+   are precisely Q/16-1 1 values and Q/16-1 Q-1 values.
 
 6.2.  Converting Between Polynomials and Byte Strings
 
@@ -557,25 +558,24 @@ Table of Contents
 
 6.2.1.  Serialize a polynomial base q
 
-   This function (referred to as pack_Rq0 below) converts a polynomial
-   into a byte string.
+   The pack_Rq0 function converts a polynomial into a byte string, and
+   the unpack_Rq0 function converts that byte string back into a
+   polynomial.
 
-   This function takes the first N-1 coefficients (each a value between
-   0 and q-1), and expresses each as a log_2(Q) bit bitstring as a
-   little-endian integer.  All N-1 coefficients are of length log_2(Q).
-   Then, it concatenates those N-1 bit strings into a long bit string;
-   the result is that bit string parsed into bytes (with any trailing
-   bits in the last byte being set to 0).
+   The pack_Rq0 function takes the first N-1 coefficients (each a value
+   between 0 and q-1), and expresses each as a log_2(Q) bit bitstring as
+   a little-endian integer.  All N-1 coefficients are of length
+   log_2(Q).  Then, it concatenates those N-1 bit strings into a long
+   bit string; the result is that bit string parsed into bytes (with any
+   trailing bits in the last byte being set to 0).
 
-   The inverse function (called) unpack_Rq0 converts that byte string
-   back into a polynomial.
-
-   It takes the byte string, parses it into N-1 consecutive log_2(Q) bit
-   strings, takes each such bit string as a little-endian integer, and
-   sets the corresponding coefficient of the polynomial to that integer.
-   Since all bit strings are of equal length, this can be done
-   efficiently.  Then, it adds all those N-1 coefficients together and
-   sets the N-th coefficient to the negation of that sum modulo Q.
+   The unpack_Rq0 function takes the byte string, parses it into N-1
+   consecutive log_2(Q) bit strings, takes each such bit string as a
+   little-endian integer, and sets the corresponding coefficient of the
+   polynomial to that integer.  Since all bit strings are of equal
+   length, this can be done efficiently.  Then, it adds all those N-1
+   coefficients together and sets the N-th coefficient to the negation
+   of that sum modulo Q.
 
    A close reading of the above algorithms will note that the pack_Rq0
    doesn't actually depend on the last coefficient.  This is because
@@ -591,14 +591,17 @@ Table of Contents
 
 6.2.2.  Serialize a ternary polynomial
 
-   This function (referred to as pack_S3 below) converts a ternary
-   polynomial into a byte string.  It works by taking the coefficients
-   in groups of 5 and packing each such group into a byte.
+   The pack_S3 function converts a ternary polynomial into a byte
+   string, and the unpack_S3 function converts that byte string back
+   into a ternary polynomial when the polynomial is serialized as part
+   of a private key.  The pack_S3 function works by taking the
+   coefficients in groups of 5 and packing each such group into a byte.
 
-   This function takes the N-1 coefficients in sets of 5; it converts
-   the five coefficients c0, c1, c2, c3, and c4 into the values 0, 1, or
-   2.  Then, it sums up the coefficients as c0 + 3*c1 + 9*c2 + 27*c3 +
-   81*c4 and then stores that value as the next byte in the byte string.
+   The pack_S3 function takes the N-1 coefficients in sets of 5; it
+   converts each of the five coefficients c0, c1, c2, c3, and c4 into
+   the value 0, 1, or 2.  Then, it sums up the coefficients as c0 + 3*c1
+   + 9*c2 + 27*c3 + 81*c4 and then stores that value as the next byte in
+   the byte string.
 
    If the last set of 5 is incomplete (which will happen if N-1 is not a
    multiple of 5), then the higher missing coefficients are assumed to
@@ -612,8 +615,35 @@ Table of Contents
    ignored.  Of course, no matter what the coefficient is, this still
    needs to be done in constant time.
 
-   The output of this function will be used only for hashing; hence,
-   there is no need for an inverse function.
+   When the output of pack_S3 is used only for hashing, there is no need
+   for an inverse function.  When the polynomial is serialized as part
+   of a private key, unpack_S3 converts that byte string back into a
+   ternary polynomial.  The unpack_S3 function parses each byte as a
+   base-3 value and extracts up to five coefficients, starting from the
+   least significant base-3 digit.  If the final group is incomplete,
+   the missing higher coefficients are treated as zero.  The final
+   coefficient is set to zero, and the resulting polynomial is reduced
+   modulo (3, S).
+
+6.2.3.  Serialize a polynomial in S modulo q
+
+   The pack_Sq function converts a polynomial in S modulo q into a byte
+   string, and the unpack_Sq function converts that byte string back
+   into a polynomial in S modulo q.
+
+   The pack_Sq function takes the first N-1 coefficients (each a value
+   between 0 and q-1), and expresses each as a log_2(Q) bit bitstring as
+   a little-endian integer.  All N-1 coefficients are of length
+   log_2(Q).  Then, it concatenates those N-1 bit strings into a long
+   bit string; the result is that bit string parsed into bytes (with any
+   trailing bits in the last byte being set to 0).
+
+   The unpack_Sq function takes the byte string, parses it into N-1
+   consecutive log_2(Q) bit strings, takes each such bit string as a
+   little-endian integer, and sets the corresponding coefficient of the
+   polynomial to that integer.  Since all bit strings are of equal
+   length, this can be done efficiently.  Unlike unpack_Rq0, unpack_Sq
+   sets the N-th coefficient to 0.
 
 7.  NTRU KEM
 
@@ -651,9 +681,9 @@ Table of Contents
 
 7.2.  Private and Public Key Generation
 
-   This generates both a private_key and a public_key.  The private_key
-   should be kept securely stored, and the public_key should be made
-   public to the communication partner.
+   The KeyGen function generates both a private_key and a public_key.
+   The private_key should be kept securely stored, and the public_key
+   should be made public to the communication partner.
 
    The brief procedure to generate a public/private keypair is given
    below:
@@ -686,8 +716,7 @@ Table of Contents
    3.  Compute H = V_1 * G * G
    4.  Compute H_inv = V_1 * F * F
 
-   The recommended strict procedure to generate a public/private keypair
-   is defined below:
+   The recommended strict procedure for KeyGen is defined below:
 
    1.   Generate a random polynomial F_3 and G_3 using the sample_fg
         procedure
@@ -701,21 +730,24 @@ Table of Contents
    6.   Compute H = modPhi1PhiN(V_1 * G * G mod Q)
    7.   Compute H_inv = modPhi1PhiN(V_1 * F * F mod Q)
    8.   Compute F_(inv,3) = Inv_(S,3)(F_3)
-   9.   Output a public key with the value H
-   10.  Output a private key with a set of the values (F_3, F_(inv,3),
-        H_inv)
-   11.  Dispose of any other intermediate values securely
+   9.   Generate a random 32-byte value s
+   10.  Output a public key with the value H
+   11.  Output a private key with a set of the values (F_3, F_(inv,3),
+        H_inv, s)
+   12.  Dispose of any other intermediate values securely
 
    These keys should be serialized as below:
 
    *  public_key = pack_Rq0(H)
-   *  private_key = pack_S3(F_3) || pack_S3(F_(inv,3)) || pack_Sq(H_inv)
+   *  private_key = pack_S3(F_3) || pack_S3(F_(inv,3)) ||
+      pack_Sq(H_inv) || s
 
 7.3.  Key Encapsulation
 
-   This takes a public key H, and generates both a ciphertext C as well
-   as a secret string K.  The ciphertext C should be sent to the holder
-   of the private key; the string K should be used as the secret.
+   The Encaps function takes a public key H, and generates both a
+   ciphertext C as well as a secret string K.  The ciphertext C should
+   be sent to the holder of the private key; the string K should be used
+   as the secret.
 
    The brief procedure is as follows:
 
@@ -725,7 +757,7 @@ Table of Contents
    2.  Compute K as the hash value of concatenated octets (R_shared ||
        M_shared)
        *  R_shared and M_shared here refer to serialized ones
-       *  The hash function is defined in the parameter set
+       *  The hash function is SHA3-256
        *  The octet string K is the secret string.
    3.  Compute C = R_shared * H + M_shared mod (Q, R)
        *  The polynomial C is the ciphertext.
@@ -735,8 +767,7 @@ Table of Contents
    this shared key to enhance strength against security attacks.  It
    ensures the same value on both sides of the key share.
 
-   The recommended strict procedure of the key encapsulation is defined
-   below:
+   The recommended strict procedure for Encaps is defined below:
 
    1.  Generate a random polynomial R_(shared,3) and M_(shared,3) using
        the sample_rm procedure
@@ -744,13 +775,12 @@ Table of Contents
           NTRU-HPS and NTRU-HRSS, and it is described in their
           respective subsections in Section 8
    2.  Set packed_rm = pack_S3(R_(shared,3)) || pack_S3(M_(shared,3))
-   3.  Compute K = Hash(packed_rm) where Hash is the hash function
-       defined in the parameter set
+   3.  Compute K = SHA3-256(packed_rm)
    4.  Output a secret string with the value of K
-   5.  Let R_shared and M_shared be R_(shared,3) and M_(shared,3)
-       changed modulus from 3 to Q
-   6.  Compute C = modPhi1PhiN(R_shared * H + M_shared mod Q)
-   7.  Output a ciphertext with the value C
+   5.  Let R_shared be R_(shared,3) changed modulus from 3 to Q
+   6.  Let M_shared be Lift(M_(shared,3))
+   7.  Compute C = modPhi1PhiN(R_shared * H + M_shared mod Q)
+   8.  Output a ciphertext with the value C
 
    Related to this procedure, the polynomials should be deserialized and
    serialized as below:
@@ -760,10 +790,10 @@ Table of Contents
 
 7.4.  Key Decapsulation
 
-   This takes a private key (F, F_inv, H_inv) and a ciphertext C, and
-   produces a secret string K.  If the ciphertext is the same as what
-   was produced by the key encapsulation procedure, then this will
-   generate the same secret string K.
+   The Decaps function takes a private key (F, F_inv, H_inv, s) and a
+   ciphertext C, and produces a secret string K.  If the ciphertext is
+   the same as what was produced by the key encapsulation procedure,
+   then this will generate the same secret string K.
 
    The brief procedure to decapsulate an encapsulated key C and to
    obtain a secret string K is given below:
@@ -774,11 +804,11 @@ Table of Contents
           in the range Q/2 to Q-1); those need to be treated as negative
           values for this next step.
    3.  Compute R_shared = (C - M_shared) * H_inv mod (Q, S)
-   4.  Set Success = ValidM(M_shared) AND ValidR(R_shared)
+   4.  Set Success = valid_m(M_shared) AND valid_r(R_shared)
    5.  Compute K1 as the hash value of concatenated octets (R_shared ||
        M_shared)
        *  R_shared and M_shared here refer to serialized ones
-       *  The hash function is defined in the parameter set
+       *  The hash function is SHA3-256
        *  The octet string K is the secret string.
    6.  Compute K2 as the hash value of concatenated octets (s || C)
    7.  If Success, return K=K1; otherwise, return K=K2
@@ -800,8 +830,7 @@ Table of Contents
    the NTRU encryption scheme, is equal on both sides, so taking a hash
    value of them produces a copy of the secret string K.
 
-   The recommended strict procedure of the key decapsulation is defined
-   below:
+   The recommended strict procedure for Decaps is defined below:
 
    1.   Let F be F_3 changed modulus from 3 to Q
    2.   Compute V_1 = C * F
@@ -809,31 +838,30 @@ Table of Contents
    4.   Compute M_(0,3) = modPhiN(V_(1,3) * F_(inv,3) mod 3)
         *  M_(0,3) is a part of the shared key identified with
            M_(shared,3)
-   5.   Compute m_1 = Lift(M_(0,3))
+   5.   Compute M_1 = Lift(M_(0,3))
         *  The Lift procedure varies depending on NTRU Type, NTRU-HPS
            and NTRU-HRSS, and it is described in their respective
            subsections in Section 8
    6.   Compute R_shared = modPhiN((C - M_1) * H_inv mod Q)
    7.   Let R_(shared,3) be R_shared changed modulus from Q to 3
-   8.   Set Success = ValidM(M_(shared,3)) AND ValidR(R_(shared,3))
-        *  The ValidR procedure and ValidM procedure vary depending on
+   8.   Set Success = valid_m(M_(shared,3)) AND valid_r(R_(shared,3))
+        *  The valid_r procedure and valid_m procedure vary depending on
            NTRU Type, NTRU-HPS and NTRU-HRSS, and it is described in
            their respective subsections in Section 8
    9.   Set packed_rm = pack_S3(R_(shared,3)) || pack_S3(M_(shared,3))
-   10.  Compute K1 = Hash(packed_rm) where Hash is the hash function
-        defined in the parameter set
-   11.  Compute K2 = Hash(s || C) where Hash is the hash function
-        defined in the parameter set
+   10.  Compute K1 = SHA3-256(packed_rm)
+   11.  Compute K2 = SHA3-256(s || C)
    12.  If Success, output a secret string with the value of K=K1;
         otherwise, return K=K2
 
-   Related to this procedure, the polynomials should be deserialized and
-   serialized as below:
+   Related to this procedure, the ciphertext and the private key should
+   be deserialized as below:
 
    *  C = unpack_Rq0(ciphertext)
    *  F_3 = unpack_S3(F_(3,serialized))
    *  F_(inv,3) = unpack_S3(F_(inv,3,serialized))
-   *  H_(inv,3) = unpack_Sq(H_(inv,3,serialized))
+   *  H_inv = unpack_Sq(H_(inv,serialized))
+   *  s is the final 32 bytes of private_key
 
 8.  NTRU Types
 
@@ -865,9 +893,9 @@ Table of Contents
 
 8.1.3.  Key Decapsulation
 
-   In the HPS type, the ValidR procedure is equivalent to valid_iid
-   procedure, and the ValidM procedure is equivalent to valid_fixed_type
-   procedure.
+   In the HPS type, the valid_r procedure is equivalent to valid_iid
+   procedure, and the valid_m procedure is equivalent to
+   valid_fixed_type procedure.
 
    The Lift(M_3) procedure of the HPS type is an identity function,
    input is a polynomial parameter M_3, and it is described as follows:
@@ -903,14 +931,14 @@ Table of Contents
 
 8.2.3.  Key Decapsulation
 
-   In the HRSS type, the ValidR procedure is equivalent to valid_iid
-   procedure, and the ValidM procedure is a tautology function; it
+   In the HRSS type, the valid_r procedure is equivalent to valid_iid
+   procedure, and the valid_m procedure is a tautology function; it
    always returns true.
 
    The Lift(M_(0,3)) procedure of the HRSS type is a function, input is
    a polynomial parameter M_(0,3), and it is described as follows:
 
-   *  Compute V_(0,3) = modPhiN(M_0 * Inv_(3,S)(Phi_1) mod 3) mod 3
+   *  Compute V_(0,3) = modPhiN(M_0 * Inv_(S,3)(Phi_1) mod 3) mod 3
    *  Let V_0 be V_(0,3) changed modulus from 3 to Q
    *  Compute V_1 = Phi_1 * V_0
    *  Output an injected polynomial with the value of V_1
@@ -926,17 +954,15 @@ Table of Contents
 
    PUBLIC KEY, PRIVATE KEY  The public and private key parameters.
    R_(shared,3), M_(shared,3)  The secret values generated internally by
-      an RNG in Key Encapsulation API.  The values are serialized with
-      the pack_S3 function.  Although these values are not parameters,
-      they are included in the test vectors to ensure that the testing
+      an RNG in the Encaps API.  The values are serialized with the
+      pack_S3 function.  Although these values are not parameters, they
+      are included in the test vectors to ensure that the testing
       process is deterministic.
-   CIPHER TEXT  The encrypted message generated by Key Encapsulation
-      API.  Key Encapsulation API assumes that the RNG generates
-      R_(shared,3) and M_(shared,3) with values provided in the test
-      vector.
+   CIPHER TEXT  The encrypted message generated by the Encaps API.  The
+      Encaps API assumes that the RNG generates R_(shared,3) and
+      M_(shared,3) with values provided in the test vector.
    SECRET STRING  The secret string shared on both sides of the key
-      share.  Both of Key Encapsulation API and Key Decapsulation API
-      return this value.
+      share.  Both the Encaps API and the Decaps API return this value.
 
    The octets are hex-encoded, and whitespace is inserted for
    readability.
